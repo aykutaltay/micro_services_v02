@@ -1,0 +1,9 @@
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_share\bin\Debug\netstandard2.0\micro_services_share.deps.json
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_share\bin\Debug\netstandard2.0\micro_services_share.dll
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_share\bin\Debug\netstandard2.0\micro_services_share.pdb
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_share\obj\Debug\netstandard2.0\micro_services_share.csprojAssemblyReference.cache
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_share\obj\Debug\netstandard2.0\micro_services_share.AssemblyInfoInputs.cache
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_share\obj\Debug\netstandard2.0\micro_services_share.AssemblyInfo.cs
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_share\obj\Debug\netstandard2.0\micro_services_share.csproj.CoreCompileInputs.cache
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_share\obj\Debug\netstandard2.0\micro_services_share.dll
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_share\obj\Debug\netstandard2.0\micro_services_share.pdb

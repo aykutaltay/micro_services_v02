@@ -10,7 +10,7 @@ namespace micro_services.A00
         public string token { get; set; }
         public int message_code { get; set; }
         public string message { get; set; }
-        public object data { get; set; }
+        public string data { get; set; }
 
     }
 }

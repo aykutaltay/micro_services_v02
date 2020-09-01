@@ -8,5 +8,11 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\micro_services_bus\micro_services_bus.csproj" />
+    <ProjectReference Include="..\micro_services_dal\micro_services_dal.csproj" />
+    <ProjectReference Include="..\micro_services_share\micro_services_share.csproj" />
+  </ItemGroup>
+
 
 </Project>

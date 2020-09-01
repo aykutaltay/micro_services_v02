@@ -20,7 +20,7 @@ namespace micro_services_dal.Models.zoradamlar_com_db_mic_user
         public DateTime users_expiretime { get; set; }
         public DateTime users_updatetime { get; set; }
         public long users_lang_id { get; set; }
-        public bool deleteduser_id { get; set; }
+        public bool deletedusers_id { get; set; }
         public bool users_active { get; set; }
         public bool users_use { get; set; }
         public string users_backupmail { get; set; }

@@ -4,3 +4,14 @@ C:\Github_repo\micro_services\micro_services_all\micro_services\micro_services_b
 C:\Github_repo\micro_services\micro_services_all\micro_services\micro_services_bus\obj\Debug\netstandard2.0\micro_services_bus.AssemblyInfoInputs.cache
 C:\Github_repo\micro_services\micro_services_all\micro_services\micro_services_bus\obj\Debug\netstandard2.0\micro_services_bus.AssemblyInfo.cs
 C:\Github_repo\micro_services\micro_services_all\micro_services\micro_services_bus\bin\Debug\netstandard2.0\micro_services_dal.dll
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_bus\obj\Debug\netstandard2.0\micro_services_bus.csprojAssemblyReference.cache
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_bus\obj\Debug\netstandard2.0\micro_services_bus.AssemblyInfoInputs.cache
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_bus\obj\Debug\netstandard2.0\micro_services_bus.AssemblyInfo.cs
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_bus\obj\Debug\netstandard2.0\micro_services_bus.csproj.CoreCompileInputs.cache
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_bus\bin\Debug\netstandard2.0\micro_services_bus.deps.json
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_bus\bin\Debug\netstandard2.0\micro_services_bus.dll
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_bus\bin\Debug\netstandard2.0\micro_services_dal.dll
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_bus\bin\Debug\netstandard2.0\micro_services_share.dll
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_bus\bin\Debug\netstandard2.0\micro_services_dal.pdb
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_bus\bin\Debug\netstandard2.0\micro_services_share.pdb
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_bus\obj\Debug\netstandard2.0\micro_services_bus.csproj.CopyComplete
