@@ -43,14 +43,17 @@ namespace micro_service_fw
 
             using (MySqlConnection conn = new MySqlConnection(connstr))
             {
+                conn.Open();
                 using (MySqlCommand cmd = new MySqlCommand("SHOW TABLES"))
                 {
+                    cmd.Connection = conn;
                     cmd.CommandType = CommandType.Text;
                     using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
                     {
                         sda.Fill(dt);
                     }
                 }
+                conn.Close();
             }
 
 
@@ -61,7 +64,7 @@ namespace micro_service_fw
         {
             DataTable dt = new DataTable();
 
-            string connstr = string.Format("Data Source={0};port=3306;Initial Catalog={1};User Id{2};password={3}"
+            string connstr = string.Format("server={0};database={1};uid={2};password={3};charset=utf8;port=3306;"
                 , AppStatic.conf[AppStatic.conf_dbserver]
                 , AppStatic.conf[AppStatic.conf_dbname]
                 , AppStatic.conf[AppStatic.conf_dbuser]
@@ -69,8 +72,10 @@ namespace micro_service_fw
 
             using (MySqlConnection conn = new MySqlConnection(connstr))
             {
+                conn.Open();
                 using (MySqlCommand cmd = new MySqlCommand(string.Format("select * from {0} LIMIT 10",tablename)))
                 {
+                    cmd.Connection = conn;
                     cmd.CommandType = CommandType.Text;
                     using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
                     {

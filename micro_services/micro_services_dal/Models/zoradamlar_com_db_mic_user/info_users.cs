@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -15,10 +15,11 @@ namespace micro_services_dal.Models.zoradamlar_com_db_mic_user
         public string users_users_expiretime = "users_expiretime";
         public string users_users_updatetime = "users_updatetime";
         public string users_users_lang_id = "users_lang_id";
-        public string users_deleteduser_id = "deleteduser_id";
+        public string users_deletedusers_id = "deletedusers_id";
         public string users_users_active = "users_active";
         public string users_users_use = "users_use";
         public string users_users_backupmail = "users_backupmail";
         public string users_tablename = "users";
     }
+
 }

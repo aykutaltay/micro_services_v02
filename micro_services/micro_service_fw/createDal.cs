@@ -67,15 +67,19 @@ namespace micro_service_fw
                     pagemeth = string.Format("    public class info_{0}", dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagemeth += "    {" + Environment.NewLine + "@body" + "    }" + Environment.NewLine;
 
-                    DataTable dt_fields = op_share.mysql_dbtables_field(AppStatic.conf, dt.Rows[i]["tableName"].ToString());
+                    DataTable dt_fields = op_share.mysql_dbtables_field(AppStatic.conf, dt.Rows[i][tableName].ToString());
 
                     pagebody = string.Empty;
                     for (int k = 0; k < dt_fields.Columns.Count; k++)
                     {
                         pagebody += string.Format(@"        public string {0}_{1} = ""{1}"";"
                             , dt.Rows[i][tableName].ToString()
-                            , dt_fields.Columns[i].ColumnName) + Environment.NewLine;
+                            , dt_fields.Columns[k].ColumnName) + Environment.NewLine;
                     }
+
+                    pagebody += string.Format(@"        public string {0}_tablename = ""{0}"";"
+                            , dt.Rows[i][tableName].ToString()
+                            ) + Environment.NewLine;
 
                     pagemeth = pagemeth.Replace("@body", pagebody);
                     pagetop = pagetop.Replace("@meth", pagemeth);
@@ -92,14 +96,14 @@ namespace micro_service_fw
                     sw.WriteLine(pagetop);
                     sw.Flush();
                     sw.Close();
-                    fs.Close();
+                    
                 }
                 result = true;
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                Console.WriteLine(e.ToString());
                
             }
 
@@ -129,31 +133,39 @@ namespace micro_service_fw
                     pagetop += string.Format("namespace micro_services_dal.Models.{0}", AppStatic.conf[AppStatic.conf_dbname]) + Environment.NewLine;
                     pagetop += "{" + Environment.NewLine + "@meth" + Environment.NewLine + "}";
 
-                    pagemeth = string.Format(@"    [DC.Table(""{0}"")]", tableName);
+                    pagemeth = string.Format(@"    [DC.Table(""{0}"")]", dt.Rows[i][tableName].ToString())+Environment.NewLine;
                     pagemeth += string.Format("    public class {0}", dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagemeth += "    {" + Environment.NewLine + "@body" + "    }" + Environment.NewLine;
 
-                    DataTable dt_fields = op_share.mysql_dbtables_field(AppStatic.conf, dt.Rows[i]["tableName"].ToString());
+                    DataTable dt_fields = op_share.mysql_dbtables_field(AppStatic.conf, dt.Rows[i][tableName].ToString());
 
-                    pagebody = string.Format("        [DC.Key]");
+                    pagebody = string.Format("        [DC.Key]")+Environment.NewLine;
                     for (int k = 0; k < dt_fields.Columns.Count; k++)
                     {
                         string dtype_name = string.Empty;
                         
                         if (dt_fields.Columns[k].DataType.Name == "varchar")
                             dtype_name = "string";
+                        if (dt_fields.Columns[k].DataType.Name == "Int64")
+                            dtype_name = "long";
+                        if (dt_fields.Columns[k].DataType.Name == "String")
+                            dtype_name = "string";
+                        if (dt_fields.Columns[k].DataType.Name == "SByte")
+                            dtype_name = "bool";
+                        if (dt_fields.Columns[k].DataType.Name == "DateTime")
+                            dtype_name = "DateTime";
 
-                        pagebody += string.Format(@"        public {2} {0}_{1} = ""{1}"";"
+                        pagebody += string.Format(@"        public {2} {0}_{1} @ get; set; $"
                             , dt.Rows[i][tableName].ToString()
-                            , dt_fields.Columns[i].ColumnName
+                            , dt_fields.Columns[k].ColumnName
                             , dtype_name) + Environment.NewLine;
                     }
 
-                    pagemeth = pagemeth.Replace("@body", pagebody);
+                    pagemeth = pagemeth.Replace("@body", pagebody.Replace('@','{').Replace('$','}'));
                     pagetop = pagetop.Replace("@meth", pagemeth);
 
                     string file_path = AppStatic.conf[AppStatic.conf_pathdal] + "\\Models\\"
-                        + AppStatic.conf[AppStatic.conf_dbname] + "\\info_" + dt.Rows[i][tableName].ToString() + ".cs";
+                        + AppStatic.conf[AppStatic.conf_dbname] + "\\" + dt.Rows[i][tableName].ToString() + ".cs";
 
                     //eğer eski dosya var ise siler
                     if (File.Exists(file_path) == true)

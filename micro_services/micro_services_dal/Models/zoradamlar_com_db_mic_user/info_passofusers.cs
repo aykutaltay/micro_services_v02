@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -16,4 +16,5 @@ namespace micro_services_dal.Models.zoradamlar_com_db_mic_user
         public string passofusers_passofusers_use = "passofusers_use";
         public string passofusers_tablename = "passofusers";
     }
+
 }
