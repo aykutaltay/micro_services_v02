@@ -9,12 +9,12 @@ namespace micro_services_dal.Models.zoradamlar_com_db_mic_user
     public class lang
     {
         [DC.Key]
-        public long lang_lang_id { get; set; }
-        public string lang_lang_name { get; set; }
-        public long lang_lang_country_id { get; set; }
-        public bool lang_deletedlang_id { get; set; }
-        public bool lang_lang_active { get; set; }
-        public bool lang_lang_use { get; set; }
+        public long lang_id { get; set; }
+        public string lang_name { get; set; }
+        public long lang_country_id { get; set; }
+        public bool deletedlang_id { get; set; }
+        public bool lang_active { get; set; }
+        public bool lang_use { get; set; }
     }
 
 }

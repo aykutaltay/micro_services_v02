@@ -10,7 +10,7 @@ namespace micro_services_bus
         public bool DBCommit(string DBTYPE, string CONNSTR, string users_id, string tables)
         {
             bool result = false;
-            if (DBTYPE == AppStaticStr.dbTypeMYSQL)
+            if (DBTYPE == AppStaticStr.core_dbTypeMYSQL)
             {
                 string[] Tables = tables.Split(',');
 
@@ -24,7 +24,7 @@ namespace micro_services_bus
         public bool DBRollback(string DBTYPE, string CONNSTR, string users_id, string tables)
         {
             bool result = false;
-            if (DBTYPE == AppStaticStr.dbTypeMYSQL)
+            if (DBTYPE == AppStaticStr.core_dbTypeMYSQL)
             {
                 string[] Tables = tables.Split(',');
 

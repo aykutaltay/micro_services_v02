@@ -9,13 +9,13 @@ namespace micro_services_dal.Models.zoradamlar_com_db_mic_user
     public class dbserver
     {
         [DC.Key]
-        public long dbserver_dbserver_id { get; set; }
-        public string dbserver_dbserver_name { get; set; }
-        public string dbserver_dbserver_adrr { get; set; }
-        public bool dbserver_deleteddbserver_id { get; set; }
-        public bool dbserver_maintenancedbserver { get; set; }
-        public bool dbserver_dbserver_active { get; set; }
-        public bool dbserver_dbserver_use { get; set; }
+        public long dbserver_id { get; set; }
+        public string dbserver_name { get; set; }
+        public string dbserver_adrr { get; set; }
+        public bool deleteddbserver_id { get; set; }
+        public bool maintenancedbserver { get; set; }
+        public bool dbserver_active { get; set; }
+        public bool dbserver_use { get; set; }
     }
 
 }

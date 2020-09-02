@@ -126,11 +126,14 @@ namespace micro_service_fw
 
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
+                    //uses kısmı
                     string tableName = "Tables_in_" + AppStatic.conf[AppStatic.conf_dbname];
                     pagetop = "using System;" + Environment.NewLine + "using System.Collections.Generic;" + Environment.NewLine + "using System.Text;" + Environment.NewLine
                         + "using DC = Dapper.Contrib.Extensions;"+Environment.NewLine;
                     pagetop += Environment.NewLine;
+                    //namespace
                     pagetop += string.Format("namespace micro_services_dal.Models.{0}", AppStatic.conf[AppStatic.conf_dbname]) + Environment.NewLine;
+                    //methodlar
                     pagetop += "{" + Environment.NewLine + "@meth" + Environment.NewLine + "}";
 
                     pagemeth = string.Format(@"    [DC.Table(""{0}"")]", dt.Rows[i][tableName].ToString())+Environment.NewLine;
@@ -148,14 +151,18 @@ namespace micro_service_fw
                             dtype_name = "string";
                         if (dt_fields.Columns[k].DataType.Name == "Int64")
                             dtype_name = "long";
+                        if (dt_fields.Columns[k].DataType.Name == "Int32")
+                            dtype_name = "int";
                         if (dt_fields.Columns[k].DataType.Name == "String")
                             dtype_name = "string";
                         if (dt_fields.Columns[k].DataType.Name == "SByte")
                             dtype_name = "bool";
                         if (dt_fields.Columns[k].DataType.Name == "DateTime")
                             dtype_name = "DateTime";
-
-                        pagebody += string.Format(@"        public {2} {0}_{1} @ get; set; $"
+                        if (dt_fields.Columns[k].DataType.Name == "Double")
+                            dtype_name = "double";
+                        
+                        pagebody += string.Format(@"        public {2} {1} @ get; set; $"
                             , dt.Rows[i][tableName].ToString()
                             , dt_fields.Columns[k].ColumnName
                             , dtype_name) + Environment.NewLine;

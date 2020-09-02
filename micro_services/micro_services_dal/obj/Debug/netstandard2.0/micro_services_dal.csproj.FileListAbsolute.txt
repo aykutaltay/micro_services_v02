@@ -11,4 +11,3 @@ C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_servic
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_dal\obj\Debug\netstandard2.0\micro_services_dal.csproj.CoreCompileInputs.cache
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_dal\obj\Debug\netstandard2.0\micro_services_dal.dll
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_dal\obj\Debug\netstandard2.0\micro_services_dal.pdb
-C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services_dal\obj\Debug\netstandard2.0\micro_services_dal.csprojAssemblyReference.cache

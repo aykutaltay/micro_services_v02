@@ -17,6 +17,7 @@ namespace micro_service_fw
 
         public static void EntryPrepare()
         {
+            Console.WriteLine("DAL için class lar oluşturulacak");
             Console.WriteLine("Program, config.conf dosayası üzerindeki bilgiler ile işlem yapacaktır");
             Console.WriteLine("İşleme devam etmek için bir tuşa basın");
             Console.ReadLine();
@@ -31,6 +32,26 @@ namespace micro_service_fw
                 else
                     Console.WriteLine("Entityler yazıldı");
             }
+            Console.WriteLine("DAL için oluşturma bitti");
+            Console.WriteLine("---------------------------------------------------------");
+            Console.WriteLine("BUS için class lar oluşturulacak");
+            Console.WriteLine("Program, config.conf dosayası üzerindeki bilgiler ile işlem yapacaktır");
+            Console.WriteLine("İşleme devam etmek için bir tuşa basın");
+            Console.ReadLine();
+            
+            Console.WriteLine("CORE için 'core' yazıp enter e basınız ");
+            secim = Console.ReadLine();
+            if (secim.ToUpper() == "CORE")
+            {
+                if (new createBus().AllCreateCore() == false)
+                    Console.WriteLine("İşlem tamamlanamadı, CORE aktarımında hata oldu");
+                else
+                    Console.WriteLine("CORE op'ları yazıldı");
+            }
+            
+            Console.ReadLine();
+
+
         }
 
         public static void ReadtoConfig()
