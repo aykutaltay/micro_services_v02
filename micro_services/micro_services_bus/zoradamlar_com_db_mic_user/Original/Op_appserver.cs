@@ -78,7 +78,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             }
             return result;
         }
-        public List<appserver> GetAllusers(string whereclause = "1 = 1", string DBTYPE = " ", string CONNSTR = " ", bool ALL=false)
+        public List<appserver> GetAllappserver(string whereclause , string DBTYPE , string CONNSTR , bool ALL=false)
         {
             List<appserver> result = new List<appserver>();
             BeforeGetAllappserver(whereclause, DBTYPE, CONNSTR, ALL);

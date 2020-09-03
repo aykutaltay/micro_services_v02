@@ -78,7 +78,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             }
             return result;
         }
-        public List<tokensofusers> GetAllusers(string whereclause = "1 = 1", string DBTYPE = " ", string CONNSTR = " ", bool ALL=false)
+        public List<tokensofusers> GetAlltokensofusers(string whereclause , string DBTYPE , string CONNSTR , bool ALL=false)
         {
             List<tokensofusers> result = new List<tokensofusers>();
             BeforeGetAlltokensofusers(whereclause, DBTYPE, CONNSTR, ALL);

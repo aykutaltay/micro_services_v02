@@ -78,7 +78,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             }
             return result;
         }
-        public List<country> GetAllusers(string whereclause = "1 = 1", string DBTYPE = " ", string CONNSTR = " ", bool ALL=false)
+        public List<country> GetAllcountry(string whereclause , string DBTYPE , string CONNSTR , bool ALL=false)
         {
             List<country> result = new List<country>();
             BeforeGetAllcountry(whereclause, DBTYPE, CONNSTR, ALL);

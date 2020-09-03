@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 
@@ -17,46 +18,45 @@ namespace micro_service_fw
 
         public static void EntryPrepare()
         {
+
+            Console.Clear();
             Console.WriteLine("DAL için class lar oluşturulacak");
             Console.WriteLine("Program, config.conf dosayası üzerindeki bilgiler ile işlem yapacaktır");
             Console.WriteLine("İşleme devam etmek için bir tuşa basın");
             Console.ReadLine();
             //dosya okuma ve hafızaya almaİ
             ReadtoConfig();
-            Console.WriteLine("İşlemi onaylama için 'evet' yazıp enter e basınız ");
-            string secim =Console.ReadLine();
-            if (secim.ToUpper()=="EVET")
+        bas:
+            Console.WriteLine("dal yazarsanız, DataAccessLayer ile ilgili işlemleri yapar, corebus yazarsanız, Core Bus oplarını yapar");
+            Console.WriteLine("çıkmak için exit yazınız");
+            string secim = Console.ReadLine();
+            if (secim.ToUpper() == "DAL")
             {
                 if (new createDal().AllCreate() == false)
                     Console.WriteLine("İşlem tamamlanamadı, aktarımda hata oldu");
                 else
                     Console.WriteLine("Entityler yazıldı");
             }
-            Console.WriteLine("DAL için oluşturma bitti");
-            Console.WriteLine("---------------------------------------------------------");
-            Console.WriteLine("BUS için class lar oluşturulacak");
-            Console.WriteLine("Program, config.conf dosayası üzerindeki bilgiler ile işlem yapacaktır");
-            Console.WriteLine("İşleme devam etmek için bir tuşa basın");
-            Console.ReadLine();
-            
-            Console.WriteLine("CORE için 'core' yazıp enter e basınız ");
-            secim = Console.ReadLine();
-            if (secim.ToUpper() == "CORE")
+            if (secim.ToUpper() == "COREBUS")
             {
                 if (new createBus().AllCreateCore() == false)
                     Console.WriteLine("İşlem tamamlanamadı, CORE aktarımında hata oldu");
                 else
                     Console.WriteLine("CORE op'ları yazıldı");
             }
-            
+            if (secim.ToUpper() == "EXIT")
+                goto son;
+
+            Console.Clear();
+            goto bas;
+
+            son:
             Console.ReadLine();
-
-
         }
 
         public static void ReadtoConfig()
         {
-            
+
             int i = 1;
 
             string filepath = "config.conf";
@@ -68,9 +68,9 @@ namespace micro_service_fw
                 string[] tmp = line.Split('"');
                 if (tmp.Count() == 2)
                 {
-                    
-                    if ((tmp[0]== AppStatic.conf_dbname) || (tmp[0] == AppStatic.conf_dbuser) 
-                        || (tmp[0] == AppStatic.conf_dbuserpass) || (tmp[0] == AppStatic.conf_fwtype) 
+
+                    if ((tmp[0] == AppStatic.conf_dbname) || (tmp[0] == AppStatic.conf_dbuser)
+                        || (tmp[0] == AppStatic.conf_dbuserpass) || (tmp[0] == AppStatic.conf_fwtype)
                         || (tmp[0] == AppStatic.conf_pathbus) || (tmp[0] == AppStatic.conf_pathdal)
                         || (tmp[0] == AppStatic.conf_dbserver))
                     {
@@ -84,7 +84,7 @@ namespace micro_service_fw
                 }
                 else
                 {
-                    Console.WriteLine(string.Format("Girilen satır okunamadı, satır no: {0}",i));
+                    Console.WriteLine(string.Format("Girilen satır okunamadı, satır no: {0}", i));
                 }
 
                 i++;

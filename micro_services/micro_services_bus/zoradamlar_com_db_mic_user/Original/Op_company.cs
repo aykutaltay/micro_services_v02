@@ -78,7 +78,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             }
             return result;
         }
-        public List<company> GetAllusers(string whereclause = "1 = 1", string DBTYPE = " ", string CONNSTR = " ", bool ALL=false)
+        public List<company> GetAllcompany(string whereclause , string DBTYPE , string CONNSTR , bool ALL=false)
         {
             List<company> result = new List<company>();
             BeforeGetAllcompany(whereclause, DBTYPE, CONNSTR, ALL);

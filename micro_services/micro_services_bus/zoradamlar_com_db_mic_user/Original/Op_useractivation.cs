@@ -78,7 +78,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             }
             return result;
         }
-        public List<useractivation> GetAllusers(string whereclause = "1 = 1", string DBTYPE = " ", string CONNSTR = " ", bool ALL=false)
+        public List<useractivation> GetAlluseractivation(string whereclause , string DBTYPE , string CONNSTR , bool ALL=false)
         {
             List<useractivation> result = new List<useractivation>();
             BeforeGetAlluseractivation(whereclause, DBTYPE, CONNSTR, ALL);

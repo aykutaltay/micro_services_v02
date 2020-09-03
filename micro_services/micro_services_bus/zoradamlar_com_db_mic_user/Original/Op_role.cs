@@ -78,7 +78,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             }
             return result;
         }
-        public List<role> GetAllusers(string whereclause = "1 = 1", string DBTYPE = " ", string CONNSTR = " ", bool ALL=false)
+        public List<role> GetAllrole(string whereclause , string DBTYPE , string CONNSTR , bool ALL=false)
         {
             List<role> result = new List<role>();
             BeforeGetAllrole(whereclause, DBTYPE, CONNSTR, ALL);

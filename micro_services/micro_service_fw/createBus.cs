@@ -184,7 +184,7 @@ namespace micro_service_fw
                     pagebody += "            return result;" + Environment.NewLine;
                     pagebody += "        }" + Environment.NewLine;
                     //GetAll
-                    pagebody += string.Format(@"        public List<{0}> GetAllusers(string whereclause = ""1 = 1"", string DBTYPE = "" "", string CONNSTR = "" "", bool ALL=false)"
+                    pagebody += string.Format(@"        public List<{0}> GetAll{0}(string whereclause , string DBTYPE , string CONNSTR , bool ALL=false)"
                         , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagebody += "        {" + Environment.NewLine;
                     pagebody += string.Format("            List<{0}> result = new List<{0}>();"

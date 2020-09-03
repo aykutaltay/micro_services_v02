@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using micro_services_share;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,7 +42,7 @@ namespace micro_services
             // configure jwt authentication
            // var appSettings = appSettingsSection.Get<AppSettings>();
             //gizli cumle
-            var key = Encoding.ASCII.GetBytes("Bu iþ hayalini kurduðumuz iþ olabilir belkide burada büyük iþler yapacaðýz");
+            var key = Encoding.ASCII.GetBytes(AppStaticStr.sec_JWTClaim);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

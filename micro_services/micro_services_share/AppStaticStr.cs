@@ -7,7 +7,9 @@ namespace micro_services_share
     public static class AppStaticStr
     {
         public static string msg0001WrongUserNamePass = "Yanlış Kullanıcı Kodu yada Şifre";
+        public static string msg0005CorrectUsernamePass = "OK";
 
+        public static string sec_JWTClaim = "Bu iş hayalini kurduğumuz iş olabilir belkide burada büyük işler yapacağız";
 
         public static string core_dbname = "zoradamlar_com_db_mic_user";
         public static string core_uid = "zorad_AdminUOAA";
