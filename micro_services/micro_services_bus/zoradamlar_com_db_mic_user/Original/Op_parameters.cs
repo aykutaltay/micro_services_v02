@@ -2,25 +2,26 @@ using System.Collections.Generic;
 using System.Linq;
 using micro_services_dal;
 using micro_services_share;
+using micro_services_share.vModel;
 using micro_services_dal.Models.zoradamlar_com_db_mic_user;
 
 namespace micro_services_bus.zoradamlar_com_db_mic_user
 {
     public partial class Op_parameters
     {
-        public parameters Saveparameters(parameters PARAMETERS, string DBTYPE, string CONNSTR, bool SYNC = false, bool TRAN = false)
+        public parameters Saveparameters(parameters PARAMETERS, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
         {
             parameters result = new parameters();
-            BeforeSaveparameters(PARAMETERS: PARAMETERS,DBTYPE: DBTYPE, CONNSTR:CONNSTR, SYNC:SYNC, TRAN: TRAN);
+            BeforeSaveparameters(PARAMETERS: PARAMETERS, ALLOFUSERS, SYNC:SYNC, TRAN: TRAN);
             //eğer birden fazla DataBase güncelleme var ise
             if (SYNC == true)
                 PARAMETERS.parameters_use = false;
             //birden fazla tabloda güncelleme var ise
             if (TRAN == true)
                 PARAMETERS.parameters_active = false;
-            if (DBTYPE == AppStaticStr.core_dbTypeMYSQL)
+            if ( ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: CONNSTR, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
                 {
                     if (PARAMETERS.parameters_id == 0)
                     {
@@ -39,16 +40,16 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                     }
                 }
             }
-            AfterSaveparameters(PARAMETERS: PARAMETERS, DBTYPE: DBTYPE, CONNSTR: CONNSTR, SYNC: SYNC, TRAN: TRAN);
+            AfterSaveparameters(PARAMETERS: PARAMETERS, ALLOFUSERS, SYNC: SYNC, TRAN: TRAN);
             return result;
         }
-        public bool Deleteparameters(long ID, string DBTYPE, string CONNSTR, bool SYNC = false, bool TRAN = false)
+        public bool Deleteparameters(long ID, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
         {
             bool result = false;
-            BeforeDeleteparameters(ID, DBTYPE, CONNSTR, SYNC, TRAN);
-            if (DBTYPE == AppStaticStr.core_dbTypeMYSQL)
+            BeforeDeleteparameters(ID, ALLOFUSERS, SYNC, TRAN);
+            if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                parameters etmp = Getparameters(ID, DBTYPE, CONNSTR);
+                parameters etmp = Getparameters(ID, ALLOFUSERS);
                 //eğer birden fazla Database etkileniyor ise
                 if (SYNC == true)
                     etmp.parameters_use = false;
@@ -56,19 +57,19 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 if (TRAN == true)
                     etmp.parameters_active = false;
                 etmp.deletedparameters_id = true;
-                parameters eresulttmp = Saveparameters(etmp, DBTYPE, CONNSTR);
+                parameters eresulttmp = Saveparameters(etmp, ALLOFUSERS);
                 if (eresulttmp.deletedparameters_id == true)
                     result = true;
             }
-            AfterDeleteparameters(ID, DBTYPE, CONNSTR, SYNC, TRAN);
+            AfterDeleteparameters(ID, ALLOFUSERS, SYNC, TRAN);
             return result;
         }
-        public parameters Getparameters(long ID, string DBTYPE, string CONNSTR, bool ALL=false)
+        public parameters Getparameters(long ID, allofusers ALLOFUSERS, bool ALL=false)
         {
             parameters result = new parameters();
-            if (DBTYPE == AppStaticStr.core_dbTypeMYSQL)
+            if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: CONNSTR, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
                 {                    result = db.Get<parameters>(id: ID);
                     //senkron dışında ve silinenlerin dışındakileri getirmesi
                     if (ALL==false)
@@ -78,32 +79,32 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             }
             return result;
         }
-        public List<parameters> GetAllparameters(string whereclause , string DBTYPE , string CONNSTR , bool ALL=false)
+        public List<parameters> GetAllparameters(string whereclause , allofusers ALLOFUSERS, bool ALL=false)
         {
             List<parameters> result = new List<parameters>();
-            BeforeGetAllparameters(whereclause, DBTYPE, CONNSTR, ALL);
+            BeforeGetAllparameters(whereclause, ALLOFUSERS, ALL);
             //senkron dışında ve silinenlerin dışındakileri getirmesi
             if (ALL == false)
             {
                 info_parameters info = new info_parameters();
                 whereclause += "AND " + info.parameters_deletedparameters_id + " = false AND " + info.parameters_parameters_use + " = true AND " + info.parameters_parameters_active + " = true";
             }
-            if (DBTYPE == AppStaticStr.core_dbTypeMYSQL)
+            if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: CONNSTR, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(ALLOFUSERS.appdatabase_connstr, usetransaction: false))
                 {
                     result = db.GetAll<parameters>(whereclause: whereclause).ToList();
-                }            }            AfterGetAllparameters(whereclause, DBTYPE, CONNSTR, ALL);
+                }            }            AfterGetAllparameters(whereclause, ALLOFUSERS, ALL);
             return result;
         }
-        public void BeforeSaveparameters(parameters PARAMETERS, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) { }
-        public void AfterSaveparameters(parameters PARAMETERS, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) { }
-        public void AfterDeleteparameters (long ID, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) { }
-        public void BeforeDeleteparameters(long ID, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) { }
-        public void BeforeGetparameters(long ID, string DBTYPE, string CONNSTR, bool ALL) { }
-        public void AfterGetparameters(long ID, string DBTYPE, string CONNSTR, bool ALL) { }
-        public void BeforeGetAllparameters(string whereclause , string DBTYPE , string CONNSTR , bool ALL ) { }
-        public void AfterGetAllparameters(string whereclause, string DBTYPE, string CONNSTR, bool ALL) { }
+        public void BeforeSaveparameters(parameters PARAMETERS, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void AfterSaveparameters(parameters PARAMETERS, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void AfterDeleteparameters (long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void BeforeDeleteparameters(long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void BeforeGetparameters(long ID, allofusers ALLOFUSERS, bool ALL) { }
+        public void AfterGetparameters(long ID, allofusers ALLOFUSERS, bool ALL) { }
+        public void BeforeGetAllparameters(string whereclause , allofusers ALLOFUSERS, bool ALL ) { }
+        public void AfterGetAllparameters(string whereclause, allofusers ALLOFUSERS, bool ALL) { }
     }
 
 }

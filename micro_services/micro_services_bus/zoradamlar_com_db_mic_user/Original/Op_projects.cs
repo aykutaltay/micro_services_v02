@@ -2,25 +2,26 @@ using System.Collections.Generic;
 using System.Linq;
 using micro_services_dal;
 using micro_services_share;
+using micro_services_share.vModel;
 using micro_services_dal.Models.zoradamlar_com_db_mic_user;
 
 namespace micro_services_bus.zoradamlar_com_db_mic_user
 {
     public partial class Op_projects
     {
-        public projects Saveprojects(projects PROJECTS, string DBTYPE, string CONNSTR, bool SYNC = false, bool TRAN = false)
+        public projects Saveprojects(projects PROJECTS, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
         {
             projects result = new projects();
-            BeforeSaveprojects(PROJECTS: PROJECTS,DBTYPE: DBTYPE, CONNSTR:CONNSTR, SYNC:SYNC, TRAN: TRAN);
+            BeforeSaveprojects(PROJECTS: PROJECTS, ALLOFUSERS, SYNC:SYNC, TRAN: TRAN);
             //eğer birden fazla DataBase güncelleme var ise
             if (SYNC == true)
                 PROJECTS.projects_use = false;
             //birden fazla tabloda güncelleme var ise
             if (TRAN == true)
                 PROJECTS.projects_active = false;
-            if (DBTYPE == AppStaticStr.core_dbTypeMYSQL)
+            if ( ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: CONNSTR, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
                 {
                     if (PROJECTS.projects_id == 0)
                     {
@@ -39,16 +40,16 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                     }
                 }
             }
-            AfterSaveprojects(PROJECTS: PROJECTS, DBTYPE: DBTYPE, CONNSTR: CONNSTR, SYNC: SYNC, TRAN: TRAN);
+            AfterSaveprojects(PROJECTS: PROJECTS, ALLOFUSERS, SYNC: SYNC, TRAN: TRAN);
             return result;
         }
-        public bool Deleteprojects(long ID, string DBTYPE, string CONNSTR, bool SYNC = false, bool TRAN = false)
+        public bool Deleteprojects(long ID, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
         {
             bool result = false;
-            BeforeDeleteprojects(ID, DBTYPE, CONNSTR, SYNC, TRAN);
-            if (DBTYPE == AppStaticStr.core_dbTypeMYSQL)
+            BeforeDeleteprojects(ID, ALLOFUSERS, SYNC, TRAN);
+            if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                projects etmp = Getprojects(ID, DBTYPE, CONNSTR);
+                projects etmp = Getprojects(ID, ALLOFUSERS);
                 //eğer birden fazla Database etkileniyor ise
                 if (SYNC == true)
                     etmp.projects_use = false;
@@ -56,19 +57,19 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 if (TRAN == true)
                     etmp.projects_active = false;
                 etmp.deletedprojects_id = true;
-                projects eresulttmp = Saveprojects(etmp, DBTYPE, CONNSTR);
+                projects eresulttmp = Saveprojects(etmp, ALLOFUSERS);
                 if (eresulttmp.deletedprojects_id == true)
                     result = true;
             }
-            AfterDeleteprojects(ID, DBTYPE, CONNSTR, SYNC, TRAN);
+            AfterDeleteprojects(ID, ALLOFUSERS, SYNC, TRAN);
             return result;
         }
-        public projects Getprojects(long ID, string DBTYPE, string CONNSTR, bool ALL=false)
+        public projects Getprojects(long ID, allofusers ALLOFUSERS, bool ALL=false)
         {
             projects result = new projects();
-            if (DBTYPE == AppStaticStr.core_dbTypeMYSQL)
+            if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: CONNSTR, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
                 {                    result = db.Get<projects>(id: ID);
                     //senkron dışında ve silinenlerin dışındakileri getirmesi
                     if (ALL==false)
@@ -78,32 +79,32 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             }
             return result;
         }
-        public List<projects> GetAllprojects(string whereclause , string DBTYPE , string CONNSTR , bool ALL=false)
+        public List<projects> GetAllprojects(string whereclause , allofusers ALLOFUSERS, bool ALL=false)
         {
             List<projects> result = new List<projects>();
-            BeforeGetAllprojects(whereclause, DBTYPE, CONNSTR, ALL);
+            BeforeGetAllprojects(whereclause, ALLOFUSERS, ALL);
             //senkron dışında ve silinenlerin dışındakileri getirmesi
             if (ALL == false)
             {
                 info_projects info = new info_projects();
                 whereclause += "AND " + info.projects_deletedprojects_id + " = false AND " + info.projects_projects_use + " = true AND " + info.projects_projects_active + " = true";
             }
-            if (DBTYPE == AppStaticStr.core_dbTypeMYSQL)
+            if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: CONNSTR, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(ALLOFUSERS.appdatabase_connstr, usetransaction: false))
                 {
                     result = db.GetAll<projects>(whereclause: whereclause).ToList();
-                }            }            AfterGetAllprojects(whereclause, DBTYPE, CONNSTR, ALL);
+                }            }            AfterGetAllprojects(whereclause, ALLOFUSERS, ALL);
             return result;
         }
-        public void BeforeSaveprojects(projects PROJECTS, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) { }
-        public void AfterSaveprojects(projects PROJECTS, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) { }
-        public void AfterDeleteprojects (long ID, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) { }
-        public void BeforeDeleteprojects(long ID, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) { }
-        public void BeforeGetprojects(long ID, string DBTYPE, string CONNSTR, bool ALL) { }
-        public void AfterGetprojects(long ID, string DBTYPE, string CONNSTR, bool ALL) { }
-        public void BeforeGetAllprojects(string whereclause , string DBTYPE , string CONNSTR , bool ALL ) { }
-        public void AfterGetAllprojects(string whereclause, string DBTYPE, string CONNSTR, bool ALL) { }
+        public void BeforeSaveprojects(projects PROJECTS, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void AfterSaveprojects(projects PROJECTS, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void AfterDeleteprojects (long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void BeforeDeleteprojects(long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void BeforeGetprojects(long ID, allofusers ALLOFUSERS, bool ALL) { }
+        public void AfterGetprojects(long ID, allofusers ALLOFUSERS, bool ALL) { }
+        public void BeforeGetAllprojects(string whereclause , allofusers ALLOFUSERS, bool ALL ) { }
+        public void AfterGetAllprojects(string whereclause, allofusers ALLOFUSERS, bool ALL) { }
     }
 
 }

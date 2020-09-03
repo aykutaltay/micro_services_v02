@@ -8,6 +8,7 @@ namespace micro_services_dal.Models.zoradamlar_com_db_mic_user
     {
         public string projects_projects_id = "projects_id";
         public string projects_projects_name = "projects_name";
+        public string projects_projects_type = "projects_type";
         public string projects_projects_appdatabase_id = "projects_appdatabase_id";
         public string projects_deletedprojects_id = "deletedprojects_id";
         public string projects_maintenanceprojects = "maintenanceprojects";

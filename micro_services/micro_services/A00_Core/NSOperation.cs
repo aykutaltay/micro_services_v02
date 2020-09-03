@@ -14,6 +14,7 @@ namespace micro_services.A00
 
         micro_services_dal.Models.zoradamlar_com_db_mic_user.info_passofusers info_passof = new micro_services_dal.Models.zoradamlar_com_db_mic_user.info_passofusers();
         micro_services_bus.zoradamlar_com_db_mic_user.Op_passofusers bus_passof = new micro_services_bus.zoradamlar_com_db_mic_user.Op_passofusers();
+         
 
         public long UserAuth(cRequest model)
         {
@@ -25,6 +26,12 @@ namespace micro_services.A00
             //    data = string.Empty
             //};
             long result = 0;
+            //işlemler için manueldolduruluyor
+            micro_services_share.vModel.allofusers ALLOFUSER = new micro_services_share.vModel.allofusers()
+            {
+                appdatabase_connstr = AppStaticStr.core_dbConnStr,
+                appdatabase_type = AppStaticStr.core_dbTypeMYSQL
+            };
 
             Dictionary<string, string> gelen = JsonConvert.DeserializeObject<Dictionary<string, string>>(model.data);
 
@@ -46,8 +53,7 @@ namespace micro_services.A00
                 , info_users.users_users_mail, gelen[AppStaticStr.Key_username]);
 
             List<micro_services_dal.Models.zoradamlar_com_db_mic_user.users> l_usr = bus_users.GetAllusers(whereclause: sql
-                , DBTYPE: AppStaticStr.core_dbTypeMYSQL
-                , CONNSTR: AppStaticStr.core_dbConnStr);
+                ,ALLOFUSERS: ALLOFUSER);
 
             if (l_usr.Count != 1)
                 return result;
@@ -57,8 +63,7 @@ namespace micro_services.A00
                 , info_passof.passofusers_passofusers_pass, gelen[AppStaticStr.Key_password]);
 
             List<micro_services_dal.Models.zoradamlar_com_db_mic_user.passofusers> l_passof = bus_passof.GetAllpassofusers(whereclause: sql
-                , DBTYPE: AppStaticStr.core_dbTypeMYSQL
-                , CONNSTR: AppStaticStr.core_dbConnStr);
+                , ALLOFUSERS:ALLOFUSER);
 
 
 

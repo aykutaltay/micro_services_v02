@@ -58,6 +58,7 @@ namespace micro_services_share.vModel
         //project
         public long projects_id { get; set; }
         public string projects_name { get; set; }
+        public string projects_type { get; set; }
         public long projects_database_id { get; set; }
         public bool deletedprojects_id { get; set; }
         public bool maintenanceprojects { get; set; }

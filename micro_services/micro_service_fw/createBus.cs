@@ -63,7 +63,9 @@ namespace micro_service_fw
                         + "using System.Linq;" + Environment.NewLine
                         + "using micro_services_dal;" + Environment.NewLine
                         + "using micro_services_share;" + Environment.NewLine
+                        + "using micro_services_share.vModel;" + Environment.NewLine
                         + "using micro_services_dal.Models." + AppStatic.conf[AppStatic.conf_dbname] + ";" + Environment.NewLine;
+
                     pagetop += Environment.NewLine;
                     //namespace
                     pagetop += string.Format("namespace micro_services_bus.{0}", AppStatic.conf[AppStatic.conf_dbname]) + Environment.NewLine;
@@ -75,12 +77,12 @@ namespace micro_service_fw
                     pagemeth += "    {" + Environment.NewLine + "@body" + "    }" + Environment.NewLine;
 
                     //Save
-                    pagebody = string.Format("        public {0} Save{0}({0} {1}, string DBTYPE, string CONNSTR, bool SYNC = false, bool TRAN = false)"
+                    pagebody = string.Format("        public {0} Save{0}({0} {1}, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)"
                         , dt.Rows[i][tableName].ToString()
                         , dt.Rows[i][tableName].ToString().ToUpper()) + Environment.NewLine;
                     pagebody += "        {" + Environment.NewLine;
                     pagebody += string.Format("            {0} result = new {0}();", dt.Rows[i][tableName].ToString()) + Environment.NewLine;
-                    pagebody += string.Format("            BeforeSave{1}({0}: {0},DBTYPE: DBTYPE, CONNSTR:CONNSTR, SYNC:SYNC, TRAN: TRAN);"
+                    pagebody += string.Format("            BeforeSave{1}({0}: {0}, ALLOFUSERS, SYNC:SYNC, TRAN: TRAN);"
                         , dt.Rows[i][tableName].ToString().ToUpper()
                         , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagebody += "            //eğer birden fazla DataBase güncelleme var ise" + Environment.NewLine;
@@ -93,9 +95,9 @@ namespace micro_service_fw
                     pagebody += string.Format("                {1}.{0}_active = false;"
                             , dt.Rows[i][tableName].ToString()
                             , dt.Rows[i][tableName].ToString().ToUpper()) + Environment.NewLine;
-                    pagebody += "            if (DBTYPE == AppStaticStr.core_dbTypeMYSQL)" + Environment.NewLine;
+                    pagebody += "            if ( ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)" + Environment.NewLine;
                     pagebody += "            {" + Environment.NewLine;
-                    pagebody += "                using (Mysql_dapper db = new Mysql_dapper(connstr: CONNSTR, usetransaction: false))" + Environment.NewLine;
+                    pagebody += "                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))" + Environment.NewLine;
                     pagebody += "                {" + Environment.NewLine;
                     pagebody += string.Format("                    if ({1}.{0}_id == 0)"
                             , dt.Rows[i][tableName].ToString()
@@ -125,21 +127,21 @@ namespace micro_service_fw
                     pagebody += "                    }" + Environment.NewLine;
                     pagebody += "                }" + Environment.NewLine;
                     pagebody += "            }" + Environment.NewLine;
-                    pagebody += string.Format("            AfterSave{0}({1}: {1}, DBTYPE: DBTYPE, CONNSTR: CONNSTR, SYNC: SYNC, TRAN: TRAN);"
+                    pagebody += string.Format("            AfterSave{0}({1}: {1}, ALLOFUSERS, SYNC: SYNC, TRAN: TRAN);"
                             , dt.Rows[i][tableName].ToString()
                             , dt.Rows[i][tableName].ToString().ToUpper()) + Environment.NewLine;
                     pagebody += "            return result;" + Environment.NewLine;
                     pagebody += "        }" + Environment.NewLine;
                     //Delete
-                    pagebody += string.Format("        public bool Delete{0}(long ID, string DBTYPE, string CONNSTR, bool SYNC = false, bool TRAN = false)"
+                    pagebody += string.Format("        public bool Delete{0}(long ID, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)"
                             , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagebody += "        {" + Environment.NewLine;
                     pagebody += "            bool result = false;" + Environment.NewLine;
-                    pagebody += string.Format("            BeforeDelete{0}(ID, DBTYPE, CONNSTR, SYNC, TRAN);"
+                    pagebody += string.Format("            BeforeDelete{0}(ID, ALLOFUSERS, SYNC, TRAN);"
                             , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
-                    pagebody += "            if (DBTYPE == AppStaticStr.core_dbTypeMYSQL)" + Environment.NewLine;
+                    pagebody += "            if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)" + Environment.NewLine;
                     pagebody += "            {" + Environment.NewLine;
-                    pagebody += string.Format("                {0} etmp = Get{0}(ID, DBTYPE, CONNSTR);"
+                    pagebody += string.Format("                {0} etmp = Get{0}(ID, ALLOFUSERS);"
                             , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagebody += "                //eğer birden fazla Database etkileniyor ise" + Environment.NewLine;
                     pagebody += "                if (SYNC == true)" + Environment.NewLine;
@@ -151,25 +153,25 @@ namespace micro_service_fw
                             , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagebody += string.Format("                etmp.deleted{0}_id = true;"
                             , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
-                    pagebody += string.Format("                {0} eresulttmp = Save{0}(etmp, DBTYPE, CONNSTR);"
+                    pagebody += string.Format("                {0} eresulttmp = Save{0}(etmp, ALLOFUSERS);"
                             , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagebody += string.Format("                if (eresulttmp.deleted{0}_id == true)"
                             , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagebody += "                    result = true;" + Environment.NewLine;
                     pagebody += "            }" + Environment.NewLine;
-                    pagebody += string.Format("            AfterDelete{0}(ID, DBTYPE, CONNSTR, SYNC, TRAN);"
+                    pagebody += string.Format("            AfterDelete{0}(ID, ALLOFUSERS, SYNC, TRAN);"
                             , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagebody += "            return result;" + Environment.NewLine;
                     pagebody += "        }" + Environment.NewLine;
                     //GET
-                    pagebody += string.Format("        public {0} Get{0}(long ID, string DBTYPE, string CONNSTR, bool ALL=false)"
+                    pagebody += string.Format("        public {0} Get{0}(long ID, allofusers ALLOFUSERS, bool ALL=false)"
                             , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagebody += "        {" + Environment.NewLine;
                     pagebody += string.Format("            {0} result = new {0}();"
                             , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
-                    pagebody += "            if (DBTYPE == AppStaticStr.core_dbTypeMYSQL)" + Environment.NewLine;
+                    pagebody += "            if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)" + Environment.NewLine;
                     pagebody += "            {" + Environment.NewLine;
-                    pagebody += "                using (Mysql_dapper db = new Mysql_dapper(connstr: CONNSTR, usetransaction: false))" + Environment.NewLine;
+                    pagebody += "                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))" + Environment.NewLine;
                     pagebody += "                {";
                     pagebody += string.Format("                    result = db.Get<{0}>(id: ID);"
                         , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
@@ -184,12 +186,12 @@ namespace micro_service_fw
                     pagebody += "            return result;" + Environment.NewLine;
                     pagebody += "        }" + Environment.NewLine;
                     //GetAll
-                    pagebody += string.Format(@"        public List<{0}> GetAll{0}(string whereclause , string DBTYPE , string CONNSTR , bool ALL=false)"
+                    pagebody += string.Format(@"        public List<{0}> GetAll{0}(string whereclause , allofusers ALLOFUSERS, bool ALL=false)"
                         , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagebody += "        {" + Environment.NewLine;
                     pagebody += string.Format("            List<{0}> result = new List<{0}>();"
                         , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
-                    pagebody += string.Format("            BeforeGetAll{0}(whereclause, DBTYPE, CONNSTR, ALL);"
+                    pagebody += string.Format("            BeforeGetAll{0}(whereclause, ALLOFUSERS, ALL);"
                         , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagebody += "            //senkron dışında ve silinenlerin dışındakileri getirmesi" + Environment.NewLine;
                     pagebody += "            if (ALL == false)" + Environment.NewLine;
@@ -199,36 +201,36 @@ namespace micro_service_fw
                     pagebody += string.Format(@"                whereclause += ""AND "" + info.{0}_deleted{0}_id + "" = false AND "" + info.{0}_{0}_use + "" = true AND "" + info.{0}_{0}_active + "" = true"";"
                         , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagebody += "            }" + Environment.NewLine;
-                    pagebody += "            if (DBTYPE == AppStaticStr.core_dbTypeMYSQL)" + Environment.NewLine;
+                    pagebody += "            if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)" + Environment.NewLine;
                     pagebody += "            {" + Environment.NewLine;
-                    pagebody += "                using (Mysql_dapper db = new Mysql_dapper(connstr: CONNSTR, usetransaction: false))" + Environment.NewLine;
+                    pagebody += "                using (Mysql_dapper db = new Mysql_dapper(ALLOFUSERS.appdatabase_connstr, usetransaction: false))" + Environment.NewLine;
                     pagebody += "                {" + Environment.NewLine;
                     pagebody += string.Format("                    result = db.GetAll<{0}>(whereclause: whereclause).ToList();"
                         , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagebody += "                }";
                     pagebody += "            }";
-                    pagebody += string.Format("            AfterGetAll{0}(whereclause, DBTYPE, CONNSTR, ALL);"
+                    pagebody += string.Format("            AfterGetAll{0}(whereclause, ALLOFUSERS, ALL);"
                         , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagebody += "            return result;" + Environment.NewLine;
                     pagebody += "        }" + Environment.NewLine;
                     //partial olanlar
-                    pagebody += string.Format("        public void BeforeSave{0}({0} {1}, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) "
+                    pagebody += string.Format("        public void BeforeSave{0}({0} {1}, allofusers ALLOFUSERS, bool SYNC, bool TRAN) "
                         , dt.Rows[i][tableName].ToString()
                         , dt.Rows[i][tableName].ToString().ToUpper()) + "{ " + "}" + Environment.NewLine;
-                    pagebody += string.Format("        public void AfterSave{0}({0} {1}, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) "
+                    pagebody += string.Format("        public void AfterSave{0}({0} {1}, allofusers ALLOFUSERS, bool SYNC, bool TRAN) "
                         , dt.Rows[i][tableName].ToString()
                         , dt.Rows[i][tableName].ToString().ToUpper()) + "{ " + "}" + Environment.NewLine;
-                    pagebody += string.Format("        public void AfterDelete{0} (long ID, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) "
+                    pagebody += string.Format("        public void AfterDelete{0} (long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) "
                         , dt.Rows[i][tableName].ToString()) + "{ " + "}" + Environment.NewLine;
-                    pagebody += string.Format("        public void BeforeDelete{0}(long ID, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) "
+                    pagebody += string.Format("        public void BeforeDelete{0}(long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) "
                         , dt.Rows[i][tableName].ToString()) + "{ " + "}" + Environment.NewLine;
-                    pagebody += string.Format("        public void BeforeGet{0}(long ID, string DBTYPE, string CONNSTR, bool ALL) "
+                    pagebody += string.Format("        public void BeforeGet{0}(long ID, allofusers ALLOFUSERS, bool ALL) "
                         , dt.Rows[i][tableName].ToString()) + "{ " + "}" + Environment.NewLine;
-                    pagebody += string.Format("        public void AfterGet{0}(long ID, string DBTYPE, string CONNSTR, bool ALL) "
+                    pagebody += string.Format("        public void AfterGet{0}(long ID, allofusers ALLOFUSERS, bool ALL) "
                         , dt.Rows[i][tableName].ToString()) + "{ " + "}" + Environment.NewLine;
-                    pagebody += string.Format("        public void BeforeGetAll{0}(string whereclause , string DBTYPE , string CONNSTR , bool ALL ) "
+                    pagebody += string.Format("        public void BeforeGetAll{0}(string whereclause , allofusers ALLOFUSERS, bool ALL ) "
                         , dt.Rows[i][tableName].ToString()) + "{ " + "}" + Environment.NewLine;
-                    pagebody += string.Format("        public void AfterGetAll{0}(string whereclause, string DBTYPE, string CONNSTR, bool ALL) "
+                    pagebody += string.Format("        public void AfterGetAll{0}(string whereclause, allofusers ALLOFUSERS, bool ALL) "
                         , dt.Rows[i][tableName].ToString()) + "{ " + "}" + Environment.NewLine;
 
                     //birleştirme ve yazma
