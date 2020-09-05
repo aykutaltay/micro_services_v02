@@ -70,3 +70,4 @@ C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_servic
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Options.dll
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\micro_services\bin\Debug\netcoreapp3.1\micro_services.pdb

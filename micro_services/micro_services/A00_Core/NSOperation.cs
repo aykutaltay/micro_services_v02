@@ -33,6 +33,11 @@ namespace micro_services.A00
                 appdatabase_type = AppStaticStr.core_dbTypeMYSQL
             };
 
+            Dictionary<string, string> test = new Dictionary<string, string>();
+            test.Add("USERNAME", "Ulaş");
+            test.Add("PASS", "ORUÇ");
+            string ttstr = JsonConvert.SerializeObject(test);
+
             Dictionary<string, string> gelen = JsonConvert.DeserializeObject<Dictionary<string, string>>(model.data);
 
             //kontroller

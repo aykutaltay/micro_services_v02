@@ -25,6 +25,7 @@ namespace micro_services
         }
 
         public IConfiguration Configuration { get; }
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -33,6 +34,20 @@ namespace micro_services
             //services.AddDbContext<DataContext>(x => x.UseInMemoryDatabase("TestDb"));
 
             services.AddCors();
+            //localden girmek için alttaki eklendi bi üstteki satır yoruma alındı
+            //             services.AddCors(options =>
+            // {
+            //     options.AddPolicy(MyAllowSpecificOrigins,
+            //         builder =>
+            //         {
+            //             builder
+            //             .AllowAnyOrigin()
+            //             .AllowAnyMethod()
+            //             .AllowAnyHeader()
+            //             .AllowCredentials();
+            //         });
+            // });
+
             services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.IgnoreNullValues = true);
 
             // configure strongly typed settings objects

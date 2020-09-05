@@ -33,6 +33,14 @@ namespace ZaMvcV03.Controllers
             return View();
         }
 
+        public IActionResult Test(VUserLogin mod)
+        {
+            if (mod.USERNAME == "Aa")
+                mod.PASSWORD = "AAAAA";
+
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

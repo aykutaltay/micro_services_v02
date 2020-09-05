@@ -81,15 +81,20 @@ namespace micro_services.A00_Core
         {
             DateTime tar = DateTime.Now;
             long result = 0;
+            allofusers e_allogusers = new allofusers()
+            {
+                appdatabase_type = AppStaticStr.core_dbTypeMYSQL,
+                appdatabase_connstr = AppStaticStr.core_dbConnStr
+            };
 
             List<tokensofusers> l_tok = Op_tokenofUsers.GetAlltokensofusers(string.Format("{0}={1}"
-                , info_tokenofUsers.tokensofusers_tokensofusers_users_id,userID),DBTYPE:AppStaticStr.core_dbTypeMYSQL,CONNSTR:AppStaticStr.core_dbConnStr);
+                , info_tokenofUsers.tokensofusers_tokensofusers_users_id,userID),ALLOFUSERS:e_allogusers);
 
             if (l_tok!=null)
             {
                 for (int i = 0; i < l_tok.Count; i++)
                 {
-                    if (Op_tokenofUsers.Deletetokensofusers(l_tok[0].tokensofusers_id, DBTYPE: AppStaticStr.core_dbTypeMYSQL, CONNSTR: AppStaticStr.core_dbConnStr) == false)
+                    if (Op_tokenofUsers.Deletetokensofusers(l_tok[0].tokensofusers_id, ALLOFUSERS:e_allogusers) == false)
                         return result;
                 }
             }
@@ -105,8 +110,7 @@ namespace micro_services.A00_Core
                 tokensofusers_use=true,
                 tokensofusers_users_id=userID
             }
-            ,DBTYPE:AppStaticStr.core_dbTypeMYSQL
-            ,CONNSTR:AppStaticStr.core_dbConnStr);
+            ,ALLOFUSERS:e_allogusers);
 
             if (e_result.tokensofusers_id == 0)
                 return result;
