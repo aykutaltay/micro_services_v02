@@ -236,6 +236,7 @@ namespace micro_service_fw
                     //birleştirme ve yazma
                     pagemeth = pagemeth.Replace("@body", pagebody.Replace('@', '{').Replace('$', '}'));
                     pagetop = pagetop.Replace("@meth", pagemeth);
+                    pagetop = pagetop.Replace('İ', 'I').Replace('ı','i');
 
                     string file_path = AppStatic.conf[AppStatic.conf_pathbus] + "\\" + AppStatic.conf[AppStatic.conf_dbname]
                         + "\\Original\\Op_" + dt.Rows[i][tableName].ToString() + ".cs";
@@ -318,6 +319,7 @@ namespace micro_service_fw
                     //birleştirme ve yazma
                     pagemeth = pagemeth.Replace("@body", pagebody.Replace('@', '{').Replace('$', '}'));
                     pagetop = pagetop.Replace("@meth", pagemeth);
+                    pagetop = pagetop.Replace('İ', 'I').Replace('ı', 'i');
 
                     string file_path = AppStatic.conf[AppStatic.conf_pathbus] + "\\" + AppStatic.conf[AppStatic.conf_dbname]
                         + "\\Op_" + dt.Rows[i][tableName].ToString() + ".cs";

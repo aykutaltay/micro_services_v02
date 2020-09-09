@@ -10,25 +10,41 @@
         usr.PASS = s;
 
         var mdl = new All.Models.cRequest();
-        mdl.data = JSON.stringify(usr);
+        var result = new All.Models.cResponse();
 
-        str = "";
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6LcUT8kZAAAAADHqHET4v2sJQr8Ozbta4Ti9s5dj', { action: 'submit' })
+                .then(function (token) {
 
+                    mdl.token = token;
+                    mdl.data = JSON.stringify(usr);
 
-        var settings = {
-            "url": "https://localhost:5001/GateOfNewWorld/auth",
-            "method": "POST",
-            "timeout": 0,
-            "headers": {
-                "Content-Type": "application/json"
-            },
-            "data": JSON.stringify(mdl),
-        };
+                    var settings = {
+                        "url": "https://localhost:5001/GateOfNewWorld/auth",
+                        "method": "POST",
+                        "timeout": 0,
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                        "data": JSON.stringify(mdl),
+                    };
 
-        $.ajax(settings).done(function (response) {
-            console.log(response);
-            str = response;
+                    $.ajax(settings).done(function (response) {
+                        //console.log(response);
+                        result = JSON.parse(response);
+                        alert(result.message);
+                    });
+                });
         });
+
+
+
+        //kontroller
+        //if (All.Methods.ValidateEmail(k) == false)
+        //    return;
+
+
+
 
 
         //All.postJSON('https://localhost:5001/GateOfNewWorld/auth', JSON.stringify(mdl), function (res) {
@@ -49,6 +65,54 @@
 
         //console.log(str);
 
+
+    });
+
+    $('#btnNewEntry').click(function () {
+        var k = $('#txtNewemail').val();
+        var a = $('#txtNewusername').val();
+        var s = $('#txtNewpass').val();
+
+        var usr = new All.Models.VNusercontol();
+        var result = new All.Models.cResponse();
+
+        usr.USERNAME = k;
+        usr.PASSWORD = s;
+        usr.NAMESURNAME = a;
+
+        var mdl = new All.Models.cRequest();
+        mdl.data = JSON.stringify(usr);
+
+
+
+        //kontroller
+        if (All.Methods.ValidateEmail(k) == false)
+            return;
+
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6LcUT8kZAAAAADHqHET4v2sJQr8Ozbta4Ti9s5dj', { action: 'submit' })
+                .then(function (token) {
+
+                    mdl.token = token;
+                    mdl.data = JSON.stringify(usr);
+
+                    var settings = {
+                        "url": "https://localhost:5001/GateOfNewWorld/nuser",
+                        "method": "POST",
+                        "timeout": 0,
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                        "data": JSON.stringify(mdl),
+                    };
+
+                    $.ajax(settings).done(function (response) {
+                        //console.log(response);
+                        //result = JSON.parse(response);
+                        alert(response.message);
+                    });
+                });
+        });
 
     });
 

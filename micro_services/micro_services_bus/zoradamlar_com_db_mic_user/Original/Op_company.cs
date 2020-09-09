@@ -71,7 +71,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             {
                 using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
                 {                    result = db.Get<company>(id: ID);
-                    //senkron dışında ve silinenlerin dışındakileri getirmesi
+                    //senkron dişinda ve silinenlerin dişindakileri getirmesi
                     if (ALL==false)
                         if ((result.company_use == false) || (result.deletedcompany_id == true) || (result.company_active==false))
                             result = new company();
@@ -83,7 +83,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
         {
             List<company> result = new List<company>();
             BeforeGetAllcompany(whereclause, ALLOFUSERS, ALL);
-            //senkron dışında ve silinenlerin dışındakileri getirmesi
+            //senkron dişinda ve silinenlerin dişindakileri getirmesi
             if (ALL == false)
             {
                 info_company info = new info_company();

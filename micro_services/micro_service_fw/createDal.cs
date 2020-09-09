@@ -83,6 +83,7 @@ namespace micro_service_fw
 
                     pagemeth = pagemeth.Replace("@body", pagebody);
                     pagetop = pagetop.Replace("@meth", pagemeth);
+                    pagetop = pagetop.Replace('İ', 'I').Replace('ı', 'i');
 
                     string file_path = AppStatic.conf[AppStatic.conf_pathdal] + "\\Models\\"
                         + AppStatic.conf[AppStatic.conf_dbname] + "\\info_" + dt.Rows[i][tableName].ToString() + ".cs";
@@ -170,6 +171,7 @@ namespace micro_service_fw
 
                     pagemeth = pagemeth.Replace("@body", pagebody.Replace('@','{').Replace('$','}'));
                     pagetop = pagetop.Replace("@meth", pagemeth);
+                    pagetop = pagetop.Replace('İ', 'I').Replace('ı', 'i');
 
                     string file_path = AppStatic.conf[AppStatic.conf_pathdal] + "\\Models\\"
                         + AppStatic.conf[AppStatic.conf_dbname] + "\\" + dt.Rows[i][tableName].ToString() + ".cs";

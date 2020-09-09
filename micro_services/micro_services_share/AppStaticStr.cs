@@ -8,6 +8,8 @@ namespace micro_services_share
     {
         public static string msg0001WrongUserNamePass = "Yanlış Kullanıcı Kodu yada Şifre";
         public static string msg0005CorrectUsernamePass = "OK";
+        public static string msg0015SaveUsernamePass = "Yeni Kullanıcı Oluşturuldu, aktivasyon için mailinizi kontrol ediniz.";
+        public static string msg0020SaveUsernamePassKayitli = "Girilen bilgilere ilişkin kullanıcı kaydı olduğundan işlem iptal edildi";
 
         public static string sec_JWTClaim = "Bu iş hayalini kurduğumuz iş olabilir belkide burada büyük işler yapacağız";
 
@@ -20,6 +22,19 @@ namespace micro_services_share
 
         public static string Key_username = "USERNAME";
         public static string Key_password = "PASSWORD";
+        public static string Key_namesurname ="NAMESURNAME";
+
+        public static string str_DefaultValuesForNewUser="New User Default";
+        public static string str_UserExpireDayDefault="userExpireDay_default";
+        public static string str_ActivateMailSubject = "ZorAdamlar platformu için açılan hesaba ilişkin etkinleştirme mailidir.";
+        public static string str_MailActivateFrom = "Zoradamlar.com Activate Mail ";
+        public static string str_MailActivateFromMail = "activate@zoradamlar.com";
+        public static string str_MailActivateFromMailPass = "@CTiv$@damlar312";
+        public static string str_MailHostName = "mail.zoradamlar.com";
+        public static int int_MailSMTPPort = 587;
+
+
+        public static string urlMailActive = "https://coreesdef.zoradamlar.com/NonSecureOp/Activesiyon?actkey=";
 
     }
 }

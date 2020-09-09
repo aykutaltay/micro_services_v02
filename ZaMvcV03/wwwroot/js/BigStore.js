@@ -9,7 +9,13 @@ All.userToken = function () {
     };
     return usrData;
 };
-All.postJSON = function (url, data, callback) {
+
+All.Integer = {};
+All.Integer.msg0005CorrectUsernamePass_i = 5;
+
+
+All.Methods = {};
+All.Methods.postJSON = function (url, data, callback) {
     return jQuery.ajax({
         headers: {
             'Accept': 'application/json',
@@ -22,6 +28,18 @@ All.postJSON = function (url, data, callback) {
         'success': callback
     });
 };
+All.Methods.ValidateEmail = function (inputtext) {
+    //var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    //if (inputText.value.match(mailformat)) {
+    //    return true;
+    //}
+    //else {
+    //    alert("Mail Adresinizi Kontrol Ediniz");
+    //    return false;
+    //}
+    return true;
+};
+
 
 All.Models = {};
 All.Models.cRequest = function () {
@@ -39,5 +57,11 @@ All.Models.cResponse = function () {
 };
 All.Models.Vusercontol = function () {
     this.USERNAME = "";
-    this.PASS = "";
-}
+    this.PASSWORD = "";
+};
+All.Models.VNusercontol = function () {
+    this.USERNAME = "";
+    this.PASSWORD = "";
+    this.NAMESURNAME = "";
+};
+

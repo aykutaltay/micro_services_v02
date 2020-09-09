@@ -71,7 +71,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             {
                 using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
                 {                    result = db.Get<role>(id: ID);
-                    //senkron dışında ve silinenlerin dışındakileri getirmesi
+                    //senkron dişinda ve silinenlerin dişindakileri getirmesi
                     if (ALL==false)
                         if ((result.role_use == false) || (result.deletedrole_id == true) || (result.role_active==false))
                             result = new role();
@@ -83,7 +83,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
         {
             List<role> result = new List<role>();
             BeforeGetAllrole(whereclause, ALLOFUSERS, ALL);
-            //senkron dışında ve silinenlerin dışındakileri getirmesi
+            //senkron dişinda ve silinenlerin dişindakileri getirmesi
             if (ALL == false)
             {
                 info_role info = new info_role();

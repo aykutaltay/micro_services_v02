@@ -1,9 +1,19 @@
 
 <script src="~/js/Login.js"></script>
-
-
+<script src='https://www.google.com/recaptcha/api.js?render=6LcUT8kZAAAAADHqHET4v2sJQr8Ozbta4Ti9s5dj'></script>
 
 <div class="container">
+    @*<div>
+        <script type="text/javascript">
+            grecaptcha.ready(function () {
+                grecaptcha.execute('6LcUT8kZAAAAADHqHET4v2sJQr8Ozbta4Ti9s5dj', { action: 'submit' })
+                    .then(function (token) {
+                        $.getJSON("/Home/RecaptchaV3Vverify?token=" + token,
+                            function (data) { console.log(data); });
+                    });
+            });
+        </script>
+    </div>*@
     <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -124,4 +134,7 @@
 
 
     </div>
+
+
+
 </div>

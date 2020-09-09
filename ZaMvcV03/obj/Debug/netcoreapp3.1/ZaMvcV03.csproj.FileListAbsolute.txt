@@ -87,8 +87,6 @@ C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\bin
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\bin\Debug\netcoreapp3.1\ZaMvcV03.Views.pdb
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.AssemblyInfoInputs.cache
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.AssemblyInfo.cs
-C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.csproj.CoreCompileInputs.cache
-C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.MvcApplicationPartsAssemblyInfo.cache
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.RazorAssemblyInfo.cache
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.RazorAssemblyInfo.cs
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.TagHelpers.input.cache
@@ -112,3 +110,6 @@ C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.genruntimeconfig.cache
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.csproj.CopyComplete
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.csprojAssemblyReference.cache
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.csproj.CoreCompileInputs.cache
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.MvcApplicationPartsAssemblyInfo.cache

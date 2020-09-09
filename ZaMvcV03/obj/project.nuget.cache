@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "VSLRG/Ws8wyYe9vEl0A0dC2pG0rbaVtAdqT+wRHEaJot8mtvkQyoHnfl05ltVlm7G0t8adSdGUcN+0rJai//+A==",
+  "dgSpecHash": "wtnL/2KpHnMW+DjrkZQzsMfF4Bj98Mp+H5QNQK4uy2OgaMUXf/VZjiVH3RG8F9d57lypMLBDYtFE4dp0gECLoA==",
   "success": true,
   "projectFilePath": "C:\\Github_repo\\micro_services\\micro_services_v02\\micro_services_v02\\ZaMvcV03\\ZaMvcV03.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\ulaso\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
+  ],
   "logs": []
 }

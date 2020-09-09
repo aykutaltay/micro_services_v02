@@ -9,38 +9,38 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
 {
     public partial class Op_useractivation
     {
-        public useractivation Saveuseractivation(useractivation USERACTİVATİON, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public useractivation Saveuseractivation(useractivation USERACTIVATION, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
         {
             useractivation result = new useractivation();
-            BeforeSaveuseractivation(USERACTİVATİON: USERACTİVATİON, ALLOFUSERS, SYNC:SYNC, TRAN: TRAN);
+            BeforeSaveuseractivation(USERACTIVATION: USERACTIVATION, ALLOFUSERS, SYNC:SYNC, TRAN: TRAN);
             //eğer birden fazla DataBase güncelleme var ise
             if (SYNC == true)
-                USERACTİVATİON.useractivation_use = false;
+                USERACTIVATION.useractivation_use = false;
             //birden fazla tabloda güncelleme var ise
             if (TRAN == true)
-                USERACTİVATİON.useractivation_active = false;
+                USERACTIVATION.useractivation_active = false;
             if ( ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
                 using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
                 {
-                    if (USERACTİVATİON.useractivation_id == 0)
+                    if (USERACTIVATION.useractivation_id == 0)
                     {
                         long id = 0;
-                        id = db.Insert<useractivation>(USERACTİVATİON);
+                        id = db.Insert<useractivation>(USERACTIVATION);
                         if (id != 0)
                             result = db.Get<useractivation>(id);
                     }
                     else
                     {
-                        bool ok = db.Update<useractivation>(USERACTİVATİON);
+                        bool ok = db.Update<useractivation>(USERACTIVATION);
                         if (ok == true)
-                            result = db.Get<useractivation>(USERACTİVATİON.useractivation_id);
+                            result = db.Get<useractivation>(USERACTIVATION.useractivation_id);
                         else
-                            result = USERACTİVATİON;
+                            result = USERACTIVATION;
                     }
                 }
             }
-            AfterSaveuseractivation(USERACTİVATİON: USERACTİVATİON, ALLOFUSERS, SYNC: SYNC, TRAN: TRAN);
+            AfterSaveuseractivation(USERACTIVATION: USERACTIVATION, ALLOFUSERS, SYNC: SYNC, TRAN: TRAN);
             return result;
         }
         public bool Deleteuseractivation(long ID, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
@@ -71,7 +71,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             {
                 using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
                 {                    result = db.Get<useractivation>(id: ID);
-                    //senkron dışında ve silinenlerin dışındakileri getirmesi
+                    //senkron dişinda ve silinenlerin dişindakileri getirmesi
                     if (ALL==false)
                         if ((result.useractivation_use == false) || (result.deleteduseractivation_id == true) || (result.useractivation_active==false))
                             result = new useractivation();
@@ -83,7 +83,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
         {
             List<useractivation> result = new List<useractivation>();
             BeforeGetAlluseractivation(whereclause, ALLOFUSERS, ALL);
-            //senkron dışında ve silinenlerin dışındakileri getirmesi
+            //senkron dişinda ve silinenlerin dişindakileri getirmesi
             if (ALL == false)
             {
                 info_useractivation info = new info_useractivation();
@@ -97,8 +97,8 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 }            }            AfterGetAlluseractivation(whereclause, ALLOFUSERS, ALL);
             return result;
         }
-        public void BeforeSaveuseractivation(useractivation USERACTİVATİON, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterSaveuseractivation(useractivation USERACTİVATİON, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void BeforeSaveuseractivation(useractivation USERACTIVATION, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void AfterSaveuseractivation(useractivation USERACTIVATION, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
         public void AfterDeleteuseractivation (long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
         public void BeforeDeleteuseractivation(long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
         public void BeforeGetuseractivation(long ID, allofusers ALLOFUSERS, bool ALL) { }

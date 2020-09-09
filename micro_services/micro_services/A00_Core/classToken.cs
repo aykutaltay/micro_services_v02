@@ -14,6 +14,11 @@ using micro_services_bus.zoradamlar_com_db_mic_user;
 using MySqlX.XDevAPI.Common;
 using micro_services_share.vModel;
 using micro_services_bus;
+using System.Net.Http;
+using micro_services.A00_Model;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
+using System.Threading;
 
 //https://jasonwatmore.com/post/2020/05/25/aspnet-core-3-api-jwt-authentication-with-refresh-tokens
 //yukarıdaki sayfa referans alınmış olup refresh token ve revoke yapılmadan kullanılmıştır.
@@ -22,16 +27,18 @@ namespace micro_services.A00_Core
 {
     public class classToken
     {
-        NSOperation Op_ns=new NSOperation();
+        NSOperation Op_ns = new NSOperation();
         Op_tokensofusers Op_tokenofUsers = new Op_tokensofusers();
         info_tokensofusers info_tokenofUsers = new info_tokensofusers();
         Op_core Op_Core = new Op_core();
 
         public cResponse Authenticate(cRequest model, string ipAddress)
         {
+            cResponse res = new cResponse();
+
             long userID = Op_ns.UserAuth(model);
 
-            cResponse res = new cResponse()
+            res = new cResponse()
             {
                 message_code = AppStaticInt.msg0001WrongUserNamePass_i,
                 message = AppStaticStr.msg0001WrongUserNamePass,
@@ -77,7 +84,7 @@ namespace micro_services.A00_Core
             return tokenHandler.WriteToken(token);
         }
 
-        private long savetoken (long userID, string token)
+        private long savetoken(long userID, string token)
         {
             DateTime tar = DateTime.Now;
             long result = 0;
@@ -88,29 +95,29 @@ namespace micro_services.A00_Core
             };
 
             List<tokensofusers> l_tok = Op_tokenofUsers.GetAlltokensofusers(string.Format("{0}={1}"
-                , info_tokenofUsers.tokensofusers_tokensofusers_users_id,userID),ALLOFUSERS:e_allogusers);
+                , info_tokenofUsers.tokensofusers_tokensofusers_users_id, userID), ALLOFUSERS: e_allogusers);
 
-            if (l_tok!=null)
+            if (l_tok != null)
             {
                 for (int i = 0; i < l_tok.Count; i++)
                 {
-                    if (Op_tokenofUsers.Deletetokensofusers(l_tok[0].tokensofusers_id, ALLOFUSERS:e_allogusers) == false)
+                    if (Op_tokenofUsers.Deletetokensofusers(l_tok[0].tokensofusers_id, ALLOFUSERS: e_allogusers) == false)
                         return result;
                 }
             }
             tokensofusers e_result = Op_tokenofUsers.Savetokensofusers(new tokensofusers()
             {
-                deletedtokensofusers_id=false,
-                tokensofusers_active=true,
-                tokensofusers_createtime=tar,
-                tokensofusers_expiretime=tar.AddMinutes(120),
-                tokensofusers_id=0,
-                tokensofusers_refreshtime=tar,
-                tokensofusers_token=token,
-                tokensofusers_use=true,
-                tokensofusers_users_id=userID
+                deletedtokensofusers_id = false,
+                tokensofusers_active = true,
+                tokensofusers_createtime = tar,
+                tokensofusers_expiretime = tar.AddMinutes(120),
+                tokensofusers_id = 0,
+                tokensofusers_refreshtime = tar,
+                tokensofusers_token = token,
+                tokensofusers_use = true,
+                tokensofusers_users_id = userID
             }
-            ,ALLOFUSERS:e_allogusers);
+            , ALLOFUSERS: e_allogusers);
 
             if (e_result.tokensofusers_id == 0)
                 return result;
@@ -121,19 +128,53 @@ namespace micro_services.A00_Core
             return result;
         }
 
-        private void savestaticList (long userID)
+        private void savestaticList(long userID)
         {
             AppStaticModel.l_allofusers.RemoveAll(x => x.users_id == userID);
 
             List<allofusers> l_tmp = Op_Core.l_allofusers(userID, AppStaticStr.core_dbTypeMYSQL, AppStaticStr.core_dbConnStr);
 
-            if (l_tmp!=null)
+            if (l_tmp != null)
             {
                 for (int i = 0; i < l_tmp.Count; i++)
                 {
                     AppStaticModel.l_allofusers.Add(l_tmp[i]);
                 }
             }
+        }
+
+        public cResponse SaveNewUser(cRequest model, string ipAddress)
+        {
+            cResponse res = new cResponse();
+
+            long userID = Op_ns.NewUser(model);
+
+
+            // return null if user not found
+            if (userID == 0) return new cResponse()
+            {
+                message_code = AppStaticInt.msg0001WrongUserNamePass_i,
+                message = AppStaticStr.msg0001WrongUserNamePass,
+                token = string.Empty,
+                data = string.Empty
+            };
+
+            if (userID == -1) return new cResponse()
+            {
+                message_code = AppStaticInt.msg0020SaveUsernamePassKayitli_i,
+                message = AppStaticStr.msg0020SaveUsernamePassKayitli,
+                token = "",
+                data = string.Empty
+            };
+
+
+            return new cResponse()
+            {
+                message_code = AppStaticInt.msg0015SaveUsernamePass_i,
+                message = AppStaticStr.msg0015SaveUsernamePass,
+                token = "",
+                data = string.Empty
+            };
         }
 
     }

@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using micro_services.A00;
 using micro_services.A00_Core;
+using micro_services.A00_Model;
 using micro_services_share;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Newtonsoft.Json;
 
 namespace micro_services.Controllers
 {
@@ -15,20 +17,40 @@ namespace micro_services.Controllers
     [ApiController]
     [Route("[controller]")]
     public class GateOfNewWorldController : ControllerBase
+    //public class GateOfNewWorldController : Controller
     {
         //public IActionResult Index()
         //{
 
         //}
+        //public GateOfNewWorldController(IHttpClientFactory httpClientFactory)
+        //{
+        //    _httpClientFactory = httpClientFactory;
+        //}
+
         [AllowAnonymous]
         [HttpPost("auth")]
         public IActionResult Authenticate([FromBody] cRequest model)
         {
-            cResponse response = new classToken().Authenticate(model, ipAddress());
+
+            cResponse response = new cResponse()
+            {
+                message_code = AppStaticInt.msg0001WrongUserNamePass_i,
+                message = AppStaticStr.msg0001WrongUserNamePass,
+                token = string.Empty,
+                data = string.Empty
+            };
+
+
+            response = recaptcha(model: model);
+            if (response.message_code == AppStaticInt.msg0010reCaptaErrorMessage)
+                return BadRequest(response);
+
+            response = new classToken().Authenticate(model, ipAddress());
 
 
             if (AppStaticInt.msg0001WrongUserNamePass_i == response.message_code)
-                    return BadRequest(response);
+                return BadRequest(response);
 
             //setTokenCookie(response.RefreshToken);
 
@@ -44,5 +66,113 @@ namespace micro_services.Controllers
                 return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
         }
 
+        [AllowAnonymous]
+        [HttpPost("nuser")]
+        public IActionResult NewUser([FromBody] cRequest model)
+        {
+
+            cResponse response = new cResponse()
+            {
+                message_code = AppStaticInt.msg0001WrongUserNamePass_i,
+                message = AppStaticStr.msg0001WrongUserNamePass,
+                token = string.Empty,
+                data = string.Empty
+            };
+
+
+            response = recaptcha(model: model);
+            if (response.message_code == AppStaticInt.msg0010reCaptaErrorMessage)
+                return BadRequest(response);
+
+            response = new classToken().SaveNewUser(model, ipAddress());
+
+
+            if (AppStaticInt.msg0001WrongUserNamePass_i == response.message_code)
+                return BadRequest(response);
+
+            //setTokenCookie(response.RefreshToken);
+
+            return Ok(response);
+        }
+
+
+        #region recapfcha işlemleri
+        public GateOfNewWorldController(IHttpClientFactory httpClientFactory)
+        {
+           _httpClientFactory = httpClientFactory;
+        }
+        private readonly string _googleVerifyAddress = "https://www.google.com/recaptcha/api/siteverify";
+
+        private readonly string _googleRecaptchaSecret = "6LcUT8kZAAAAAGpERh4ciAMeGskiG34Ezs01xODv";
+
+        private readonly IHttpClientFactory _httpClientFactory;
+        //private IHttpClientFactory _httpClientFactory;
+
+        //[AllowAnonymous]
+        //[HttpGet]
+        private TokenResponse RecaptchaV3Vverify(string token)
+        {
+            TokenResponse tokenResponse = new TokenResponse()
+            {
+                Success = false
+            };
+
+            using (var client = _httpClientFactory.CreateClient())
+            {
+                var response = client.GetStringAsync($"{_googleVerifyAddress}?secret={_googleRecaptchaSecret}&response={token}");
+                response.Wait();
+                var responseResult = response.Result;
+                tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(responseResult);
+
+            }
+
+            //return Json(tokenResponse);
+            return tokenResponse;
+        }
+        private cResponse recaptcha(cRequest model)
+        {
+            // var a = Task.Run(async () => {
+            //     return RecaptchaV3Vverify(model.token);
+            // });
+
+            TokenResponse a = RecaptchaV3Vverify(model.token);
+
+            cResponse res = new cResponse();
+
+            if (a.ErrorCodes != null)
+            {
+                res.message_code = AppStaticInt.msg0010reCaptaErrorMessage;
+                res.message = a.ErrorCodes.ToString();
+                res.token = "";
+                res.data = JsonConvert.SerializeObject(a);
+
+                return res;
+            };
+
+            if (a.Success != true)
+            {
+                res.message_code = AppStaticInt.msg0010reCaptaErrorMessage;
+                res.message = a.ErrorCodes.ToString();
+                res.token = "";
+                res.data = JsonConvert.SerializeObject(a);
+
+                return res;
+            };
+            double score = 0;
+            double.TryParse(a.Score.ToString(), out score);
+
+            if (score <= 0.7)
+            {
+                res.message_code = AppStaticInt.msg0010reCaptaErrorMessage;
+                res.message = a.ErrorCodes.ToString();
+                res.token = "";
+                res.data = JsonConvert.SerializeObject(a);
+
+                return res;
+            };
+
+            return res;
+        }
+        #endregion recapfcha işlemleri
     }
 }

@@ -19,7 +19,7 @@ namespace micro_services_dal
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         #region Constructor

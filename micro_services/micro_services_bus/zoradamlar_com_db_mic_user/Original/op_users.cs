@@ -12,14 +12,14 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
         public users Saveusers(users USERS, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
         {
             users result = new users();
-            BeforeSaveusers(USERS: USERS, ALLOFUSERS, SYNC: SYNC, TRAN: TRAN);
+            BeforeSaveusers(USERS: USERS, ALLOFUSERS, SYNC:SYNC, TRAN: TRAN);
             //eğer birden fazla DataBase güncelleme var ise
             if (SYNC == true)
                 USERS.users_use = false;
             //birden fazla tabloda güncelleme var ise
             if (TRAN == true)
                 USERS.users_active = false;
-            if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
+            if ( ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
                 using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
                 {
@@ -64,27 +64,26 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             AfterDeleteusers(ID, ALLOFUSERS, SYNC, TRAN);
             return result;
         }
-        public users Getusers(long ID, allofusers ALLOFUSERS, bool ALL = false)
+        public users Getusers(long ID, allofusers ALLOFUSERS, bool ALL=false)
         {
             users result = new users();
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
                 using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
-                {
-                    result = db.Get<users>(id: ID);
-                    //senkron dışında ve silinenlerin dışındakileri getirmesi
-                    if (ALL == false)
-                        if ((result.users_use == false) || (result.deletedusers_id == true) || (result.users_active == false))
+                {                    result = db.Get<users>(id: ID);
+                    //senkron dişinda ve silinenlerin dişindakileri getirmesi
+                    if (ALL==false)
+                        if ((result.users_use == false) || (result.deletedusers_id == true) || (result.users_active==false))
                             result = new users();
                 }
             }
             return result;
         }
-        public List<users> GetAllusers(string whereclause, allofusers ALLOFUSERS, bool ALL = false)
+        public List<users> GetAllusers(string whereclause , allofusers ALLOFUSERS, bool ALL=false)
         {
             List<users> result = new List<users>();
             BeforeGetAllusers(whereclause, ALLOFUSERS, ALL);
-            //senkron dışında ve silinenlerin dışındakileri getirmesi
+            //senkron dişinda ve silinenlerin dişindakileri getirmesi
             if (ALL == false)
             {
                 info_users info = new info_users();
@@ -95,18 +94,16 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 using (Mysql_dapper db = new Mysql_dapper(ALLOFUSERS.appdatabase_connstr, usetransaction: false))
                 {
                     result = db.GetAll<users>(whereclause: whereclause).ToList();
-                }
-            }
-            AfterGetAllusers(whereclause, ALLOFUSERS, ALL);
+                }            }            AfterGetAllusers(whereclause, ALLOFUSERS, ALL);
             return result;
         }
         public void BeforeSaveusers(users USERS, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
         public void AfterSaveusers(users USERS, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterDeleteusers(long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void AfterDeleteusers (long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
         public void BeforeDeleteusers(long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
         public void BeforeGetusers(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void AfterGetusers(long ID, allofusers ALLOFUSERS, bool ALL) { }
-        public void BeforeGetAllusers(string whereclause, allofusers ALLOFUSERS, bool ALL) { }
+        public void BeforeGetAllusers(string whereclause , allofusers ALLOFUSERS, bool ALL ) { }
         public void AfterGetAllusers(string whereclause, allofusers ALLOFUSERS, bool ALL) { }
     }
 

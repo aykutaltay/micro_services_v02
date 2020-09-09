@@ -8,8 +8,8 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
 {
     public partial class Op_useractivation
     {
-        //public void BeforeSaveuseractivation(useractivation USERACTİVATİON, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) { }
-        //public void AfterSaveuseractivation(useractivation USERACTİVATİON, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) { }
+        //public void BeforeSaveuseractivation(useractivation USERACTIVATION, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) { }
+        //public void AfterSaveuseractivation(useractivation USERACTIVATION, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) { }
         //public void AfterDeleteuseractivation (long ID, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) { }
         //public void BeforeDeleteuseractivation(long ID, string DBTYPE, string CONNSTR, bool SYNC, bool TRAN) { }
         //public void BeforeGetuseractivation(long ID, string DBTYPE, string CONNSTR, bool ALL) { }
