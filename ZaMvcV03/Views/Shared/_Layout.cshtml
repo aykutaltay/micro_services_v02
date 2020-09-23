@@ -17,50 +17,51 @@
 </head>
 <body>
     <div style="max-width: 1200px; margin: 0 auto; padding: 10 px;">
-    <header>
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Zor Adamlar</a>
-                </div>
-                <ul class="nav navbar-nav">
-                    <li  class="active">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            Projelerimiz
+        <header>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Zor Adamlar</a>
+                    </div>
+                    <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                Projelerimiz
                                 <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Fason</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="active">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Hakkımızda</a>
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Kayıt</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Login"><span class="glyphicon glyphicon-log-in"></span> Giriş</a></li>
-                </ul>
-            </div>
-            
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    @*<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Fason</a>*@
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Activation" asp-action="Activation">Fason</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="active">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Hakkımızda</a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a asp-area="" asp-controller="Home" asp-action="Login"><span class="glyphicon glyphicon-log-in"></span> Giriş</a></li>
+                    </ul>
+                </div>
 
-        </nav>
-    </header>
-       <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted text-right">
-        <div class="container" margin-left: auto>
-            <p>e-mail : info@zoradamlar.com</p>
+            </nav>
+        </header>
+        <div class="container">
+            <div class="alert-warning warning">Bilgi satırı</div>
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
         </div>
-    </footer>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
-</div>
+
+        <footer class="border-top footer text-muted text-right">
+            <div class="container" margin-left: auto>
+                <p>e-mail : info@zoradamlar.com</p>
+            </div>
+        </footer>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @RenderSection("Scripts", required: false)
+    </div>
 </body>
 </html>

@@ -12,5 +12,8 @@ namespace micro_services_share
         public static int msg0015SaveUsernamePass_i = 15;
         public static int msg0020SaveUsernamePassKayitli_i = 20;
 
+        public static int msg001Succes=1;
+        public static int msg001Fail=0;
+
     }
 }

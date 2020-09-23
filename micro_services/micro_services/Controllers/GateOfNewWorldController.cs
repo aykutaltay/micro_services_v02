@@ -19,15 +19,6 @@ namespace micro_services.Controllers
     public class GateOfNewWorldController : ControllerBase
     //public class GateOfNewWorldController : Controller
     {
-        //public IActionResult Index()
-        //{
-
-        //}
-        //public GateOfNewWorldController(IHttpClientFactory httpClientFactory)
-        //{
-        //    _httpClientFactory = httpClientFactory;
-        //}
-
         [AllowAnonymous]
         [HttpPost("auth")]
         public IActionResult Authenticate([FromBody] cRequest model)
@@ -88,13 +79,12 @@ namespace micro_services.Controllers
 
 
             if (AppStaticInt.msg0001WrongUserNamePass_i == response.message_code)
-                return BadRequest(response);
+                return Ok(response);
 
             //setTokenCookie(response.RefreshToken);
 
             return Ok(response);
         }
-
 
         #region recapfcha işlemleri
         public GateOfNewWorldController(IHttpClientFactory httpClientFactory)
@@ -174,5 +164,27 @@ namespace micro_services.Controllers
             return res;
         }
         #endregion recapfcha işlemleri
+    
+        [AllowAnonymous]
+        [HttpPost("activation")]
+        public IActionResult Active(string actkey)
+        {
+
+            // yazılması gereken   https://../../Activation?acktKey=13628fe2-2ec8-41b0-99ad-eb96554f94c3
+            cResponse response = new cResponse()
+            {
+                message_code = AppStaticInt.msg001Fail,
+                message = AppStaticStr.msg0025ActivasyonHatasi,
+                token = string.Empty,
+                data = string.Empty
+            };
+
+            response = new classToken().userActivation(ACTkey: actkey);
+
+            return Ok(response);
+        }
+
+
+
     }
 }

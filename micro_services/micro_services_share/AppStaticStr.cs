@@ -10,6 +10,10 @@ namespace micro_services_share
         public static string msg0005CorrectUsernamePass = "OK";
         public static string msg0015SaveUsernamePass = "Yeni Kullanıcı Oluşturuldu, aktivasyon için mailinizi kontrol ediniz.";
         public static string msg0020SaveUsernamePassKayitli = "Girilen bilgilere ilişkin kullanıcı kaydı olduğundan işlem iptal edildi";
+        public static string msg0025ActivasyonHatasi ="Aktivasyon Yapılamadı";
+        public static string msg0030ActivasyonYapildi = "Kullanici Aktive Edildi";
+        public static string msg0035AktivasyonKeyHata = "Aktivasyon Key Hatası";
+
 
         public static string sec_JWTClaim = "Bu iş hayalini kurduğumuz iş olabilir belkide burada büyük işler yapacağız";
 

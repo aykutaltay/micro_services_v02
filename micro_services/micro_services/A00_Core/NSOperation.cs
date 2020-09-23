@@ -29,6 +29,11 @@ namespace micro_services.A00
         micro_services_bus.zoradamlar_com_db_mic_user.Op_useractivation bus_UserActiva = new micro_services_bus.zoradamlar_com_db_mic_user.Op_useractivation();
         micro_services_dal.Models.zoradamlar_com_db_mic_user.info_usersofprojects info_usersofprojects = new micro_services_dal.Models.zoradamlar_com_db_mic_user.info_usersofprojects();
         micro_services_bus.zoradamlar_com_db_mic_user.Op_usersofprojects bus_UserOproje = new micro_services_bus.zoradamlar_com_db_mic_user.Op_usersofprojects();
+        micro_services_share.vModel.allofusers default_ALLOFUSER = new micro_services_share.vModel.allofusers()
+                {
+                    appdatabase_connstr = AppStaticStr.core_dbConnStr,
+                    appdatabase_type = AppStaticStr.core_dbTypeMYSQL
+                };
         public long UserAuth(cRequest model)
         {
             //cResponse result = new cResponse()
@@ -76,7 +81,7 @@ namespace micro_services.A00
             if (l_usr.Count != 1)
                 return result;
 
-            sql = string.Format("{0}={1} And {2}='{3}'"
+            sql = string.Format(" {0}={1} And {2}='{3}'"
                 , info_passof.passofusers_passofusers_users_id, l_usr[0].users_id
                 , info_passof.passofusers_passofusers_pass, gelen[AppStaticStr.Key_password]);
 
@@ -97,8 +102,6 @@ namespace micro_services.A00
 
             return result;
         }
-
-
         public long NewUser(cRequest model)
         {
             //cResponse result = new cResponse()
@@ -109,13 +112,6 @@ namespace micro_services.A00
             //    data = string.Empty
             //};
             long result = 0;
-            //işlemler için manueldolduruluyor
-            micro_services_share.vModel.allofusers ALLOFUSER = new micro_services_share.vModel.allofusers()
-            {
-                appdatabase_connstr = AppStaticStr.core_dbConnStr,
-                appdatabase_type = AppStaticStr.core_dbTypeMYSQL
-            };
-
 
             Dictionary<string, string> gelen = JsonConvert.DeserializeObject<Dictionary<string, string>>(model.data);
 
@@ -141,7 +137,7 @@ namespace micro_services.A00
                 , info_users.users_users_mail, gelen[AppStaticStr.Key_username]);
 
             List<micro_services_dal.Models.zoradamlar_com_db_mic_user.users> l_usr = bus_users.GetAllusers(whereclause: sql
-                , ALLOFUSERS: ALLOFUSER);
+                , ALLOFUSERS: default_ALLOFUSER, ALL:true);
 
             if (l_usr.Count == 1) //aynu kullanıcıdan var ise bu hata verilir.
                 return -1;
@@ -157,7 +153,7 @@ namespace micro_services.A00
             List<micro_services_dal.Models.zoradamlar_com_db_mic_user.parameters> l_prmters = bus_parameters.GetAllparameters(
                 whereclause: string.Format("{0}='{1}'"
                 , info_parameters.parameters_parameters_name, AppStaticStr.str_DefaultValuesForNewUser)
-                , ALLOFUSERS: ALLOFUSER
+                , ALLOFUSERS: default_ALLOFUSER
             );
 
             int db_id = 0;
@@ -214,7 +210,8 @@ namespace micro_services.A00
                 passofusers_expiretime=tarih.AddDays(exp_day-30),
                 passofusers_active=true,
                 deletedpassofusers_id=false,
-                passofusers_pass=AppStaticMethod.strEncrypt(gelen[AppStaticStr.Key_password]),
+                //passofusers_pass=AppStaticMethod.strEncrypt(gelen[AppStaticStr.Key_password]),
+                passofusers_pass=gelen[AppStaticStr.Key_password],
                 passofusers_use=true
             };
 
@@ -245,7 +242,7 @@ namespace micro_services.A00
             //entitiy üzerinden kayıtlar, deleted ile yapılıyor, sonrasında tek bir update var, orada hata verirse bile kayıtlar silinmiş olarak veri tabanında olacak
             #region Entitiy ile çoklu kayda uygun kayıt (deleted=true olarak)
             e_comp.deletedcompany_id = true;
-            micro_services_dal.Models.zoradamlar_com_db_mic_user.company s_comp =  bus_Compny.Savecompany(COMPANY: e_comp, ALLOFUSERS: ALLOFUSER);
+            micro_services_dal.Models.zoradamlar_com_db_mic_user.company s_comp =  bus_Compny.Savecompany(COMPANY: e_comp, ALLOFUSERS: default_ALLOFUSER);
             if (s_comp.company_id == 0)
                 return result;
             strtables += info_company.company_tablename;
@@ -253,7 +250,7 @@ namespace micro_services.A00
 
             e_users.deletedusers_id = true;
             e_users.users_company_id = s_comp.company_id;
-            micro_services_dal.Models.zoradamlar_com_db_mic_user.users s_users = bus_users.Saveusers(USERS: e_users, ALLOFUSERS: ALLOFUSER);
+            micro_services_dal.Models.zoradamlar_com_db_mic_user.users s_users = bus_users.Saveusers(USERS: e_users, ALLOFUSERS: default_ALLOFUSER);
             if (s_users.users_id == 0)
                 return result;
             strtables += "," + info_users.users_tablename;
@@ -261,7 +258,7 @@ namespace micro_services.A00
 
             e_pass.deletedpassofusers_id = true;
             e_pass.passofusers_users_id = s_users.users_id;
-            micro_services_dal.Models.zoradamlar_com_db_mic_user.passofusers s_pass = bus_passof.Savepassofusers(PASSOFUSERS: e_pass, ALLOFUSERS: ALLOFUSER);
+            micro_services_dal.Models.zoradamlar_com_db_mic_user.passofusers s_pass = bus_passof.Savepassofusers(PASSOFUSERS: e_pass, ALLOFUSERS: default_ALLOFUSER);
             if (s_pass.passofusers_id == 0)
                 return result;
             strtables += "," + info_passof.passofusers_tablename;
@@ -269,7 +266,7 @@ namespace micro_services.A00
 
             e_usract.deleteduseractivation_id = true;
             e_usract.useractivation_user_id= s_pass.passofusers_users_id;
-            micro_services_dal.Models.zoradamlar_com_db_mic_user.useractivation s_usract = bus_UserActiva.Saveuseractivation(USERACTIVATION: e_usract, ALLOFUSERS: ALLOFUSER);
+            micro_services_dal.Models.zoradamlar_com_db_mic_user.useractivation s_usract = bus_UserActiva.Saveuseractivation(USERACTIVATION: e_usract, ALLOFUSERS: default_ALLOFUSER);
             if (s_usract.useractivation_id == 0)
                 return result;
             strtables += "," + info_useractivation.useractivation_tablename;
@@ -277,7 +274,7 @@ namespace micro_services.A00
 
             e_usrproject.deletedusersofprojects_id = true;
             e_usrproject.usersofprojects_users_id = s_usract.useractivation_user_id;
-            micro_services_dal.Models.zoradamlar_com_db_mic_user.usersofprojects s_usrproject = bus_UserOproje.Saveusersofprojects(USERSOFPROJECTS: e_usrproject, ALLOFUSERS: ALLOFUSER);
+            micro_services_dal.Models.zoradamlar_com_db_mic_user.usersofprojects s_usrproject = bus_UserOproje.Saveusersofprojects(USERSOFPROJECTS: e_usrproject, ALLOFUSERS: default_ALLOFUSER);
             if (s_usrproject.usersofprojects_id == 0)
                 return result;
             strtables += "," + info_usersofprojects.usersofprojects_tablename;
@@ -285,9 +282,9 @@ namespace micro_services.A00
             #endregion Entitiy ile çoklu kayda uygun kayıt (deleted=true olarak)
 
             //deleted lar true olarak kaydedildi ise onların tek severde update edilmesi
-            if (ALLOFUSER.appdatabase_type==AppStaticStr.core_dbTypeMYSQL)
+            if (default_ALLOFUSER.appdatabase_type==AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr:ALLOFUSER.appdatabase_connstr))
+                using (Mysql_dapper db = new Mysql_dapper(connstr:default_ALLOFUSER.appdatabase_connstr))
                 {
                     if (db.MultiTableRecordActive(tables: strtables, values: strvalues) == false)
                         return result;
@@ -302,5 +299,36 @@ namespace micro_services.A00
             return result;
         }
 
+        public long UserIdofActivation (string actkey)
+        {
+            long result=0;
+            string whrclause = string.Format("{0}='{1}' and {2}=true and {3}=false and {4}=true"
+            ,info_useractivation.useractivation_useractivation_code,actkey
+            ,info_useractivation.useractivation_useractivation_active
+            ,info_useractivation.useractivation_deleteduseractivation_id
+            ,info_useractivation.useractivation_useractivation_use);
+
+            List<micro_services_dal.Models.zoradamlar_com_db_mic_user.useractivation> l_act = bus_UserActiva.GetAlluseractivation(whereclause:whrclause
+            ,ALLOFUSERS: default_ALLOFUSER, ALL:true);
+
+            if (l_act.Count!=1)
+                return result;
+
+            micro_services_dal.Models.zoradamlar_com_db_mic_user.useractivation e_usractive = l_act[0];
+            e_usractive.useractivation_active=true;
+
+            micro_services_dal.Models.zoradamlar_com_db_mic_user.users e_users = bus_users.Getusers(
+                ID:e_usractive.useractivation_user_id
+                ,ALLOFUSERS:default_ALLOFUSER
+                ,ALL:true);
+            e_users.users_active=true;
+
+            bus_UserActiva.Saveuseractivation(USERACTIVATION:e_usractive,ALLOFUSERS:default_ALLOFUSER);
+            bus_users.Saveusers(USERS:e_users,ALLOFUSERS:default_ALLOFUSER);
+
+            result = e_users.users_id;
+
+            return result;
+        }
     }
 }

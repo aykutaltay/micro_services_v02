@@ -1,24 +1,26 @@
 
+<script src="~/js/md5.min.js"></script>
 <script src="~/js/Login.js"></script>
 <script src='https://www.google.com/recaptcha/api.js?render=6LcUT8kZAAAAADHqHET4v2sJQr8Ozbta4Ti9s5dj'></script>
 
 <div class="container">
     @*<div>
-        <script type="text/javascript">
-            grecaptcha.ready(function () {
-                grecaptcha.execute('6LcUT8kZAAAAADHqHET4v2sJQr8Ozbta4Ti9s5dj', { action: 'submit' })
-                    .then(function (token) {
-                        $.getJSON("/Home/RecaptchaV3Vverify?token=" + token,
-                            function (data) { console.log(data); });
-                    });
-            });
-        </script>
-    </div>*@
+            <script type="text/javascript">
+                grecaptcha.ready(function () {
+                    grecaptcha.execute('6LcUT8kZAAAAADHqHET4v2sJQr8Ozbta4Ti9s5dj', { action: 'submit' })
+                        .then(function (token) {
+                            $.getJSON("/Home/RecaptchaV3Vverify?token=" + token,
+                                function (data) { console.log(data); });
+                        });
+                });
+            </script>
+        </div>*@
+
     <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-info">
             <div class="panel-heading">
                 <div class="panel-title">Kullanıcı Girişi</div>
-                <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">Şifremi Unuttum </a></div>
+                <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#" onClick="$('#loginbox').hide(); $('#resetpassbox').show()">Şifremi Unuttum </a></div>
             </div>
 
             <div style="padding-top:30px" class="panel-body">
@@ -36,18 +38,6 @@
                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                         <input type="password" class="form-control" name="password" placeholder="şifre" id="txtpass">
                     </div>
-
-
-
-                    <div class="input-group">
-                        <div class="checkbox">
-                            <label>
-                                <input id="login-remember" type="checkbox" name="remember" value="1"> Beni Hatırla
-                            </label>
-                        </div>
-                    </div>
-
-
                     <div style="margin-top:10px" class="form-group">
                         <!-- Button -->
 
@@ -129,12 +119,44 @@
                 </form>
             </div>
         </div>
-
-
-
-
     </div>
+    <div id="resetpassbox" style="display:none; margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">Yeniden Şifre Oluşturma</div>
+                <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="#" onclick="$('#resetpassbox').hide(); $('#loginbox').show()">Kullanıcı Giriş</a></div>
+            </div>
+            <div class="panel-body">
+                <form id="signupform" class="form-horizontal" role="form">
 
+                    <div id="signupalert" style="display:none" class="alert alert-danger">
+                        <p>Error:</p>
+                        <span></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="email" class="col-md-3 control-label">Email</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" name="email" placeholder="Email - Kullanıcı Kodu" id="txtNewemail">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <!-- Button -->
+                        <div class="col-md-offset-3 col-md-9">
+
+
+                            <button id="btnResetPass" type="button" class="btn btn-info">
+                                <i class="icon-hand-right"></i> &nbsp Şifre Yenilemek için Mail Gönder
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
 </div>

@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
 
+
     $('#btnEntry').click(function () {
         var k = $('#txtemail').val();
         var s = $('#txtpass').val();
@@ -7,7 +8,7 @@
         var usr = new All.Models.Vusercontol();
 
         usr.USERNAME = k;
-        usr.PASS = s;
+        usr.PASSWORD = md5(s);
 
         var mdl = new All.Models.cRequest();
         var result = new All.Models.cResponse();
@@ -20,7 +21,7 @@
                     mdl.data = JSON.stringify(usr);
 
                     var settings = {
-                        "url": "https://localhost:5001/GateOfNewWorld/auth",
+                        "url": All.srv+"/GateOfNewWorld/auth",
                         "method": "POST",
                         "timeout": 0,
                         "headers": {
@@ -68,6 +69,7 @@
 
     });
 
+
     $('#btnNewEntry').click(function () {
         var k = $('#txtNewemail').val();
         var a = $('#txtNewusername').val();
@@ -77,7 +79,7 @@
         var result = new All.Models.cResponse();
 
         usr.USERNAME = k;
-        usr.PASSWORD = s;
+        usr.PASSWORD = md5(s);
         usr.NAMESURNAME = a;
 
         var mdl = new All.Models.cRequest();
@@ -97,7 +99,7 @@
                     mdl.data = JSON.stringify(usr);
 
                     var settings = {
-                        "url": "https://localhost:5001/GateOfNewWorld/nuser",
+                        "url": All.srv + "/GateOfNewWorld/nuser",
                         "method": "POST",
                         "timeout": 0,
                         "headers": {
@@ -109,7 +111,11 @@
                     $.ajax(settings).done(function (response) {
                         //console.log(response);
                         //result = JSON.parse(response);
-                        alert(response.message);
+                        //alert(response.message);
+                        //$('#a_message').removeClass('hidden').html(response.message);
+                        $("div.warning").html(response.message);
+                        $("div.warning").fadeIn(All.Integer.msgFadein).delay(All.Integer.msgDelay).fadeOut(All.Integer.msgFadeout);
+                        
                     });
                 });
         });

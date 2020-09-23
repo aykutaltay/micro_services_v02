@@ -1,4 +1,5 @@
 ﻿var All = {};
+All.srv = "https://localhost:5001";
 All.url = '/GateOfNewWorld/NSOperation';
 All.surl = '/GateOfNewWorld/SOperation';
 
@@ -12,6 +13,9 @@ All.userToken = function () {
 
 All.Integer = {};
 All.Integer.msg0005CorrectUsernamePass_i = 5;
+All.Integer.msgFadein = 200;
+All.Integer.msgFadeout = 600;
+All.Integer.msgDelay = 1800;
 
 
 All.Methods = {};

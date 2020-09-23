@@ -94,7 +94,7 @@ namespace micro_services.A00_Core
                 appdatabase_connstr = AppStaticStr.core_dbConnStr
             };
 
-            List<tokensofusers> l_tok = Op_tokenofUsers.GetAlltokensofusers(string.Format("{0}={1}"
+            List<tokensofusers> l_tok = Op_tokenofUsers.GetAlltokensofusers(string.Format("{0}={1} "
                 , info_tokenofUsers.tokensofusers_tokensofusers_users_id, userID), ALLOFUSERS: e_allogusers);
 
             if (l_tok != null)
@@ -153,7 +153,7 @@ namespace micro_services.A00_Core
             // return null if user not found
             if (userID == 0) return new cResponse()
             {
-                message_code = AppStaticInt.msg0001WrongUserNamePass_i,
+                message_code = AppStaticInt.msg001Fail,
                 message = AppStaticStr.msg0001WrongUserNamePass,
                 token = string.Empty,
                 data = string.Empty
@@ -161,7 +161,7 @@ namespace micro_services.A00_Core
 
             if (userID == -1) return new cResponse()
             {
-                message_code = AppStaticInt.msg0020SaveUsernamePassKayitli_i,
+                message_code = AppStaticInt.msg001Fail,
                 message = AppStaticStr.msg0020SaveUsernamePassKayitli,
                 token = "",
                 data = string.Empty
@@ -170,11 +170,33 @@ namespace micro_services.A00_Core
 
             return new cResponse()
             {
-                message_code = AppStaticInt.msg0015SaveUsernamePass_i,
+                message_code = AppStaticInt.msg001Succes,
                 message = AppStaticStr.msg0015SaveUsernamePass,
                 token = "",
                 data = string.Empty
             };
+        }
+
+        public cResponse userActivation (string ACTkey)
+        {
+            cResponse response = new cResponse()
+            {
+                message_code = AppStaticInt.msg001Fail,
+                message = AppStaticStr.msg0025ActivasyonHatasi,
+                token = string.Empty,
+                data = string.Empty
+            };
+
+
+            long userid = Op_ns.UserIdofActivation(actkey: ACTkey);
+            if (userid == 0)
+                return response;
+
+            response.message_code = AppStaticInt.msg001Succes;
+            response.message = AppStaticStr.msg0030ActivasyonYapildi;
+
+
+            return response;
         }
 
     }

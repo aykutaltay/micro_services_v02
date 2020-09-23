@@ -75,34 +75,50 @@ namespace micro_services_share
             <head>
               <title>ZorAdamlar Aktivasyon</title>
               <meta charset=""utf - 8"">
-              < meta name = ""viewport"" content = ""width=device-width, initial-scale=1"" >
-              < link rel = ""stylesheet"" href = ""https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"" >
-              < script src = ""https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"" ></ script >
-              < script src = ""https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"" ></ script >
-              < script src = ""https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"" ></ script >
-            </ head >
-            
-            
-            < body >
-            < form >
-            < h2 > ZorAdamlar.com yazılım geliştirme platformuna </ h2 >
-            < h2 style = ""text-align:right"" > Hoş geldiniz.</ h2 >
-            < h2 > Sayın : {0}</ h2 >
-             < p > </ p >
-             < p > ZorAdamlar.com platformunda geliştirilen yazılımları kullanmak için açtığınız bu kullanıcının çalışır duruma gelmesi için aşağıda belirtilen ""Etkinleştir"" butonuna basmanız yada açık olarak yazılan adresi kopyalıyarak, kullanıdığınız web browser'a yapıştırmanız yeterli olacaktır.</p>
-               < p > Bu işlem sonrasında kullanıcınız sistem üzerinde aktif olacaktır.</ p >
-                 < p > &nbsp;</ p >
-                    < a href = ""{1}"" class=""btn btn-primary"">Etkinşeştir</a>
+              <meta name = ""viewport"" content = ""width=device-width, initial-scale=1"">
+
+              <link rel = ""stylesheet"" href = ""https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"">
+              <script src = ""https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"" ></script>
+              <script src = ""https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"" ></script>
+              <script src = ""https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"" ></script>
+
+            </head >
+
+            <body>
+
+              <link rel = ""stylesheet"" href = ""https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"">
+              <script src = ""https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"" ></script>
+              <script src = ""https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"" ></script>
+              <script src = ""https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"" ></script>
+
+            <form>
+            <h2> ZorAdamlar.com yazılım geliştirme platformuna </h2>
+            <h2 style = ""text-align:right"" > Hoş geldiniz.</h2>
+            <h2> Sayın : {0}</h2>
+             <p> </p>
+             <p> ZorAdamlar.com platformunda geliştirilen yazılımları kullanmak için açtığınız bu kullanıcının çalışır duruma gelmesi için aşağıda belirtilen ""Etkinleştir"" butonuna basmanız yada açık olarak yazılan adresi kopyalıyarak, kullanıdığınız web browser'a yapıştırmanız yeterli olacaktır.</p>
+               <p> Bu işlem sonrasında kullanıcınız sistem üzerinde aktif olacaktır.</p>
+                 <p> &nbsp;</p>
+                    <a href = ""{1}"" class=""btn btn-primary"">Etkinleştir</a>
             <p>&nbsp;</p>
             <p> Link : <p>
-            <input type = ""text"" class=""form-control"" value=""{1}"">
+            <div class=""form-group"">
+            <label>{1}</label>
+            </div>
             </form>
-            </ body >
+            </body >
 
             ", namesurname
             , url);
 
-            MailSend_General(to: l_mailadress, subject: str_subject, body: str_body);
+
+            //string str_body = string.Format(@"
+            //<p> ZorAdamlar.com platformunda geliştirilen yazılımları kullanmak için açtığınız bu kullanıcının çalışır duruma gelmesi için aşağıda belirtilen ""Etkinleştir"" butonuna basmanız yada açık olarak yazılan adresi kopyalıyarak, kullanıdığınız web browser'a yapıştırmanız yeterli olacaktır.</p>
+            //<p> Bu işlem sonrasında kullanıcınız sistem üzerinde aktif olacaktır.</p>
+
+            //                ");
+
+            MailSend_General(to: l_mailadress, subject: str_subject, body: str_body,isBodyHtml:true);
 
         }
 
