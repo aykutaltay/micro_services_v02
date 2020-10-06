@@ -87,7 +87,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             if (ALL == false)
             {
                 info_dbserver info = new info_dbserver();
-                whereclause += "AND " + info.dbserver_deleteddbserver_id + " = false AND " + info.dbserver_dbserver_use + " = true AND " + info.dbserver_dbserver_active + " = true";
+                whereclause += " AND " + info.dbserver_deleteddbserver_id + " = false AND " + info.dbserver_dbserver_use + " = true AND " + info.dbserver_dbserver_active + " = true";
             }
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {

@@ -87,7 +87,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             if (ALL == false)
             {
                 info_tokensofusers info = new info_tokensofusers();
-                whereclause += "AND " + info.tokensofusers_deletedtokensofusers_id + " = false AND " + info.tokensofusers_tokensofusers_use + " = true AND " + info.tokensofusers_tokensofusers_active + " = true";
+                whereclause += " AND " + info.tokensofusers_deletedtokensofusers_id + " = false AND " + info.tokensofusers_tokensofusers_use + " = true AND " + info.tokensofusers_tokensofusers_active + " = true";
             }
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {

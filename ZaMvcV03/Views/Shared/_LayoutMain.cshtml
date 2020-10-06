@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zor Adamlar</title>
+    <script src="~/js/BigStore.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="icon" href="~/assest/logo.gif" type="image/gif" sizes="16x16">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.22/af-2.3.5/b-1.6.4/cr-1.5.2/datatables.min.css" />
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/af-2.3.5/b-1.6.4/cr-1.5.2/datatables.min.js"></script>
+
+
+
+
+</head>
+<body>
+    <div style="max-width: 1200px; margin: 0 auto; padding: 10 px;">
+        <header>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" asp-area="" asp-controller="Mainuser" asp-action="Index">Zor Adamlar</a>
+                    </div>
+                    <ul class="nav navbar-nav">
+                        @*<li class="active">
+                                <a class="nav-link text-dark" data-toggle="dropdown" href="#">
+                                    Kullanıcı Ana Menü
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Fason</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Activation" asp-action="Activation">Fason</a>
+                                    </li>
+                                </ul>
+                            </li>*@
+                        <li class="active">
+                            @*<a class="nav-link text-dark" id="btnUserMainMenu" asp-area="" asp-controller="Mainuser" asp-action="Menu" asp-route-id="?token=afsdfasdfas">Kullanıcı Ana Menü</a>*@
+                            <a class="nav-link text-dark" id="btnUserMainMenu">Kullanıcı Ana Menü</a>
+                            <script>
+                                //$('#btnUserMainMenu', function () {
+                                //    html += '<a class="nav-link text-dark" asp-area="" asp-controller="Mainuser" asp-action="Menu"';
+                                //    html += 'asp-route-id="' + localStorage.getItem("token") + '"';
+                                //    html += '> Kullanıcı Ana Menü</a >';
+                                //});
+
+                                //$('#btnUserMainMenu').add("asp-route-id=" + localStorage.getItem("token"));
+                                //$('#btnUserMainMenu').attr("asp-route-id=" + localStorage.getItem("token"));
+
+                                //$('#btnUserMainMenu').attr("href", "/Mainuser/Menu?token=" + localStorage.getItem("token"));
+                                //$('#btnUserMainMenu').attr("href", "/Mainuser/Menu");
+
+                                $('#btnUserMainMenu').on('click', function () {
+                                    var mdl = new All.Models.cRequest();
+                                    mdl.token = localStorage.getItem("token");
+                                    mdl.data = mdl.token;
+
+                                    var settings = {
+                                        "url": All.webpageurl + "Mainuser/MenuEntry",
+                                        "method": "GET",
+                                        "timeout": 0,
+                                        "headers": {
+                                            "Content-Type": "application/json",
+                                            "Authorization": "Bearer " + mdl.token
+                                        },
+                                        "data": { token: mdl.token },
+                                    };
+
+                                    $.ajax(settings).done(function (response) {
+
+                                        //console.log(response);
+                                        ////result = JSON.parse(response);
+                                        if (response.message_code == 1) {
+                                            var ss = All.webpageurl + All.webpageMain;
+                                            window.location.href = ss;
+                                        }
+                                        else {
+                                            var ss = All.webpageurl + All.webpageMainIndex;
+                                            window.location.href = ss;
+                                        }
+                                    });
+                                });
+                            </script>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a asp-area="" asp-controller="Home" asp-action="Login" id="btnLogout">
+                                <script>
+                                    $('#btnLogout').on('clicl', function () {
+                                        localStorage.setItem("token", "_");
+                                        window.location.href = All.webpageurl;
+                                    });
+                                </script>
+                                <span class="glyphicon glyphicon-log-out"></span> Çıkış
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+
+            </nav>
+        </header>
+        <div class="container">
+            <div class="alert-warning warning">Bilgi satırı</div>
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+
+        <footer class="border-top footer text-muted text-right">
+            <div class="container" margin-left: auto>
+                <p>e-mail : info@zoradamlar.com</p>
+            </div>
+        </footer>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @RenderSection("Scripts", required: false)
+    </div>
+</body>
+</html>

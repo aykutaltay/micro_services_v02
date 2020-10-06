@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using micro_services_dal;
 using micro_services_share;
+using micro_services_share.Model;
 using Newtonsoft.Json;
 
 namespace micro_services.A00
@@ -128,7 +129,7 @@ namespace micro_services.A00
                 return result;
             if (AppStaticMethod.Cont_Injektion(gelen[AppStaticStr.Key_password]) == false)
                 return result;
-            if (AppStaticMethod.Cont_Injektion(gelen[AppStaticStr.Key_username]) == false)
+            if (AppStaticMethod.Cont_Injektion(gelen[AppStaticStr.Key_namesurname]) == false)
                 return result;
 
 
@@ -298,7 +299,6 @@ namespace micro_services.A00
 
             return result;
         }
-
         public long UserIdofActivation (string actkey)
         {
             long result=0;

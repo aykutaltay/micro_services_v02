@@ -87,7 +87,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             if (ALL == false)
             {
                 info_lang info = new info_lang();
-                whereclause += "AND " + info.lang_deletedlang_id + " = false AND " + info.lang_lang_use + " = true AND " + info.lang_lang_active + " = true";
+                whereclause += " AND " + info.lang_deletedlang_id + " = false AND " + info.lang_lang_use + " = true AND " + info.lang_lang_active + " = true";
             }
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {

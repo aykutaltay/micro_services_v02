@@ -19,6 +19,7 @@ using micro_services.A00_Model;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Threading;
+using micro_services_share.Model;
 
 //https://jasonwatmore.com/post/2020/05/25/aspnet-core-3-api-jwt-authentication-with-refresh-tokens
 //yukarıdaki sayfa referans alınmış olup refresh token ve revoke yapılmadan kullanılmıştır.

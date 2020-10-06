@@ -7,6 +7,7 @@ using micro_services.A00;
 using micro_services.A00_Core;
 using micro_services.A00_Model;
 using micro_services_share;
+using micro_services_share.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -35,13 +36,13 @@ namespace micro_services.Controllers
 
             response = recaptcha(model: model);
             if (response.message_code == AppStaticInt.msg0010reCaptaErrorMessage)
-                return BadRequest(response);
+                return Ok(response);
 
             response = new classToken().Authenticate(model, ipAddress());
 
 
             if (AppStaticInt.msg0001WrongUserNamePass_i == response.message_code)
-                return BadRequest(response);
+                return Ok(response);
 
             //setTokenCookie(response.RefreshToken);
 
@@ -89,7 +90,7 @@ namespace micro_services.Controllers
         #region recapfcha işlemleri
         public GateOfNewWorldController(IHttpClientFactory httpClientFactory)
         {
-           _httpClientFactory = httpClientFactory;
+            _httpClientFactory = httpClientFactory;
         }
         private readonly string _googleVerifyAddress = "https://www.google.com/recaptcha/api/siteverify";
 
@@ -164,7 +165,7 @@ namespace micro_services.Controllers
             return res;
         }
         #endregion recapfcha işlemleri
-    
+
         [AllowAnonymous]
         [HttpPost("activation")]
         public IActionResult Active(string actkey)
@@ -184,7 +185,43 @@ namespace micro_services.Controllers
             return Ok(response);
         }
 
+        [HttpPost("mainuserlist")]
+        public IActionResult MainUserList([FromBody] cRequest model)
+        {
+            cResponse response = new SOperation().CompanyUserList(model);
 
+            return Ok(response);
+        }
 
+        [HttpPost("mainuserget")]
+        public IActionResult MainUserGet([FromBody] cRequest model)
+        {
+            cResponse response = new SOperation().UserGet(model);
+
+            return Ok(response);
+        }
+
+        [HttpPost("userinfo")]
+        public IActionResult UserInfo([FromBody] cRequest model)
+        {
+            cResponse response = new cResponse()
+            {
+                message_code = AppStaticInt.msg001Fail,
+                message = AppStaticStr.msg0025ActivasyonHatasi,
+                token = string.Empty,
+                data = string.Empty
+            };
+
+            cRequest req = new cRequest()
+            {
+                token=model.token,
+                data=model.data,
+
+            };
+
+            response = new SOperation().UserGetALL(req);
+
+            return Ok(response);
+        }
     }
 }

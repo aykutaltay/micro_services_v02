@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "/YlE3HGbIlpVYIchMzBf0zYjyV1Qr5FL2JW0pQ2pLvnNvGXDzwl4nZ4bWeXbnTBxV1kVTt4oi7rMV1fglJfCNQ==",
+  "dgSpecHash": "Pk8dUyJO1MhaD8U202l2ewFUvj4Rh9+JuBxqguE1BSsN0AcCZKheeKJbDvG3SAZJjGkiOIH8hgVN/xpKB3dm2g==",
   "success": true,
   "projectFilePath": "C:\\Github_repo\\micro_services\\micro_services_v02\\micro_services_v02\\micro_services\\micro_services_share\\micro_services_share.csproj",
   "expectedPackageFiles": [
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
+    "C:\\Users\\ulaso\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
   ],
   "logs": []
 }

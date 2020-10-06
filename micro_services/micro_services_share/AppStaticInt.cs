@@ -11,6 +11,7 @@ namespace micro_services_share
         public static int msg0010reCaptaErrorMessage = 10;
         public static int msg0015SaveUsernamePass_i = 15;
         public static int msg0020SaveUsernamePassKayitli_i = 20;
+        public static int msg0040Hata_i=40;
 
         public static int msg001Succes=1;
         public static int msg001Fail=0;

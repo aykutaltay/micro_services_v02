@@ -87,7 +87,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             if (ALL == false)
             {
                 info_country info = new info_country();
-                whereclause += "AND " + info.country_deletedcountry_id + " = false AND " + info.country_country_use + " = true AND " + info.country_country_active + " = true";
+                whereclause += " AND " + info.country_deletedcountry_id + " = false AND " + info.country_country_use + " = true AND " + info.country_country_active + " = true";
             }
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {

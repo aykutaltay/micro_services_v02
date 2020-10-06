@@ -87,7 +87,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             if (ALL == false)
             {
                 info_parameters info = new info_parameters();
-                whereclause += "AND " + info.parameters_deletedparameters_id + " = false AND " + info.parameters_parameters_use + " = true AND " + info.parameters_parameters_active + " = true";
+                whereclause += " AND " + info.parameters_deletedparameters_id + " = false AND " + info.parameters_parameters_use + " = true AND " + info.parameters_parameters_active + " = true";
             }
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {

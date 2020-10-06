@@ -13,6 +13,8 @@ namespace micro_services_share
         public static string msg0025ActivasyonHatasi ="Aktivasyon Yapılamadı";
         public static string msg0030ActivasyonYapildi = "Kullanici Aktive Edildi";
         public static string msg0035AktivasyonKeyHata = "Aktivasyon Key Hatası";
+        public static string msg0040Hata="HATA";
+        public static string msg0045OK="OK";
 
 
         public static string sec_JWTClaim = "Bu iş hayalini kurduğumuz iş olabilir belkide burada büyük işler yapacağız";
@@ -39,6 +41,10 @@ namespace micro_services_share
 
 
         public static string urlMailActive = "https://coreesdef.zoradamlar.com/NonSecureOp/Activesiyon?actkey=";
-
+        public static string urlRestUserinfo = "https://localhost:5001/GateOfNewWorld/userinfo";
+        public static string urlRestAuth = "https://localhost:5001/GateOfNewWorld/auth";
+        public static string urlRestNuser= "https://localhost:5001/GateOfNewWorld/nuser";
+        public static string urlRestMainUserList= "https://localhost:5001/GateOfNewWorld/mainuserlist";
+        public static string urlRestMainUserGet= "https://localhost:5001/GateOfNewWorld/mainuserget";
     }
 }

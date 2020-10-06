@@ -1,0 +1,203 @@
+﻿
+@{
+    ViewData["Title"] = "Menu";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/js/MainuserMenu.js"></script>
+
+<div class="container">
+    @*<div id="user" style="margin-top:1px;" class="mainbox col-md-12 col-md-offset-3 col-sm-8 col-sm-offset-2">*@
+    <div id="user" style="margin-top:1px;" class="mainbox col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">Kullanıcı Bilgi Girişi</div>
+                <div style="float:left; font-size: 80%; position: relative; top:-10px"></div>
+            </div>
+
+            <div style="padding-top:3px" class="panel-body">
+
+                <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+
+                @*<form id="userform" class="form-horizontal" role="form">*@
+                <form id="userform" class="form" role="form">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div style="margin-bottom: 5px" class="input-group">
+                                <span class="input-group-addon">Durum </span>
+                                <label class="radio-inline" style="margin-left:5px"><input type="radio" name="optStatus" value="1" id="statu_Active" checked>Aktif</label>
+                                <label class="radio-inline"><input type="radio" name="optStatus" value="0" id="statu_Passive">Pasif</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div style="margin-bottom: 5px" class="input-group">
+                                <span class="input-group-addon">Yetki </span>
+                                <label class="radio-inline" style="margin-left:5px"><input type="radio" name="optAth" value="admin" id="auth_admin" checked>Yönetici</label>
+                                <label class="radio-inline"><input type="radio" name="optAth" value="user" id="auth_user">Kullanıcı</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div style="margin-bottom: 5px" class="input-group">
+                                <span class="input-group-addon">Dil </span>
+                                <select class="form-control" id="optLang" style="margin-left:5px">
+                                    <option value="1">Türkçe</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div style="margin-bottom: 5px" class="input-group">
+                                <span class="input-group-addon">Kod</span>
+                                <input type="text" class="form-control" name="username" value="" placeholder="Kullanıcı Kod" id="txtusername">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div style="margin-bottom: 5px" class="input-group">
+                                <span class="input-group-addon">E-mail</span>
+                                <input type="text" class="form-control" name="usermail" value="" placeholder="Kullanıcı Mail" id="txtuseremail">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div style="margin-bottom: 5px" class="input-group">
+                                <span class="input-group-addon">Yedek E-Mail</i></span>
+                                <input type="text" class="form-control" name="userbackupmail" value="" placeholder="Kullanıcı Yedek Mail" id="txtuserbackupemail">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div style="margin-bottom: 5px" class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input type="password" class="form-control" name="password" placeholder="Şifre" id="txtpass">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div style="margin-bottom: 5px" class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input type="password" class="form-control" name="passwordrepeat" placeholder="Şifre Tekrar" id="txtpassrepeat">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div style="margin-bottom: 5px" class="input-group">
+                                <span class="input-group-addon">Yetkili Projeler</span>
+                                <div class="checkbox" style="margin-left:10px">
+                                    <label><input type="checkbox" name="Core_project" id="cb_Core_project">Core</label>
+                                </div>
+                                <div class="checkbox" style="margin-left:10px">
+                                    <label><input type="checkbox" name="Fason_project" id="cb_Fason_project">Fason</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div style="margin-bottom: 5px" class="input-group">
+                                <span class="input-group-addon">Oluşturma Tarih</i></span>
+                                <input type="text" class="form-control" name="CreateTime" value="" placeholder="Tarih" id="txtcreateTime">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div style="margin-bottom: 5px" class="input-group">
+                                <span class="input-group-addon">Değiştirme Tarih</i></span>
+                                <input type="text" class="form-control" name="ChangeTime" value="" placeholder="Tarih" id="txtchangeTime">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div style="margin-bottom: 5px" class="input-group">
+                                <span class="input-group-addon">Son Kullanma Tarih</i></span>
+                                <input type="text" class="form-control" name="ExpireTime" value="" placeholder="Tarih" id="txtexpireTime">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    @*<div class="col-md-4">
+                            <div style="margin-bottom: 5px" class="input-group">
+                                <span class="input-group-addon">Dil </span>
+                                <select class="input-medium" id="optLang" style="margin-left:5px">
+                                    <option value="1">Türkçe</option>
+                                </select>
+                            </div>
+                        </div>*@
+
+
+
+                    <div style="margin-top:10px" class="form-group">
+                        <!-- Button -->
+                        <div class="row">
+                            <div class="col-sm-12 controls">
+                                <a id="btnNew" href="#" class="btn btn-success">Yeni </a>
+                                <a id="btnSave" href="#" class="btn btn-success" style="margin-left:15px">Kaydet </a>
+                                <a id="btnList" href="#" class="btn btn-success" style="margin-left:15px">Listele </a>
+                                <a id="btnDelete" href="#" class="btn btn-success" style="margin-left:15px">Sil </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-12 control">
+                            <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
+                                <table id="example" class="table table-responsive table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Durum</th>
+                                            <th>Yetki</th>
+                                            <th>Kod</th>
+                                            <th>Email</th>
+                                            <th>SonTarih</th>
+                                        </tr>
+                                    </thead>
+                                    @*<tbody>
+                                            <tr>
+                                                <td>Tiger Nixon</td>
+                                                <td>System Architect</td>
+                                                <td>Edinburgh</td>
+                                                <td>61</td>
+                                                <td>2011/04/25</td>
+                                                <td>$320,800</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tiger Nixon</td>
+                                                <td>System Architect</td>
+                                                <td>Edinburgh</td>
+                                                <td>61</td>
+                                                <td>2011/04/25</td>
+                                                <td>$320,800</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Durum</th>
+                                                <th>Yetki</th>
+                                                <th>Kod</th>
+                                                <th>Email</th>
+                                                <th>SonTarih</th>
+                                            </tr>
+                                        </tfoot>*@
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<h1>Menu</h1>
+

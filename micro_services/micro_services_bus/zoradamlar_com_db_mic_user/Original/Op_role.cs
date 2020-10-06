@@ -87,7 +87,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             if (ALL == false)
             {
                 info_role info = new info_role();
-                whereclause += "AND " + info.role_deletedrole_id + " = false AND " + info.role_role_use + " = true AND " + info.role_role_active + " = true";
+                whereclause += " AND " + info.role_deletedrole_id + " = false AND " + info.role_role_use + " = true AND " + info.role_role_active + " = true";
             }
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {

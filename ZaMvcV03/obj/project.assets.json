@@ -1797,6 +1797,19 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XDocument.dll": {}
         }
+      },
+      "micro_services_share/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.3"
+        },
+        "compile": {
+          "bin/placeholder/micro_services_share.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/micro_services_share.dll": {}
+        }
       }
     }
   },
@@ -5986,12 +5999,18 @@
         "system.xml.xdocument.4.3.0.nupkg.sha512",
         "system.xml.xdocument.nuspec"
       ]
+    },
+    "micro_services_share/1.0.0": {
+      "type": "project",
+      "path": "../micro_services/micro_services_share/micro_services_share.csproj",
+      "msbuildProject": "../micro_services/micro_services_share/micro_services_share.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 3.1.4",
-      "Newtonsoft.Json >= 12.0.3"
+      "Newtonsoft.Json >= 12.0.3",
+      "micro_services_share >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -6023,7 +6042,11 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Github_repo\\micro_services\\micro_services_v02\\micro_services_v02\\micro_services\\micro_services_share\\micro_services_share.csproj": {
+              "projectPath": "C:\\Github_repo\\micro_services\\micro_services_v02\\micro_services_v02\\micro_services\\micro_services_share\\micro_services_share.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -6062,7 +6085,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace micro_services.A00
+namespace micro_services_share.Model
 {
     public class cResponse
     {
@@ -11,6 +10,5 @@ namespace micro_services.A00
         public int message_code { get; set; }
         public string message { get; set; }
         public string data { get; set; }
-
     }
 }

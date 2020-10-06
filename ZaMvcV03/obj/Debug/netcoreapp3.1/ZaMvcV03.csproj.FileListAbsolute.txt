@@ -186,3 +186,8 @@ C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.MvcApplicationPartsAssemblyInfo.cache
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\Razor\Views\Activation\Activation.cshtml.g.cs
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.csprojAssemblyReference.cache
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_LayoutMain.cshtml.g.cs
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\Razor\Views\Mainuser\Menu.cshtml.g.cs
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\Razor\Views\Mainuser\Index.cshtml.g.cs
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\bin\Debug\netcoreapp3.1\micro_services_share.dll
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\bin\Debug\netcoreapp3.1\micro_services_share.pdb

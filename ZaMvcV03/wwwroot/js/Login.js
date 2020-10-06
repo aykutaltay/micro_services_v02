@@ -21,7 +21,7 @@
                     mdl.data = JSON.stringify(usr);
 
                     var settings = {
-                        "url": All.srv+"/GateOfNewWorld/auth",
+                        "url": All.webpageoptauth,
                         "method": "POST",
                         "timeout": 0,
                         "headers": {
@@ -31,40 +31,13 @@
                     };
 
                     $.ajax(settings).done(function (response) {
-                        //console.log(response);
-                        result = JSON.parse(response);
-                        alert(result.message);
+                        result = response;
+                        localStorage.setItem("token", result.token);
+                        var ss = All.webpageurl + All.webpageMainIndex;
+                        window.location.href=ss;
                     });
                 });
         });
-
-
-
-        //kontroller
-        //if (All.Methods.ValidateEmail(k) == false)
-        //    return;
-
-
-
-
-
-        //All.postJSON('https://localhost:5001/GateOfNewWorld/auth', JSON.stringify(mdl), function (res) {
-        //    try {
-        //        str = res;
-        //        //var resultModel = JSON.parse(res);
-        //        //localStorage.setItem('User', res);
-        //        //location.href = '/Default/Index';
-        //        //$('#msg').removeClass('hidden').html('Giriş Başarılı');
-        //        localStorage.setItem('User', res);
-        //        localStorage.setItem('User001', str);
-        //    } catch (e) {
-        //        //$('#frmLogin').show();
-        //        //$('#msg').removeClass('hidden').html(e);
-        //        str = html(e);
-        //    }
-        //});
-
-        //console.log(str);
 
 
     });
@@ -99,7 +72,7 @@
                     mdl.data = JSON.stringify(usr);
 
                     var settings = {
-                        "url": All.srv + "/GateOfNewWorld/nuser",
+                        "url": All.webpaceoptnuser,
                         "method": "POST",
                         "timeout": 0,
                         "headers": {
@@ -109,10 +82,6 @@
                     };
 
                     $.ajax(settings).done(function (response) {
-                        //console.log(response);
-                        //result = JSON.parse(response);
-                        //alert(response.message);
-                        //$('#a_message').removeClass('hidden').html(response.message);
                         $("div.warning").html(response.message);
                         $("div.warning").fadeIn(All.Integer.msgFadein).delay(All.Integer.msgDelay).fadeOut(All.Integer.msgFadeout);
                         

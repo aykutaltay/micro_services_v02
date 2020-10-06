@@ -198,7 +198,7 @@ namespace micro_service_fw
                     pagebody += "            {" + Environment.NewLine;
                     pagebody += string.Format("                info_{0} info = new info_{0}();"
                         , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
-                    pagebody += string.Format(@"                whereclause += ""AND "" + info.{0}_deleted{0}_id + "" = false AND "" + info.{0}_{0}_use + "" = true AND "" + info.{0}_{0}_active + "" = true"";"
+                    pagebody += string.Format(@"                whereclause += "" AND "" + info.{0}_deleted{0}_id + "" = false AND "" + info.{0}_{0}_use + "" = true AND "" + info.{0}_{0}_active + "" = true"";"
                         , dt.Rows[i][tableName].ToString()) + Environment.NewLine;
                     pagebody += "            }" + Environment.NewLine;
                     pagebody += "            if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)" + Environment.NewLine;
