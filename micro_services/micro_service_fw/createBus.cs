@@ -64,6 +64,8 @@ namespace micro_service_fw
                         + "using micro_services_dal;" + Environment.NewLine
                         + "using micro_services_share;" + Environment.NewLine
                         + "using micro_services_share.vModel;" + Environment.NewLine
+                        + "using micro_services_share.Model;" + Environment.NewLine
+                        + "using Newtonsoft.Json;"+ Environment.NewLine
                         + "using micro_services_dal.Models." + AppStatic.conf[AppStatic.conf_dbname] + ";" + Environment.NewLine;
 
                     pagetop += Environment.NewLine;
@@ -232,6 +234,83 @@ namespace micro_service_fw
                         , dt.Rows[i][tableName].ToString()) + "{ " + "}" + Environment.NewLine;
                     pagebody += string.Format("        public void AfterGetAll{0}(string whereclause, allofusers ALLOFUSERS, bool ALL) "
                         , dt.Rows[i][tableName].ToString()) + "{ " + "}" + Environment.NewLine;
+                    //single crud eklemek için
+                    pagebody += string.Format("        public string Single_crud (cRequest request, allofusers e_aou)") + Environment.NewLine;
+                    pagebody += string.Format("        ")+"{" + Environment.NewLine;
+                    pagebody += string.Format("             string result = AppStaticStr.msg0040Hata;") + Environment.NewLine;
+                    pagebody += string.Format("             #region gelen paket içinden yapılacak işlemin bilgilerinin alınması") + Environment.NewLine;
+                    pagebody += string.Format("             List<ex_data> l_ed_opt = request.data_ex.Where(w => w.info == AppStaticStr.SrvOpt).ToList();") + Environment.NewLine;
+                    pagebody += string.Format("             if (l_ed_opt == null) return result;") + Environment.NewLine;
+                    pagebody += string.Format("             if (l_ed_opt.Count != 1) return result;") + Environment.NewLine;
+                    pagebody += string.Format("             #endregion gelen paket içinden yapılacak işlemin bilgilerinin alınması") + Environment.NewLine;
+                    pagebody += string.Format("             if (l_ed_opt[0].value==AppStaticStr.SingleCrudSave)") + Environment.NewLine;
+                    pagebody += string.Format("                 ")+"{" + Environment.NewLine;
+                    pagebody += string.Format("                     {0} ent = JsonConvert.DeserializeObject<{0}>(request.data);", dt.Rows[i][tableName].ToString()) + Environment.NewLine;
+                    pagebody += string.Format("                     {0} save_ent = Save{0}(ent, e_aou, false, false);", dt.Rows[i][tableName].ToString()) + Environment.NewLine;
+                    pagebody += string.Format("                     cResponse res = new cResponse()") + Environment.NewLine;
+                    pagebody += string.Format("                     ")+"{" + Environment.NewLine;
+                    pagebody += string.Format("                         message_code = AppStaticInt.msg001Succes,") + Environment.NewLine;
+                    pagebody += string.Format("                         message = AppStaticStr.msg0045OK,") + Environment.NewLine;
+                    pagebody += string.Format("                         data = JsonConvert.SerializeObject(save_ent),") + Environment.NewLine;
+                    pagebody += string.Format("                         token = request.token") + Environment.NewLine;
+                    pagebody += string.Format("                     ")+"}"+";"+ Environment.NewLine;
+                    pagebody += string.Format("                     result = JsonConvert.SerializeObject(res);") + Environment.NewLine;
+                    pagebody += string.Format("                 ")+"}" + Environment.NewLine;
+                    pagebody += string.Format("             if (l_ed_opt[0].value==AppStaticStr.SingleCrudDelete)") + Environment.NewLine;
+                    pagebody += string.Format("             ")+"{" + Environment.NewLine;
+                    pagebody += string.Format("                 {0} ent = JsonConvert.DeserializeObject<{0}>(request.data);", dt.Rows[i][tableName].ToString()) + Environment.NewLine;
+                    pagebody += string.Format("                 bool resu = Delete{0} (ID: ent.{0}_id, ALLOFUSERS: e_aou, SYNC: false, TRAN: false);", dt.Rows[i][tableName].ToString()) + Environment.NewLine;
+                    pagebody += string.Format("                 if (resu == true)") + Environment.NewLine;
+                    pagebody += string.Format("                 ")+"{" + Environment.NewLine;
+                    pagebody += string.Format("                     cResponse res = new cResponse()") + Environment.NewLine;
+                    pagebody += string.Format("                     ")+"{" + Environment.NewLine;
+                    pagebody += string.Format("                         message_code = AppStaticInt.msg001Succes,") + Environment.NewLine;
+                    pagebody += string.Format("                         message = AppStaticStr.msg0045OK,") + Environment.NewLine;
+                    pagebody += string.Format("                         data = resu.ToString(),") + Environment.NewLine;
+                    pagebody += string.Format("                         token = request.token") + Environment.NewLine;
+                    pagebody += string.Format("                     ")+"}"+";" + Environment.NewLine;
+                    pagebody += string.Format("                     result = JsonConvert.SerializeObject(res);") + Environment.NewLine;
+                    pagebody += string.Format("                 ")+"}" + Environment.NewLine;
+                    pagebody += string.Format("             ")+"}" + Environment.NewLine;
+                    pagebody += string.Format("             if (l_ed_opt[0].value==AppStaticStr.SingleCrudGet)") + Environment.NewLine;
+                    pagebody += string.Format("             ")+"{" + Environment.NewLine;
+                    pagebody += string.Format("                 int ID = 0;") + Environment.NewLine;
+                    pagebody += string.Format("                 int.TryParse(request.data, out ID);") + Environment.NewLine;
+                    pagebody += string.Format("                 {0} ent = Get{0}(ID: ID,ALLOFUSERS:e_aou, ALL:false);", dt.Rows[i][tableName].ToString()) + Environment.NewLine;
+                    pagebody += string.Format("                 if (ent!=null)") + Environment.NewLine;
+                    pagebody += string.Format("                 ")+"{" + Environment.NewLine;
+                    pagebody += string.Format("                     if (ent.{0}_id==ID)", dt.Rows[i][tableName].ToString()) + Environment.NewLine;
+                    pagebody += string.Format("                     ")+"{" + Environment.NewLine;
+                    pagebody += string.Format("                         cResponse res = new cResponse()") + Environment.NewLine;
+                    pagebody += string.Format("                         ")+"{" + Environment.NewLine;
+                    pagebody += string.Format("                         message_code = AppStaticInt.msg001Succes,") + Environment.NewLine;
+                    pagebody += string.Format("                         data = JsonConvert.SerializeObject(ent),") + Environment.NewLine;
+                    pagebody += string.Format("                         token = request.token") + Environment.NewLine;
+                    pagebody += string.Format("                         ")+"}"+";" + Environment.NewLine;
+                    pagebody += string.Format("                         result = JsonConvert.SerializeObject(res);") + Environment.NewLine;
+                    pagebody += string.Format("                     ")+"}" + Environment.NewLine;
+                    pagebody += string.Format("                 ")+"}" + Environment.NewLine;
+                    pagebody += string.Format("             ")+"}" + Environment.NewLine;
+                    pagebody += string.Format("             if (l_ed_opt[0].value==AppStaticStr.SingleCrudGetAll)") + Environment.NewLine;
+                    pagebody += string.Format("             ")+"{" + Environment.NewLine;
+                    pagebody += string.Format("                 List<{0}> ent = GetAll{0}(whereclause:request.data, ALLOFUSERS: e_aou, ALL: false);", dt.Rows[i][tableName].ToString()) + Environment.NewLine;
+                    pagebody += string.Format("                 if (ent != null)") + Environment.NewLine;
+                    pagebody += string.Format("                 ")+"{" + Environment.NewLine;
+                    pagebody += string.Format("                     if (ent.Count>0)") + Environment.NewLine;
+                    pagebody += string.Format("                     ")+"{" + Environment.NewLine;
+                    pagebody += string.Format("                         cResponse res = new cResponse()") + Environment.NewLine;
+                    pagebody += string.Format("                         ")+"{" + Environment.NewLine;
+                    pagebody += string.Format("                             message_code = AppStaticInt.msg001Succes,") + Environment.NewLine;
+                    pagebody += string.Format("                             message = AppStaticStr.msg0045OK,") + Environment.NewLine;
+                    pagebody += string.Format("                             data = JsonConvert.SerializeObject(ent),") + Environment.NewLine;
+                    pagebody += string.Format("                             token = request.token") + Environment.NewLine;
+                    pagebody += string.Format("                         ")+"}"+";" + Environment.NewLine;
+                    pagebody += string.Format("                         result = JsonConvert.SerializeObject(res);") + Environment.NewLine;
+                    pagebody += string.Format("                     ")+"}" + Environment.NewLine;
+                    pagebody += string.Format("                 ")+"}" + Environment.NewLine;
+                    pagebody += string.Format("             ")+"}" + Environment.NewLine;
+                    pagebody += string.Format("             return result;") + Environment.NewLine;
+                    pagebody += string.Format("        ")+"}" + Environment.NewLine;
 
                     //birleştirme ve yazma
                     pagemeth = pagemeth.Replace("@body", pagebody.Replace('@', '{').Replace('$', '}'));

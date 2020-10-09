@@ -10,6 +10,7 @@ using micro_services_share;
 using micro_services_share.Model;
 using micro_services_share.vModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 //using ZaMvcV03.Models;
 
@@ -30,7 +31,6 @@ namespace ZaMvcV03.Controllers
         public IActionResult MenuEntry(string token)
         {
 
-
             if (token == null)
                 return View("Index");
 
@@ -41,6 +41,7 @@ namespace ZaMvcV03.Controllers
                 token = token
             };
             AppClassMVCMethod mvcPost = new AppClassMVCMethod(token:token);
+
 
             response=mvcPost.post(AppStaticStr.urlRestUserinfo,model: req);
 
@@ -77,8 +78,14 @@ namespace ZaMvcV03.Controllers
                     return BadRequest(response);
                 }
             }
+
+
+
+
             return BadRequest(response);
         }
+
+
 
     }
 }

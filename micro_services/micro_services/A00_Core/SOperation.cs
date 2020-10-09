@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using micro_services.A00;
 using micro_services_bus;
@@ -27,6 +28,9 @@ namespace micro_services.A00_Core
         };
         Op_usersofprojects Op_uop = new Op_usersofprojects();
         info_usersofprojects infUop = new info_usersofprojects();
+
+        classToken ctoken = new classToken();
+        // Methodlar 
         public cResponse CompanyUserList(cRequest request)
         {
             cResponse result = new cResponse()
@@ -148,6 +152,117 @@ namespace micro_services.A00_Core
             result.data = JsonConvert.SerializeObject(e_aou);
             result.message = AppStaticStr.msg0045OK;
             result.message_code = AppStaticInt.msg001Succes;
+
+            return result;
+        }
+
+        public cResponse userRetoken(cRequest request)
+        {
+            cResponse result = new cResponse()
+            {
+                token = request.token,
+                data = "",
+                message = AppStaticStr.msg0040Hata,
+                message_code = AppStaticInt.msg001Fail
+            };
+
+            List<allofusers> l_aou = AppStaticModel.l_allofusers.Where(w => w.tokensofusers_token == request.token).ToList();
+            try
+            {
+                if (l_aou.Count != 1)
+                    return result;
+                allofusers e_aou = l_aou[0];
+                string newtoken = ctoken.generateJwtToken(e_aou.users_id);
+                long kontsavetoken = 0;
+                kontsavetoken = ctoken.savetoken(e_aou.users_id, newtoken);
+                if (kontsavetoken != 0)
+                    ctoken.savestaticList(e_aou.users_id);
+
+                result.token = newtoken;
+                result.data = newtoken;
+                result.message_code = AppStaticInt.msg001Succes;
+                result.message = AppStaticStr.msg0045OK;
+            }
+            catch (System.Exception)
+            {
+
+            }
+
+            return result;
+        }
+
+        public cResponse ref_crud(cRequest request)
+        {
+            cResponse result = new cResponse()
+            {
+                token = request.token,
+                data = "",
+                message = AppStaticStr.msg0040Hata,
+                message_code = AppStaticInt.msg001Fail
+            };
+
+            #region kullanıcı bilgilerinin alınması
+            List<allofusers> l_aou = AppStaticModel.l_allofusers.Where(w => w.tokensofusers_token == request.token).ToList();
+
+            if (l_aou == null) return result;
+            if (l_aou.Count != 1) return result;
+
+            #endregion kullanıcı bilgilerinin alınması
+
+            #region gelen paket içinden yapılacak işlemin bilgilerinin alınması
+            List<ex_data> l_ed_crd = request.data_ex.Where(w => w.info == AppStaticStr.SrvSingleCrud).ToList();
+            List<ex_data> l_ed_tbl = request.data_ex.Where(w => w.info == AppStaticStr.SrvTable).ToList();
+
+            if (l_ed_crd == null) return result;
+            if (l_ed_tbl == null) return result;
+
+            if (l_ed_crd.Count != 1) return result;
+            if (l_ed_tbl.Count != 1) return result;
+
+
+            #endregion gelen paket içinden yapılacak işlemin bilgilerinin alınması
+            //reflection yapılacak bilginin hazırlanması
+            string optpath = string.Format("{0}.{1}.Op_{2}"
+            , AppStaticStr.MicroServicesBus
+            , l_aou[0].dbserver_name
+            , l_ed_tbl[0].value
+            );
+
+            string opt = string.Format("{0}"
+            , l_ed_crd[0].value);
+            string path = AppDomain.CurrentDomain.BaseDirectory.ToString() + "micro_services_bus.dll";
+            System.Reflection.Assembly ass = System.Reflection.Assembly.LoadFrom(path);
+            Type myTypeOpt = ass.GetType(optpath);
+
+            
+            //Type Testmy =Type.GetType("micro_services.A00.NSOperation");
+
+            //object calcInstance = Activator.CreateInstance(Type.GetType(optpath), "entiyti",allofusers,"sync", "tran");
+            //object calcInstance = Activator.CreateInstance(Type.GetType(optpath), request, l_aou[0]);
+            //object calcInstance = Activator.CreateInstance(Type.GetType(optpath),string.Format("Op_{0}",l_ed_tbl[0].value));
+            object calcInstance = Activator.CreateInstance(myTypeOpt);
+
+            try
+            {
+                string values = (string)myTypeOpt.InvokeMember(
+                    //string.Format("{0}_{1}Op.", capsule.prosesName, capsule.backMessage),
+                    //"Get_c_paramOp",
+                    opt,
+                BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
+                //null, calcInstance, new object[] { JsonConvert.DeserializeObject(capsule.backDataStr).ToString() });
+                null, calcInstance, new object[] { request, l_aou[0] });
+
+
+                result = JsonConvert.DeserializeObject<cResponse>(values);
+
+            }
+            catch (Exception ex)
+            {
+                result.message=ex.ToString();
+            }
+
+
+
 
             return result;
         }

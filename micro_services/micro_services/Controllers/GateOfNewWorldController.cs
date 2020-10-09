@@ -27,7 +27,7 @@ namespace micro_services.Controllers
 
             cResponse response = new cResponse()
             {
-                message_code = AppStaticInt.msg0001WrongUserNamePass_i,
+                message_code = AppStaticInt.msg001Fail,
                 message = AppStaticStr.msg0001WrongUserNamePass,
                 token = string.Empty,
                 data = string.Empty
@@ -41,7 +41,7 @@ namespace micro_services.Controllers
             response = new classToken().Authenticate(model, ipAddress());
 
 
-            if (AppStaticInt.msg0001WrongUserNamePass_i == response.message_code)
+            if (AppStaticInt.msg001Fail == response.message_code)
                 return Ok(response);
 
             //setTokenCookie(response.RefreshToken);
@@ -65,7 +65,7 @@ namespace micro_services.Controllers
 
             cResponse response = new cResponse()
             {
-                message_code = AppStaticInt.msg0001WrongUserNamePass_i,
+                message_code = AppStaticInt.msg001Fail,
                 message = AppStaticStr.msg0001WrongUserNamePass,
                 token = string.Empty,
                 data = string.Empty
@@ -79,7 +79,7 @@ namespace micro_services.Controllers
             response = new classToken().SaveNewUser(model, ipAddress());
 
 
-            if (AppStaticInt.msg0001WrongUserNamePass_i == response.message_code)
+            if (AppStaticInt.msg001Fail == response.message_code)
                 return Ok(response);
 
             //setTokenCookie(response.RefreshToken);
@@ -214,8 +214,8 @@ namespace micro_services.Controllers
 
             cRequest req = new cRequest()
             {
-                token=model.token,
-                data=model.data,
+                token = model.token,
+                data = model.data,
 
             };
 
@@ -223,5 +223,20 @@ namespace micro_services.Controllers
 
             return Ok(response);
         }
+        [HttpPost("retoken")]
+        public IActionResult ReToken([FromBody] cRequest model)
+        {
+            cResponse response = new SOperation().userRetoken(model);
+            return Ok(response);
+        }
+
+        [HttpPost("refcrud")]
+        public IActionResult RefCrud([FromBody] cRequest model)
+        {
+            cResponse response = new SOperation().ref_crud(model);
+            return Ok(response);
+        }
+
+
     }
 }

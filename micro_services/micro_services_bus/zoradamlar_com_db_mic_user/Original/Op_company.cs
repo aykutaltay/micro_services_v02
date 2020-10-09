@@ -3,6 +3,8 @@ using System.Linq;
 using micro_services_dal;
 using micro_services_share;
 using micro_services_share.vModel;
+using micro_services_share.Model;
+using Newtonsoft.Json;
 using micro_services_dal.Models.zoradamlar_com_db_mic_user;
 
 namespace micro_services_bus.zoradamlar_com_db_mic_user
@@ -105,6 +107,82 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
         public void AfterGetcompany(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void BeforeGetAllcompany(string whereclause , allofusers ALLOFUSERS, bool ALL ) { }
         public void AfterGetAllcompany(string whereclause, allofusers ALLOFUSERS, bool ALL) { }
+        public string Single_crud (cRequest request, allofusers e_aou)
+        {
+             string result = AppStaticStr.msg0040Hata;
+             #region gelen paket içinden yapilacak işlemin bilgilerinin alinmasi
+             List<ex_data> l_ed_opt = request.data_ex.Where(w => w.info == AppStaticStr.SrvOpt).ToList();
+             if (l_ed_opt == null) return result;
+             if (l_ed_opt.Count != 1) return result;
+             #endregion gelen paket içinden yapilacak işlemin bilgilerinin alinmasi
+             if (l_ed_opt[0].value==AppStaticStr.SingleCrudSave)
+                 {
+                     company ent = JsonConvert.DeserializeObject<company>(request.data);
+                     company save_ent = Savecompany(ent, e_aou, false, false);
+                     cResponse res = new cResponse()
+                     {
+                         message_code = AppStaticInt.msg001Succes,
+                         message = AppStaticStr.msg0045OK,
+                         data = JsonConvert.SerializeObject(save_ent),
+                         token = request.token
+                     };
+                     result = JsonConvert.SerializeObject(res);
+                 }
+             if (l_ed_opt[0].value==AppStaticStr.SingleCrudDelete)
+             {
+                 company ent = JsonConvert.DeserializeObject<company>(request.data);
+                 bool resu = Deletecompany (ID: ent.company_id, ALLOFUSERS: e_aou, SYNC: false, TRAN: false);
+                 if (resu == true)
+                 {
+                     cResponse res = new cResponse()
+                     {
+                         message_code = AppStaticInt.msg001Succes,
+                         message = AppStaticStr.msg0045OK,
+                         data = resu.ToString(),
+                         token = request.token
+                     };
+                     result = JsonConvert.SerializeObject(res);
+                 }
+             }
+             if (l_ed_opt[0].value==AppStaticStr.SingleCrudGet)
+             {
+                 int ID = 0;
+                 int.TryParse(request.data, out ID);
+                 company ent = Getcompany(ID: ID,ALLOFUSERS:e_aou, ALL:false);
+                 if (ent!=null)
+                 {
+                     if (ent.company_id==ID)
+                     {
+                         cResponse res = new cResponse()
+                         {
+                         message_code = AppStaticInt.msg001Succes,
+                         data = JsonConvert.SerializeObject(ent),
+                         token = request.token
+                         };
+                         result = JsonConvert.SerializeObject(res);
+                     }
+                 }
+             }
+             if (l_ed_opt[0].value==AppStaticStr.SingleCrudGetAll)
+             {
+                 List<company> ent = GetAllcompany(whereclause:request.data, ALLOFUSERS: e_aou, ALL: false);
+                 if (ent != null)
+                 {
+                     if (ent.Count>0)
+                     {
+                         cResponse res = new cResponse()
+                         {
+                             message_code = AppStaticInt.msg001Succes,
+                             message = AppStaticStr.msg0045OK,
+                             data = JsonConvert.SerializeObject(ent),
+                             token = request.token
+                         };
+                         result = JsonConvert.SerializeObject(res);
+                     }
+                 }
+             }
+             return result;
+        }
     }
 
 }

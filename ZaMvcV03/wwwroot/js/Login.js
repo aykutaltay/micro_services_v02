@@ -32,9 +32,15 @@
 
                     $.ajax(settings).done(function (response) {
                         result = response;
-                        localStorage.setItem("token", result.token);
-                        var ss = All.webpageurl + All.webpageMainIndex;
-                        window.location.href=ss;
+                        if (result.message_code == 1) {
+                            localStorage.setItem("token", result.token);
+                            var ss = All.webpageurl + All.webpageMainIndex;
+                            window.location.href = ss;
+                        }
+                        else {
+                            $("div.warning").html(response.message);
+                            $("div.warning").fadeIn(All.Integer.msgFadein).delay(All.Integer.msgDelay).fadeOut(All.Integer.msgFadeout);
+                        }
                     });
                 });
         });

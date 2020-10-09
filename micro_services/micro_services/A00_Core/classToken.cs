@@ -41,7 +41,7 @@ namespace micro_services.A00_Core
 
             res = new cResponse()
             {
-                message_code = AppStaticInt.msg0001WrongUserNamePass_i,
+                message_code = AppStaticInt.msg001Fail,
                 message = AppStaticStr.msg0001WrongUserNamePass,
                 token = string.Empty,
                 data = string.Empty
@@ -61,14 +61,14 @@ namespace micro_services.A00_Core
 
             return new cResponse()
             {
-                message_code = AppStaticInt.msg0005CorrectUsernamePass_i,
+                message_code = AppStaticInt.msg001Succes,
                 message = AppStaticStr.msg0005CorrectUsernamePass,
                 token = jwtToken,
                 data = string.Empty
             };
         }
 
-        private string generateJwtToken(long userID)
+        public string generateJwtToken(long userID)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(AppStaticStr.sec_JWTClaim);
@@ -85,7 +85,7 @@ namespace micro_services.A00_Core
             return tokenHandler.WriteToken(token);
         }
 
-        private long savetoken(long userID, string token)
+        public long savetoken(long userID, string token)
         {
             DateTime tar = DateTime.Now;
             long result = 0;
@@ -129,7 +129,7 @@ namespace micro_services.A00_Core
             return result;
         }
 
-        private void savestaticList(long userID)
+        public void savestaticList(long userID)
         {
             AppStaticModel.l_allofusers.RemoveAll(x => x.users_id == userID);
 

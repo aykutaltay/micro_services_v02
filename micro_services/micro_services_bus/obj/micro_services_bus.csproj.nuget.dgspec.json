@@ -184,7 +184,11 @@
         },
         "frameworks": {
           "netstandard2.0": {
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Github_repo\\micro_services\\micro_services_v02\\micro_services_v02\\micro_services\\micro_services_dal\\micro_services_dal.csproj": {
+                "projectPath": "C:\\Github_repo\\micro_services\\micro_services_v02\\micro_services_v02\\micro_services\\micro_services_dal\\micro_services_dal.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

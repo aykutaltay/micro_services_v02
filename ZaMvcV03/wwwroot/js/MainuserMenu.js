@@ -5,9 +5,10 @@ var e_usr = new All.Models.Vgetuser();
 var mainstat = 0;
 
 var Getlist = function () {
-
-    dt = $('#example').DataTable({
-    });
+    if (dt == null) {
+        dt = $('#example').DataTable({
+        });
+    }
 
     dt.destroy();
 
@@ -75,13 +76,13 @@ var Getlist = function () {
 
         }
         else {
+            $("div.warning").html(response.message);
+            $("div.warning").fadeIn(All.Integer.msgFadein).delay(All.Integer.msgDelay).fadeOut(All.Integer.msgFadeout);
             var ss = All.webpageurl + All.webpageMainIndex;
             window.location.href = ss;
             return;
         }
     });
-
-
 
 };
 var Getuser = function () {
@@ -107,8 +108,11 @@ var Getuser = function () {
             e_usr = JSON.parse(response.data);
             Getuserpage();
         }
+        else {
+            $("div.warning").html(response.message);
+            $("div.warning").fadeIn(All.Integer.msgFadein).delay(All.Integer.msgDelay).fadeOut(All.Integer.msgFadeout);
+        }
     });
-
 
 };
 var Getuserpage = function () {
@@ -172,8 +176,74 @@ var NewUser = function () {
     document.getElementById("txtpass").disabled = false;
     document.getElementById("txtpassrepeat").disabled = false;
 }
+var Setuserpage = function () {
+    if (document.getElementById('auth_admin').checked == true) {
+        e_usr.authValue = "admin";
+    }
+    else {
+        e_usr.authValue = "user";
+    }
+//----------
+    if (document.getElementById("cb_Core_project").checked == true) {
+        e_usr.Core_project = true;
+    }
+    else {
+        e_usr.Core_project = false;
+    }
+//----------
+    if (document.getElementById("cb_Fason_project").checked == true) {
+        e_usr.Fason_project = true;
+    }
+    else {
+        e_usr.Fason_project = false;
+    }
+//--------------
+    if (document.getElementById('statu_Active').checked == true) {
+        e_usr.statuValue = 1;
+    }
+    else {
+        e_usr.statuValue = 0;
+    }
+    //-----------
+    e_usr.langValue = document.getElementById("optLang").value;
+    e_usr.pass = document.getElementById("txtpass").value;
+    e_usr.passRepat = document.getElementById("txtpassrepeat").value;
+    e_usr.userBackupMail = document.getElementById('txtuserbackupemail').value;
+    e_usr.userID = localStorage.getItem(All.String.strUserIDBilgi);
+    e_usr.userMail = document.getElementById('txtuseremail').value;
+    e_usr.userName = document.getElementById('txtusername').value;
 
 
+}
+var Saveuser = function () {
+
+    var mdl = new All.Models.cRequest();
+    mdl.token = localStorage.getItem("token");
+    Setuserpage();
+    mdl.data = JSON.stringify(e_usr);
+
+    var settings = {
+        "url": All.webpaceoptmainuserList,
+        "method": "POST",
+        "timeout": 0,
+        "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + mdl.token
+        },
+        "data": JSON.stringify(mdl),
+    };
+
+    $.ajax(settings).done(function (response) {
+        if (response.message_code == 1) {
+            //işlem sonucu olursa
+        }
+        else {
+            //işlem sonucu olmaz ise
+            $("div.warning").html(response.message);
+            $("div.warning").fadeIn(All.Integer.msgFadein).delay(All.Integer.msgDelay).fadeOut(All.Integer.msgFadeout);
+        }
+    });
+}
 $(document).ready(function () {
     Getlist();
 
@@ -194,7 +264,9 @@ $(document).ready(function () {
     $('#btnNew').on('click', function () {
         NewUser();
     });
-
-
-
+    $('#btnList').on('click', function () {
+        Getlist()
+    });
+    
+    GetTime01();
 });

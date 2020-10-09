@@ -4,6 +4,8 @@ All.webpageoptauth = All.webpageurl + "OptCore/auth";
 All.webpaceoptnuser = All.webpageurl + "OptCore/nuser";
 All.webpaceoptmainuserList = All.webpageurl + "OptCore/mainuserlist";
 All.wabpageoptmainuserget = All.webpageurl + "OptCore/mainuserget";
+All.webpageoptretoken = All.webpageurl + "OptCore/tokenRenew";
+All.webpageoptsaveuser = All.webpageurl + "OptCore/saveUser";
 All.webpageMainIndex = "Mainuser/Index";
 All.webpageMain = "Mainuser/Menu";
 All.webpageMainIndex = "Mainuser/Index";
@@ -58,7 +60,12 @@ All.Models.cRequest = function () {
     this.project_code = 0;
     this.prosses_code = 0;
     this.data = '';
-    this.data_ex = '';
+    this.data_ex = All.Models.exdata;
+};
+All.Models.exdata = function () {
+    id = 0;
+    info = '';
+    value = '';
 };
 All.Models.cResponse = function () {
     this.token = '';
