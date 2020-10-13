@@ -11,10 +11,11 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
 {
     public partial class Op_users
     {
-        public users Saveusers(users USERS, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public users Saveusers(users USERS, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
+            string connstr = GetConnStr(ALLOFUSERS);
             users result = new users();
-            BeforeSaveusers(USERS: USERS, ALLOFUSERS, SYNC:SYNC, TRAN: TRAN);
+            BeforeSaveusers(USERS: USERS, ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC, TRAN: TRAN);
             //eğer birden fazla DataBase güncelleme var ise
             if (SYNC == true)
                 USERS.users_use = false;
@@ -23,32 +24,54 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 USERS.users_active = false;
             if ( ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                if (DB_MYSQL == null)
                 {
-                    if (USERS.users_id == 0)
-                    {
-                        long id = 0;
-                        id = db.Insert<users>(USERS);
-                        if (id != 0)
-                            result = db.Get<users>(id);
-                    }
-                    else
-                    {
-                        bool ok = db.Update<users>(USERS);
-                        if (ok == true)
-                            result = db.Get<users>(USERS.users_id);
-                        else
-                            result = USERS;
-                    }
+                   using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
+                   {
+                        if (USERS.users_id == 0)
+                       {
+                            long id = 0;
+                            id = db.Insert<users>(USERS);
+                           if (id != 0)
+                             result = db.Get<users>(id);
+                       }
+                       else
+                       {
+                         bool ok = db.Update<users>(USERS);
+                           if (ok == true)
+                             result = db.Get<users>(USERS.users_id);
+                           else
+                             result = USERS;
+                       }
+                   }
+                }
+                else
+                {
+                   Mysql_dapper db = DB_MYSQL;
+                        if (USERS.users_id == 0)
+                       {
+                            long id = 0;
+                            id = db.Insert<users>(USERS);
+                           if (id != 0)
+                             result = db.Get<users>(id);
+                       }
+                       else
+                       {
+                         bool ok = db.Update<users>(USERS);
+                           if (ok == true)
+                             result = db.Get<users>(USERS.users_id);
+                           else
+                             result = USERS;
+                       }
                 }
             }
-            AfterSaveusers(USERS: USERS, ALLOFUSERS, SYNC: SYNC, TRAN: TRAN);
+            AfterSaveusers(USERS: USERS, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC: SYNC, TRAN: TRAN);
             return result;
         }
-        public bool Deleteusers(long ID, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public bool Deleteusers(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
             bool result = false;
-            BeforeDeleteusers(ID, ALLOFUSERS, SYNC, TRAN);
+            BeforeDeleteusers(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
                 users etmp = Getusers(ID, ALLOFUSERS);
@@ -59,19 +82,20 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 if (TRAN == true)
                     etmp.users_active = false;
                 etmp.deletedusers_id = true;
-                users eresulttmp = Saveusers(etmp, ALLOFUSERS);
+                users eresulttmp = Saveusers(USERS:etmp, ALLOFUSERS:ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC,TRAN:TRAN);
                 if (eresulttmp.deletedusers_id == true)
                     result = true;
             }
-            AfterDeleteusers(ID, ALLOFUSERS, SYNC, TRAN);
+            AfterDeleteusers(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             return result;
         }
         public users Getusers(long ID, allofusers ALLOFUSERS, bool ALL=false)
         {
             users result = new users();
+            string connstr = GetConnStr(ALLOFUSERS);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
                 {                    result = db.Get<users>(id: ID);
                     //senkron dişinda ve silinenlerin dişindakileri getirmesi
                     if (ALL==false)
@@ -84,6 +108,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
         public List<users> GetAllusers(string whereclause , allofusers ALLOFUSERS, bool ALL=false)
         {
             List<users> result = new List<users>();
+            string connstr = GetConnStr(ALLOFUSERS);
             BeforeGetAllusers(whereclause, ALLOFUSERS, ALL);
             //senkron dişinda ve silinenlerin dişindakileri getirmesi
             if (ALL == false)
@@ -93,21 +118,21 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             }
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr, usetransaction: false))
                 {
                     result = db.GetAll<users>(whereclause: whereclause).ToList();
                 }            }            AfterGetAllusers(whereclause, ALLOFUSERS, ALL);
             return result;
         }
-        public void BeforeSaveusers(users USERS, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterSaveusers(users USERS, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterDeleteusers (long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void BeforeDeleteusers(long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void BeforeSaveusers(users USERS, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterSaveusers(users USERS, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterDeleteusers (long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void BeforeDeleteusers(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
         public void BeforeGetusers(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void AfterGetusers(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void BeforeGetAllusers(string whereclause , allofusers ALLOFUSERS, bool ALL ) { }
         public void AfterGetAllusers(string whereclause, allofusers ALLOFUSERS, bool ALL) { }
-        public string Single_crud (cRequest request, allofusers e_aou)
+        public string Single_crud (cRequest request, allofusers e_aou, Mysql_dapper DB_MYSQL=null)
         {
              string result = AppStaticStr.msg0040Hata;
              #region gelen paket içinden yapilacak işlemin bilgilerinin alinmasi
@@ -118,7 +143,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudSave)
                  {
                      users ent = JsonConvert.DeserializeObject<users>(request.data);
-                     users save_ent = Saveusers(ent, e_aou, false, false);
+                     users save_ent = Saveusers(ent, e_aou, DB_MYSQL, false, false);
                      cResponse res = new cResponse()
                      {
                          message_code = AppStaticInt.msg001Succes,
@@ -131,7 +156,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudDelete)
              {
                  users ent = JsonConvert.DeserializeObject<users>(request.data);
-                 bool resu = Deleteusers (ID: ent.users_id, ALLOFUSERS: e_aou, SYNC: false, TRAN: false);
+                 bool resu = Deleteusers (ID: ent.users_id, ALLOFUSERS: e_aou, DB_MYSQL:DB_MYSQL ,SYNC: false, TRAN: false);
                  if (resu == true)
                  {
                      cResponse res = new cResponse()
@@ -182,6 +207,20 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                  }
              }
              return result;
+        }
+        public string GetConnStr (allofusers ALLOFUSERS)
+
+        {
+            string result = string.Empty;
+            if (ALLOFUSERS.projects_id == AppStaticInt.ProjectCodeCore)
+                result = ALLOFUSERS.appdatabase_connstr;
+            long db_ID = 0;
+            long.TryParse(ALLOFUSERS.company_dbserver_id.ToString(), out db_ID);
+            if (db_ID == 0)
+                result = ALLOFUSERS.appdatabase_connstr;
+            else
+                result = ALLOFUSERS.dbserver_adrr;
+            return result;
         }
     }
 

@@ -17,5 +17,7 @@ namespace micro_services_share
 
         public static int RoleAdminponit = 100;
 
+        public static int ProjectCodeCore = 1;
+
     }
 }

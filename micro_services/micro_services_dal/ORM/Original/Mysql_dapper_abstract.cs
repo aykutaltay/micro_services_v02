@@ -15,7 +15,7 @@ namespace micro_services_dal
 
         MySqlConnection conn;
         MySqlTransaction tran;
-        public const int timeoutSec = 900;
+        public const int timeoutSec = 9000;
 
         public void Dispose()
         {

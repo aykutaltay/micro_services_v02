@@ -11,10 +11,11 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
 {
     public partial class Op_appserver
     {
-        public appserver Saveappserver(appserver APPSERVER, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public appserver Saveappserver(appserver APPSERVER, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
+            string connstr = GetConnStr(ALLOFUSERS);
             appserver result = new appserver();
-            BeforeSaveappserver(APPSERVER: APPSERVER, ALLOFUSERS, SYNC:SYNC, TRAN: TRAN);
+            BeforeSaveappserver(APPSERVER: APPSERVER, ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC, TRAN: TRAN);
             //eğer birden fazla DataBase güncelleme var ise
             if (SYNC == true)
                 APPSERVER.appserver_use = false;
@@ -23,32 +24,54 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 APPSERVER.appserver_active = false;
             if ( ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                if (DB_MYSQL == null)
                 {
-                    if (APPSERVER.appserver_id == 0)
-                    {
-                        long id = 0;
-                        id = db.Insert<appserver>(APPSERVER);
-                        if (id != 0)
-                            result = db.Get<appserver>(id);
-                    }
-                    else
-                    {
-                        bool ok = db.Update<appserver>(APPSERVER);
-                        if (ok == true)
-                            result = db.Get<appserver>(APPSERVER.appserver_id);
-                        else
-                            result = APPSERVER;
-                    }
+                   using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
+                   {
+                        if (APPSERVER.appserver_id == 0)
+                       {
+                            long id = 0;
+                            id = db.Insert<appserver>(APPSERVER);
+                           if (id != 0)
+                             result = db.Get<appserver>(id);
+                       }
+                       else
+                       {
+                         bool ok = db.Update<appserver>(APPSERVER);
+                           if (ok == true)
+                             result = db.Get<appserver>(APPSERVER.appserver_id);
+                           else
+                             result = APPSERVER;
+                       }
+                   }
+                }
+                else
+                {
+                   Mysql_dapper db = DB_MYSQL;
+                        if (APPSERVER.appserver_id == 0)
+                       {
+                            long id = 0;
+                            id = db.Insert<appserver>(APPSERVER);
+                           if (id != 0)
+                             result = db.Get<appserver>(id);
+                       }
+                       else
+                       {
+                         bool ok = db.Update<appserver>(APPSERVER);
+                           if (ok == true)
+                             result = db.Get<appserver>(APPSERVER.appserver_id);
+                           else
+                             result = APPSERVER;
+                       }
                 }
             }
-            AfterSaveappserver(APPSERVER: APPSERVER, ALLOFUSERS, SYNC: SYNC, TRAN: TRAN);
+            AfterSaveappserver(APPSERVER: APPSERVER, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC: SYNC, TRAN: TRAN);
             return result;
         }
-        public bool Deleteappserver(long ID, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public bool Deleteappserver(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
             bool result = false;
-            BeforeDeleteappserver(ID, ALLOFUSERS, SYNC, TRAN);
+            BeforeDeleteappserver(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
                 appserver etmp = Getappserver(ID, ALLOFUSERS);
@@ -59,19 +82,20 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 if (TRAN == true)
                     etmp.appserver_active = false;
                 etmp.deletedappserver_id = true;
-                appserver eresulttmp = Saveappserver(etmp, ALLOFUSERS);
+                appserver eresulttmp = Saveappserver(APPSERVER:etmp, ALLOFUSERS:ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC,TRAN:TRAN);
                 if (eresulttmp.deletedappserver_id == true)
                     result = true;
             }
-            AfterDeleteappserver(ID, ALLOFUSERS, SYNC, TRAN);
+            AfterDeleteappserver(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             return result;
         }
         public appserver Getappserver(long ID, allofusers ALLOFUSERS, bool ALL=false)
         {
             appserver result = new appserver();
+            string connstr = GetConnStr(ALLOFUSERS);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
                 {                    result = db.Get<appserver>(id: ID);
                     //senkron dişinda ve silinenlerin dişindakileri getirmesi
                     if (ALL==false)
@@ -84,6 +108,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
         public List<appserver> GetAllappserver(string whereclause , allofusers ALLOFUSERS, bool ALL=false)
         {
             List<appserver> result = new List<appserver>();
+            string connstr = GetConnStr(ALLOFUSERS);
             BeforeGetAllappserver(whereclause, ALLOFUSERS, ALL);
             //senkron dişinda ve silinenlerin dişindakileri getirmesi
             if (ALL == false)
@@ -93,21 +118,21 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             }
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr, usetransaction: false))
                 {
                     result = db.GetAll<appserver>(whereclause: whereclause).ToList();
                 }            }            AfterGetAllappserver(whereclause, ALLOFUSERS, ALL);
             return result;
         }
-        public void BeforeSaveappserver(appserver APPSERVER, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterSaveappserver(appserver APPSERVER, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterDeleteappserver (long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void BeforeDeleteappserver(long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void BeforeSaveappserver(appserver APPSERVER, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterSaveappserver(appserver APPSERVER, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterDeleteappserver (long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void BeforeDeleteappserver(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
         public void BeforeGetappserver(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void AfterGetappserver(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void BeforeGetAllappserver(string whereclause , allofusers ALLOFUSERS, bool ALL ) { }
         public void AfterGetAllappserver(string whereclause, allofusers ALLOFUSERS, bool ALL) { }
-        public string Single_crud (cRequest request, allofusers e_aou)
+        public string Single_crud (cRequest request, allofusers e_aou, Mysql_dapper DB_MYSQL=null)
         {
              string result = AppStaticStr.msg0040Hata;
              #region gelen paket içinden yapilacak işlemin bilgilerinin alinmasi
@@ -118,7 +143,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudSave)
                  {
                      appserver ent = JsonConvert.DeserializeObject<appserver>(request.data);
-                     appserver save_ent = Saveappserver(ent, e_aou, false, false);
+                     appserver save_ent = Saveappserver(ent, e_aou, DB_MYSQL, false, false);
                      cResponse res = new cResponse()
                      {
                          message_code = AppStaticInt.msg001Succes,
@@ -131,7 +156,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudDelete)
              {
                  appserver ent = JsonConvert.DeserializeObject<appserver>(request.data);
-                 bool resu = Deleteappserver (ID: ent.appserver_id, ALLOFUSERS: e_aou, SYNC: false, TRAN: false);
+                 bool resu = Deleteappserver (ID: ent.appserver_id, ALLOFUSERS: e_aou, DB_MYSQL:DB_MYSQL ,SYNC: false, TRAN: false);
                  if (resu == true)
                  {
                      cResponse res = new cResponse()
@@ -182,6 +207,20 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                  }
              }
              return result;
+        }
+        public string GetConnStr (allofusers ALLOFUSERS)
+
+        {
+            string result = string.Empty;
+            if (ALLOFUSERS.projects_id == AppStaticInt.ProjectCodeCore)
+                result = ALLOFUSERS.appdatabase_connstr;
+            long db_ID = 0;
+            long.TryParse(ALLOFUSERS.company_dbserver_id.ToString(), out db_ID);
+            if (db_ID == 0)
+                result = ALLOFUSERS.appdatabase_connstr;
+            else
+                result = ALLOFUSERS.dbserver_adrr;
+            return result;
         }
     }
 

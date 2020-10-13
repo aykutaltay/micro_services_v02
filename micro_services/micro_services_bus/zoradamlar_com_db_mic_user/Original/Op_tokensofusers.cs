@@ -11,10 +11,11 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
 {
     public partial class Op_tokensofusers
     {
-        public tokensofusers Savetokensofusers(tokensofusers TOKENSOFUSERS, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public tokensofusers Savetokensofusers(tokensofusers TOKENSOFUSERS, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
+            string connstr = GetConnStr(ALLOFUSERS);
             tokensofusers result = new tokensofusers();
-            BeforeSavetokensofusers(TOKENSOFUSERS: TOKENSOFUSERS, ALLOFUSERS, SYNC:SYNC, TRAN: TRAN);
+            BeforeSavetokensofusers(TOKENSOFUSERS: TOKENSOFUSERS, ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC, TRAN: TRAN);
             //eğer birden fazla DataBase güncelleme var ise
             if (SYNC == true)
                 TOKENSOFUSERS.tokensofusers_use = false;
@@ -23,32 +24,54 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 TOKENSOFUSERS.tokensofusers_active = false;
             if ( ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                if (DB_MYSQL == null)
                 {
-                    if (TOKENSOFUSERS.tokensofusers_id == 0)
-                    {
-                        long id = 0;
-                        id = db.Insert<tokensofusers>(TOKENSOFUSERS);
-                        if (id != 0)
-                            result = db.Get<tokensofusers>(id);
-                    }
-                    else
-                    {
-                        bool ok = db.Update<tokensofusers>(TOKENSOFUSERS);
-                        if (ok == true)
-                            result = db.Get<tokensofusers>(TOKENSOFUSERS.tokensofusers_id);
-                        else
-                            result = TOKENSOFUSERS;
-                    }
+                   using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
+                   {
+                        if (TOKENSOFUSERS.tokensofusers_id == 0)
+                       {
+                            long id = 0;
+                            id = db.Insert<tokensofusers>(TOKENSOFUSERS);
+                           if (id != 0)
+                             result = db.Get<tokensofusers>(id);
+                       }
+                       else
+                       {
+                         bool ok = db.Update<tokensofusers>(TOKENSOFUSERS);
+                           if (ok == true)
+                             result = db.Get<tokensofusers>(TOKENSOFUSERS.tokensofusers_id);
+                           else
+                             result = TOKENSOFUSERS;
+                       }
+                   }
+                }
+                else
+                {
+                   Mysql_dapper db = DB_MYSQL;
+                        if (TOKENSOFUSERS.tokensofusers_id == 0)
+                       {
+                            long id = 0;
+                            id = db.Insert<tokensofusers>(TOKENSOFUSERS);
+                           if (id != 0)
+                             result = db.Get<tokensofusers>(id);
+                       }
+                       else
+                       {
+                         bool ok = db.Update<tokensofusers>(TOKENSOFUSERS);
+                           if (ok == true)
+                             result = db.Get<tokensofusers>(TOKENSOFUSERS.tokensofusers_id);
+                           else
+                             result = TOKENSOFUSERS;
+                       }
                 }
             }
-            AfterSavetokensofusers(TOKENSOFUSERS: TOKENSOFUSERS, ALLOFUSERS, SYNC: SYNC, TRAN: TRAN);
+            AfterSavetokensofusers(TOKENSOFUSERS: TOKENSOFUSERS, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC: SYNC, TRAN: TRAN);
             return result;
         }
-        public bool Deletetokensofusers(long ID, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public bool Deletetokensofusers(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
             bool result = false;
-            BeforeDeletetokensofusers(ID, ALLOFUSERS, SYNC, TRAN);
+            BeforeDeletetokensofusers(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
                 tokensofusers etmp = Gettokensofusers(ID, ALLOFUSERS);
@@ -59,19 +82,20 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 if (TRAN == true)
                     etmp.tokensofusers_active = false;
                 etmp.deletedtokensofusers_id = true;
-                tokensofusers eresulttmp = Savetokensofusers(etmp, ALLOFUSERS);
+                tokensofusers eresulttmp = Savetokensofusers(TOKENSOFUSERS:etmp, ALLOFUSERS:ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC,TRAN:TRAN);
                 if (eresulttmp.deletedtokensofusers_id == true)
                     result = true;
             }
-            AfterDeletetokensofusers(ID, ALLOFUSERS, SYNC, TRAN);
+            AfterDeletetokensofusers(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             return result;
         }
         public tokensofusers Gettokensofusers(long ID, allofusers ALLOFUSERS, bool ALL=false)
         {
             tokensofusers result = new tokensofusers();
+            string connstr = GetConnStr(ALLOFUSERS);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
                 {                    result = db.Get<tokensofusers>(id: ID);
                     //senkron dişinda ve silinenlerin dişindakileri getirmesi
                     if (ALL==false)
@@ -84,6 +108,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
         public List<tokensofusers> GetAlltokensofusers(string whereclause , allofusers ALLOFUSERS, bool ALL=false)
         {
             List<tokensofusers> result = new List<tokensofusers>();
+            string connstr = GetConnStr(ALLOFUSERS);
             BeforeGetAlltokensofusers(whereclause, ALLOFUSERS, ALL);
             //senkron dişinda ve silinenlerin dişindakileri getirmesi
             if (ALL == false)
@@ -93,21 +118,21 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             }
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr, usetransaction: false))
                 {
                     result = db.GetAll<tokensofusers>(whereclause: whereclause).ToList();
                 }            }            AfterGetAlltokensofusers(whereclause, ALLOFUSERS, ALL);
             return result;
         }
-        public void BeforeSavetokensofusers(tokensofusers TOKENSOFUSERS, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterSavetokensofusers(tokensofusers TOKENSOFUSERS, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterDeletetokensofusers (long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void BeforeDeletetokensofusers(long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void BeforeSavetokensofusers(tokensofusers TOKENSOFUSERS, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterSavetokensofusers(tokensofusers TOKENSOFUSERS, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterDeletetokensofusers (long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void BeforeDeletetokensofusers(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
         public void BeforeGettokensofusers(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void AfterGettokensofusers(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void BeforeGetAlltokensofusers(string whereclause , allofusers ALLOFUSERS, bool ALL ) { }
         public void AfterGetAlltokensofusers(string whereclause, allofusers ALLOFUSERS, bool ALL) { }
-        public string Single_crud (cRequest request, allofusers e_aou)
+        public string Single_crud (cRequest request, allofusers e_aou, Mysql_dapper DB_MYSQL=null)
         {
              string result = AppStaticStr.msg0040Hata;
              #region gelen paket içinden yapilacak işlemin bilgilerinin alinmasi
@@ -118,7 +143,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudSave)
                  {
                      tokensofusers ent = JsonConvert.DeserializeObject<tokensofusers>(request.data);
-                     tokensofusers save_ent = Savetokensofusers(ent, e_aou, false, false);
+                     tokensofusers save_ent = Savetokensofusers(ent, e_aou, DB_MYSQL, false, false);
                      cResponse res = new cResponse()
                      {
                          message_code = AppStaticInt.msg001Succes,
@@ -131,7 +156,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudDelete)
              {
                  tokensofusers ent = JsonConvert.DeserializeObject<tokensofusers>(request.data);
-                 bool resu = Deletetokensofusers (ID: ent.tokensofusers_id, ALLOFUSERS: e_aou, SYNC: false, TRAN: false);
+                 bool resu = Deletetokensofusers (ID: ent.tokensofusers_id, ALLOFUSERS: e_aou, DB_MYSQL:DB_MYSQL ,SYNC: false, TRAN: false);
                  if (resu == true)
                  {
                      cResponse res = new cResponse()
@@ -182,6 +207,20 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                  }
              }
              return result;
+        }
+        public string GetConnStr (allofusers ALLOFUSERS)
+
+        {
+            string result = string.Empty;
+            if (ALLOFUSERS.projects_id == AppStaticInt.ProjectCodeCore)
+                result = ALLOFUSERS.appdatabase_connstr;
+            long db_ID = 0;
+            long.TryParse(ALLOFUSERS.company_dbserver_id.ToString(), out db_ID);
+            if (db_ID == 0)
+                result = ALLOFUSERS.appdatabase_connstr;
+            else
+                result = ALLOFUSERS.dbserver_adrr;
+            return result;
         }
     }
 

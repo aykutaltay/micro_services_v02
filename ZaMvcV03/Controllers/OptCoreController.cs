@@ -33,6 +33,8 @@ namespace ZaMvcV03.Controllers
 
         public IActionResult auth([FromBody] cRequest Model)
         {
+            Model.project_code = AppStaticInt.ProjectCodeCore;
+
             cResponse response = new cResponse();
             AppClassMVCMethod mvcPost = new AppClassMVCMethod(Model.token);
             response = mvcPost.post(AppStaticStr.urlRestAuth, model: Model);
@@ -42,6 +44,8 @@ namespace ZaMvcV03.Controllers
 
         public IActionResult nuser ([FromBody] cRequest Model)
         {
+            Model.project_code = AppStaticInt.ProjectCodeCore;
+
             cResponse response = new cResponse();
             AppClassMVCMethod mvcPost = new AppClassMVCMethod(Model.token);
             response = mvcPost.post(AppStaticStr.urlRestAuth, model: Model);
@@ -51,6 +55,8 @@ namespace ZaMvcV03.Controllers
 
         public IActionResult mainuserlist([FromBody] cRequest Model)
         {
+            Model.project_code = AppStaticInt.ProjectCodeCore;
+
             cResponse response = new cResponse();
             AppClassMVCMethod mvcPost = new AppClassMVCMethod(Model.token);
             response = mvcPost.post(AppStaticStr.urlRestMainUserList, model: Model);
@@ -60,6 +66,8 @@ namespace ZaMvcV03.Controllers
 
         public IActionResult mainuserget([FromBody] cRequest Model)
         {
+            Model.project_code = AppStaticInt.ProjectCodeCore;
+
             cResponse response = new cResponse();
             AppClassMVCMethod mvcPost = new AppClassMVCMethod(Model.token);
             response = mvcPost.post(AppStaticStr.urlRestMainUserGet, model: Model);
@@ -69,6 +77,8 @@ namespace ZaMvcV03.Controllers
 
         public IActionResult tokenRenew ([FromBody] cRequest Model)
         {
+            Model.project_code = AppStaticInt.ProjectCodeCore;
+
             cResponse response = new cResponse()
             {
                 message_code = AppStaticInt.msg001Fail,
@@ -95,6 +105,8 @@ namespace ZaMvcV03.Controllers
 
         public IActionResult saveUser ([FromBody] cRequest Model)
         {
+            Model.project_code = AppStaticInt.ProjectCodeCore;
+
             cResponse response=new AppClassMVCMethod(Model.token).SaveUser(Model);
 
 
@@ -105,6 +117,8 @@ namespace ZaMvcV03.Controllers
         #region reflection örneği
         public IActionResult test1([FromBody] cRequest Model)
         {
+            Model.project_code = AppStaticInt.ProjectCodeCore;
+
             lang lng = new lang()
             {
                 lang_id = 0,

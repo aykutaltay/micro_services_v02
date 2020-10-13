@@ -11,10 +11,11 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
 {
     public partial class Op_usersofprojects
     {
-        public usersofprojects Saveusersofprojects(usersofprojects USERSOFPROJECTS, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public usersofprojects Saveusersofprojects(usersofprojects USERSOFPROJECTS, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
+            string connstr = GetConnStr(ALLOFUSERS);
             usersofprojects result = new usersofprojects();
-            BeforeSaveusersofprojects(USERSOFPROJECTS: USERSOFPROJECTS, ALLOFUSERS, SYNC:SYNC, TRAN: TRAN);
+            BeforeSaveusersofprojects(USERSOFPROJECTS: USERSOFPROJECTS, ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC, TRAN: TRAN);
             //eğer birden fazla DataBase güncelleme var ise
             if (SYNC == true)
                 USERSOFPROJECTS.usersofprojects_use = false;
@@ -23,32 +24,54 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 USERSOFPROJECTS.usersofprojects_active = false;
             if ( ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                if (DB_MYSQL == null)
                 {
-                    if (USERSOFPROJECTS.usersofprojects_id == 0)
-                    {
-                        long id = 0;
-                        id = db.Insert<usersofprojects>(USERSOFPROJECTS);
-                        if (id != 0)
-                            result = db.Get<usersofprojects>(id);
-                    }
-                    else
-                    {
-                        bool ok = db.Update<usersofprojects>(USERSOFPROJECTS);
-                        if (ok == true)
-                            result = db.Get<usersofprojects>(USERSOFPROJECTS.usersofprojects_id);
-                        else
-                            result = USERSOFPROJECTS;
-                    }
+                   using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
+                   {
+                        if (USERSOFPROJECTS.usersofprojects_id == 0)
+                       {
+                            long id = 0;
+                            id = db.Insert<usersofprojects>(USERSOFPROJECTS);
+                           if (id != 0)
+                             result = db.Get<usersofprojects>(id);
+                       }
+                       else
+                       {
+                         bool ok = db.Update<usersofprojects>(USERSOFPROJECTS);
+                           if (ok == true)
+                             result = db.Get<usersofprojects>(USERSOFPROJECTS.usersofprojects_id);
+                           else
+                             result = USERSOFPROJECTS;
+                       }
+                   }
+                }
+                else
+                {
+                   Mysql_dapper db = DB_MYSQL;
+                        if (USERSOFPROJECTS.usersofprojects_id == 0)
+                       {
+                            long id = 0;
+                            id = db.Insert<usersofprojects>(USERSOFPROJECTS);
+                           if (id != 0)
+                             result = db.Get<usersofprojects>(id);
+                       }
+                       else
+                       {
+                         bool ok = db.Update<usersofprojects>(USERSOFPROJECTS);
+                           if (ok == true)
+                             result = db.Get<usersofprojects>(USERSOFPROJECTS.usersofprojects_id);
+                           else
+                             result = USERSOFPROJECTS;
+                       }
                 }
             }
-            AfterSaveusersofprojects(USERSOFPROJECTS: USERSOFPROJECTS, ALLOFUSERS, SYNC: SYNC, TRAN: TRAN);
+            AfterSaveusersofprojects(USERSOFPROJECTS: USERSOFPROJECTS, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC: SYNC, TRAN: TRAN);
             return result;
         }
-        public bool Deleteusersofprojects(long ID, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public bool Deleteusersofprojects(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
             bool result = false;
-            BeforeDeleteusersofprojects(ID, ALLOFUSERS, SYNC, TRAN);
+            BeforeDeleteusersofprojects(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
                 usersofprojects etmp = Getusersofprojects(ID, ALLOFUSERS);
@@ -59,19 +82,20 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 if (TRAN == true)
                     etmp.usersofprojects_active = false;
                 etmp.deletedusersofprojects_id = true;
-                usersofprojects eresulttmp = Saveusersofprojects(etmp, ALLOFUSERS);
+                usersofprojects eresulttmp = Saveusersofprojects(USERSOFPROJECTS:etmp, ALLOFUSERS:ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC,TRAN:TRAN);
                 if (eresulttmp.deletedusersofprojects_id == true)
                     result = true;
             }
-            AfterDeleteusersofprojects(ID, ALLOFUSERS, SYNC, TRAN);
+            AfterDeleteusersofprojects(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             return result;
         }
         public usersofprojects Getusersofprojects(long ID, allofusers ALLOFUSERS, bool ALL=false)
         {
             usersofprojects result = new usersofprojects();
+            string connstr = GetConnStr(ALLOFUSERS);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
                 {                    result = db.Get<usersofprojects>(id: ID);
                     //senkron dişinda ve silinenlerin dişindakileri getirmesi
                     if (ALL==false)
@@ -84,6 +108,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
         public List<usersofprojects> GetAllusersofprojects(string whereclause , allofusers ALLOFUSERS, bool ALL=false)
         {
             List<usersofprojects> result = new List<usersofprojects>();
+            string connstr = GetConnStr(ALLOFUSERS);
             BeforeGetAllusersofprojects(whereclause, ALLOFUSERS, ALL);
             //senkron dişinda ve silinenlerin dişindakileri getirmesi
             if (ALL == false)
@@ -93,21 +118,21 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             }
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr, usetransaction: false))
                 {
                     result = db.GetAll<usersofprojects>(whereclause: whereclause).ToList();
                 }            }            AfterGetAllusersofprojects(whereclause, ALLOFUSERS, ALL);
             return result;
         }
-        public void BeforeSaveusersofprojects(usersofprojects USERSOFPROJECTS, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterSaveusersofprojects(usersofprojects USERSOFPROJECTS, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterDeleteusersofprojects (long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void BeforeDeleteusersofprojects(long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void BeforeSaveusersofprojects(usersofprojects USERSOFPROJECTS, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterSaveusersofprojects(usersofprojects USERSOFPROJECTS, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterDeleteusersofprojects (long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void BeforeDeleteusersofprojects(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
         public void BeforeGetusersofprojects(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void AfterGetusersofprojects(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void BeforeGetAllusersofprojects(string whereclause , allofusers ALLOFUSERS, bool ALL ) { }
         public void AfterGetAllusersofprojects(string whereclause, allofusers ALLOFUSERS, bool ALL) { }
-        public string Single_crud (cRequest request, allofusers e_aou)
+        public string Single_crud (cRequest request, allofusers e_aou, Mysql_dapper DB_MYSQL=null)
         {
              string result = AppStaticStr.msg0040Hata;
              #region gelen paket içinden yapilacak işlemin bilgilerinin alinmasi
@@ -118,7 +143,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudSave)
                  {
                      usersofprojects ent = JsonConvert.DeserializeObject<usersofprojects>(request.data);
-                     usersofprojects save_ent = Saveusersofprojects(ent, e_aou, false, false);
+                     usersofprojects save_ent = Saveusersofprojects(ent, e_aou, DB_MYSQL, false, false);
                      cResponse res = new cResponse()
                      {
                          message_code = AppStaticInt.msg001Succes,
@@ -131,7 +156,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudDelete)
              {
                  usersofprojects ent = JsonConvert.DeserializeObject<usersofprojects>(request.data);
-                 bool resu = Deleteusersofprojects (ID: ent.usersofprojects_id, ALLOFUSERS: e_aou, SYNC: false, TRAN: false);
+                 bool resu = Deleteusersofprojects (ID: ent.usersofprojects_id, ALLOFUSERS: e_aou, DB_MYSQL:DB_MYSQL ,SYNC: false, TRAN: false);
                  if (resu == true)
                  {
                      cResponse res = new cResponse()
@@ -182,6 +207,20 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                  }
              }
              return result;
+        }
+        public string GetConnStr (allofusers ALLOFUSERS)
+
+        {
+            string result = string.Empty;
+            if (ALLOFUSERS.projects_id == AppStaticInt.ProjectCodeCore)
+                result = ALLOFUSERS.appdatabase_connstr;
+            long db_ID = 0;
+            long.TryParse(ALLOFUSERS.company_dbserver_id.ToString(), out db_ID);
+            if (db_ID == 0)
+                result = ALLOFUSERS.appdatabase_connstr;
+            else
+                result = ALLOFUSERS.dbserver_adrr;
+            return result;
         }
     }
 

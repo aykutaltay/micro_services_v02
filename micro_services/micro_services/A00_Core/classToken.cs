@@ -47,17 +47,20 @@ namespace micro_services.A00_Core
                 data = string.Empty
             };
 
-
+            //-------------------------------------------------------------
             // return null if user not found
             if (userID == 0) return res;
 
+            //-------------------------------------------------------------
             // authentication successful so generate jwt and refresh tokens
             string jwtToken = generateJwtToken(userID);
+            //-------------------------------------------------------------
             //token bilgisinin DB ye kaydı
             if (savetoken(userID, jwtToken) == 0)
                 return res;
+            //-------------------------------------------------------------
             //Ram deki statik liste kullanıcı bilgilerinin kaydedilmesi
-            savestaticList(userID);
+            savestaticList(userID,model.project_code);
 
             return new cResponse()
             {
@@ -129,11 +132,11 @@ namespace micro_services.A00_Core
             return result;
         }
 
-        public void savestaticList(long userID)
+        public void savestaticList(long userID,long projectID)
         {
-            AppStaticModel.l_allofusers.RemoveAll(x => x.users_id == userID);
+            AppStaticModel.l_allofusers.RemoveAll(x => x.users_id == userID  && x.projects_id==projectID);
 
-            List<allofusers> l_tmp = Op_Core.l_allofusers(userID, AppStaticStr.core_dbTypeMYSQL, AppStaticStr.core_dbConnStr);
+            List<allofusers> l_tmp = Op_Core.l_allofusers(userID, projectID,AppStaticStr.core_dbTypeMYSQL, AppStaticStr.core_dbConnStr);
 
             if (l_tmp != null)
             {

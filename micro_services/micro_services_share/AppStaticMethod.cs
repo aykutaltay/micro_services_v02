@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace micro_services_share
@@ -28,6 +29,13 @@ namespace micro_services_share
                 return result;
             if (bilgi.Contains("EXEC") == true)
                 return result;
+            //özel karakterler
+            if (bilgi.Contains("'") == true)
+                return result;
+            if (bilgi.Contains("%") == true)
+                return result;
+
+
 
             result = true;
 
@@ -119,7 +127,7 @@ namespace micro_services_share
 
             //                ");
 
-            MailSend_General(to: l_mailadress, subject: str_subject, body: str_body,isBodyHtml:true);
+            MailSend_General(to: l_mailadress, subject: str_subject, body: str_body, isBodyHtml: true);
 
         }
 
@@ -156,5 +164,20 @@ namespace micro_services_share
             }
         }
 
+        public static bool EmailValidation(string email)
+        {
+            bool result = false;
+
+            string patt = @"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*"
+                        + "@"
+                        + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$";
+
+
+            if (Regex.IsMatch(email, patt))
+                result = true;
+
+            return result;
+
+        }
     }
 }

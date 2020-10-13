@@ -9,129 +9,129 @@ using micro_services_dal.Models.zoradamlar_com_db_mic_user;
 
 namespace micro_services_bus.zoradamlar_com_db_mic_user
 {
-    public partial class Op_lang
+    public partial class Op_usertrans
     {
-        public lang Savelang(lang LANG, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
+        public usertrans Saveusertrans(usertrans USERTRANS, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
             string connstr = GetConnStr(ALLOFUSERS);
-            lang result = new lang();
-            BeforeSavelang(LANG: LANG, ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC, TRAN: TRAN);
+            usertrans result = new usertrans();
+            BeforeSaveusertrans(USERTRANS: USERTRANS, ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC, TRAN: TRAN);
             //eğer birden fazla DataBase güncelleme var ise
             if (SYNC == true)
-                LANG.lang_use = false;
+                USERTRANS.usertrans_use = false;
             //birden fazla tabloda güncelleme var ise
             if (TRAN == true)
-                LANG.lang_active = false;
+                USERTRANS.usertrans_active = false;
             if ( ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
                 if (DB_MYSQL == null)
                 {
                    using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
                    {
-                        if (LANG.lang_id == 0)
+                        if (USERTRANS.usertrans_id == 0)
                        {
                             long id = 0;
-                            id = db.Insert<lang>(LANG);
+                            id = db.Insert<usertrans>(USERTRANS);
                            if (id != 0)
-                             result = db.Get<lang>(id);
+                             result = db.Get<usertrans>(id);
                        }
                        else
                        {
-                         bool ok = db.Update<lang>(LANG);
+                         bool ok = db.Update<usertrans>(USERTRANS);
                            if (ok == true)
-                             result = db.Get<lang>(LANG.lang_id);
+                             result = db.Get<usertrans>(USERTRANS.usertrans_id);
                            else
-                             result = LANG;
+                             result = USERTRANS;
                        }
                    }
                 }
                 else
                 {
                    Mysql_dapper db = DB_MYSQL;
-                        if (LANG.lang_id == 0)
+                        if (USERTRANS.usertrans_id == 0)
                        {
                             long id = 0;
-                            id = db.Insert<lang>(LANG);
+                            id = db.Insert<usertrans>(USERTRANS);
                            if (id != 0)
-                             result = db.Get<lang>(id);
+                             result = db.Get<usertrans>(id);
                        }
                        else
                        {
-                         bool ok = db.Update<lang>(LANG);
+                         bool ok = db.Update<usertrans>(USERTRANS);
                            if (ok == true)
-                             result = db.Get<lang>(LANG.lang_id);
+                             result = db.Get<usertrans>(USERTRANS.usertrans_id);
                            else
-                             result = LANG;
+                             result = USERTRANS;
                        }
                 }
             }
-            AfterSavelang(LANG: LANG, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC: SYNC, TRAN: TRAN);
+            AfterSaveusertrans(USERTRANS: USERTRANS, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC: SYNC, TRAN: TRAN);
             return result;
         }
-        public bool Deletelang(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
+        public bool Deleteusertrans(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
             bool result = false;
-            BeforeDeletelang(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
+            BeforeDeleteusertrans(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                lang etmp = Getlang(ID, ALLOFUSERS);
+                usertrans etmp = Getusertrans(ID, ALLOFUSERS);
                 //eğer birden fazla Database etkileniyor ise
                 if (SYNC == true)
-                    etmp.lang_use = false;
+                    etmp.usertrans_use = false;
                 //eğer birden fazla tablo etkileniyor ise
                 if (TRAN == true)
-                    etmp.lang_active = false;
-                etmp.deletedlang_id = true;
-                lang eresulttmp = Savelang(LANG:etmp, ALLOFUSERS:ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC,TRAN:TRAN);
-                if (eresulttmp.deletedlang_id == true)
+                    etmp.usertrans_active = false;
+                etmp.deletedusertrans_id = true;
+                usertrans eresulttmp = Saveusertrans(USERTRANS:etmp, ALLOFUSERS:ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC,TRAN:TRAN);
+                if (eresulttmp.deletedusertrans_id == true)
                     result = true;
             }
-            AfterDeletelang(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
+            AfterDeleteusertrans(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             return result;
         }
-        public lang Getlang(long ID, allofusers ALLOFUSERS, bool ALL=false)
+        public usertrans Getusertrans(long ID, allofusers ALLOFUSERS, bool ALL=false)
         {
-            lang result = new lang();
+            usertrans result = new usertrans();
             string connstr = GetConnStr(ALLOFUSERS);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
                 using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
-                {                    result = db.Get<lang>(id: ID);
+                {                    result = db.Get<usertrans>(id: ID);
                     //senkron dişinda ve silinenlerin dişindakileri getirmesi
                     if (ALL==false)
-                        if ((result.lang_use == false) || (result.deletedlang_id == true) || (result.lang_active==false))
-                            result = new lang();
+                        if ((result.usertrans_use == false) || (result.deletedusertrans_id == true) || (result.usertrans_active==false))
+                            result = new usertrans();
                 }
             }
             return result;
         }
-        public List<lang> GetAlllang(string whereclause , allofusers ALLOFUSERS, bool ALL=false)
+        public List<usertrans> GetAllusertrans(string whereclause , allofusers ALLOFUSERS, bool ALL=false)
         {
-            List<lang> result = new List<lang>();
+            List<usertrans> result = new List<usertrans>();
             string connstr = GetConnStr(ALLOFUSERS);
-            BeforeGetAlllang(whereclause, ALLOFUSERS, ALL);
+            BeforeGetAllusertrans(whereclause, ALLOFUSERS, ALL);
             //senkron dişinda ve silinenlerin dişindakileri getirmesi
             if (ALL == false)
             {
-                info_lang info = new info_lang();
-                whereclause += " AND " + info.lang_deletedlang_id + " = false AND " + info.lang_lang_use + " = true AND " + info.lang_lang_active + " = true";
+                info_usertrans info = new info_usertrans();
+                whereclause += " AND " + info.usertrans_deletedusertrans_id + " = false AND " + info.usertrans_usertrans_use + " = true AND " + info.usertrans_usertrans_active + " = true";
             }
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
                 using (Mysql_dapper db = new Mysql_dapper(connstr, usetransaction: false))
                 {
-                    result = db.GetAll<lang>(whereclause: whereclause).ToList();
-                }            }            AfterGetAlllang(whereclause, ALLOFUSERS, ALL);
+                    result = db.GetAll<usertrans>(whereclause: whereclause).ToList();
+                }            }            AfterGetAllusertrans(whereclause, ALLOFUSERS, ALL);
             return result;
         }
-        public void BeforeSavelang(lang LANG, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
-        public void AfterSavelang(lang LANG, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
-        public void AfterDeletelang (long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
-        public void BeforeDeletelang(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
-        public void BeforeGetlang(long ID, allofusers ALLOFUSERS, bool ALL) { }
-        public void AfterGetlang(long ID, allofusers ALLOFUSERS, bool ALL) { }
-        public void BeforeGetAlllang(string whereclause , allofusers ALLOFUSERS, bool ALL ) { }
-        public void AfterGetAlllang(string whereclause, allofusers ALLOFUSERS, bool ALL) { }
+        public void BeforeSaveusertrans(usertrans USERTRANS, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterSaveusertrans(usertrans USERTRANS, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterDeleteusertrans (long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void BeforeDeleteusertrans(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void BeforeGetusertrans(long ID, allofusers ALLOFUSERS, bool ALL) { }
+        public void AfterGetusertrans(long ID, allofusers ALLOFUSERS, bool ALL) { }
+        public void BeforeGetAllusertrans(string whereclause , allofusers ALLOFUSERS, bool ALL ) { }
+        public void AfterGetAllusertrans(string whereclause, allofusers ALLOFUSERS, bool ALL) { }
         public string Single_crud (cRequest request, allofusers e_aou, Mysql_dapper DB_MYSQL=null)
         {
              string result = AppStaticStr.msg0040Hata;
@@ -142,8 +142,8 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              #endregion gelen paket içinden yapilacak işlemin bilgilerinin alinmasi
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudSave)
                  {
-                     lang ent = JsonConvert.DeserializeObject<lang>(request.data);
-                     lang save_ent = Savelang(ent, e_aou, DB_MYSQL, false, false);
+                     usertrans ent = JsonConvert.DeserializeObject<usertrans>(request.data);
+                     usertrans save_ent = Saveusertrans(ent, e_aou, DB_MYSQL, false, false);
                      cResponse res = new cResponse()
                      {
                          message_code = AppStaticInt.msg001Succes,
@@ -155,8 +155,8 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                  }
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudDelete)
              {
-                 lang ent = JsonConvert.DeserializeObject<lang>(request.data);
-                 bool resu = Deletelang (ID: ent.lang_id, ALLOFUSERS: e_aou, DB_MYSQL:DB_MYSQL ,SYNC: false, TRAN: false);
+                 usertrans ent = JsonConvert.DeserializeObject<usertrans>(request.data);
+                 bool resu = Deleteusertrans (ID: ent.usertrans_id, ALLOFUSERS: e_aou, DB_MYSQL:DB_MYSQL ,SYNC: false, TRAN: false);
                  if (resu == true)
                  {
                      cResponse res = new cResponse()
@@ -173,10 +173,10 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              {
                  int ID = 0;
                  int.TryParse(request.data, out ID);
-                 lang ent = Getlang(ID: ID,ALLOFUSERS:e_aou, ALL:false);
+                 usertrans ent = Getusertrans(ID: ID,ALLOFUSERS:e_aou, ALL:false);
                  if (ent!=null)
                  {
-                     if (ent.lang_id==ID)
+                     if (ent.usertrans_id==ID)
                      {
                          cResponse res = new cResponse()
                          {
@@ -190,7 +190,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              }
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudGetAll)
              {
-                 List<lang> ent = GetAlllang(whereclause:request.data, ALLOFUSERS: e_aou, ALL: false);
+                 List<usertrans> ent = GetAllusertrans(whereclause:request.data, ALLOFUSERS: e_aou, ALL: false);
                  if (ent != null)
                  {
                      if (ent.Count>0)

@@ -38,7 +38,8 @@ namespace ZaMvcV03.Controllers
             cRequest req = new cRequest()
             {
                 data = token,
-                token = token
+                token = token,
+                project_code=AppStaticInt.ProjectCodeCore
             };
             AppClassMVCMethod mvcPost = new AppClassMVCMethod(token:token);
 

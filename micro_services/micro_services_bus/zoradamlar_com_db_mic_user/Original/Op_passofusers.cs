@@ -11,10 +11,11 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
 {
     public partial class Op_passofusers
     {
-        public passofusers Savepassofusers(passofusers PASSOFUSERS, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public passofusers Savepassofusers(passofusers PASSOFUSERS, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
+            string connstr = GetConnStr(ALLOFUSERS);
             passofusers result = new passofusers();
-            BeforeSavepassofusers(PASSOFUSERS: PASSOFUSERS, ALLOFUSERS, SYNC:SYNC, TRAN: TRAN);
+            BeforeSavepassofusers(PASSOFUSERS: PASSOFUSERS, ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC, TRAN: TRAN);
             //eğer birden fazla DataBase güncelleme var ise
             if (SYNC == true)
                 PASSOFUSERS.passofusers_use = false;
@@ -23,32 +24,54 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 PASSOFUSERS.passofusers_active = false;
             if ( ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                if (DB_MYSQL == null)
                 {
-                    if (PASSOFUSERS.passofusers_id == 0)
-                    {
-                        long id = 0;
-                        id = db.Insert<passofusers>(PASSOFUSERS);
-                        if (id != 0)
-                            result = db.Get<passofusers>(id);
-                    }
-                    else
-                    {
-                        bool ok = db.Update<passofusers>(PASSOFUSERS);
-                        if (ok == true)
-                            result = db.Get<passofusers>(PASSOFUSERS.passofusers_id);
-                        else
-                            result = PASSOFUSERS;
-                    }
+                   using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
+                   {
+                        if (PASSOFUSERS.passofusers_id == 0)
+                       {
+                            long id = 0;
+                            id = db.Insert<passofusers>(PASSOFUSERS);
+                           if (id != 0)
+                             result = db.Get<passofusers>(id);
+                       }
+                       else
+                       {
+                         bool ok = db.Update<passofusers>(PASSOFUSERS);
+                           if (ok == true)
+                             result = db.Get<passofusers>(PASSOFUSERS.passofusers_id);
+                           else
+                             result = PASSOFUSERS;
+                       }
+                   }
+                }
+                else
+                {
+                   Mysql_dapper db = DB_MYSQL;
+                        if (PASSOFUSERS.passofusers_id == 0)
+                       {
+                            long id = 0;
+                            id = db.Insert<passofusers>(PASSOFUSERS);
+                           if (id != 0)
+                             result = db.Get<passofusers>(id);
+                       }
+                       else
+                       {
+                         bool ok = db.Update<passofusers>(PASSOFUSERS);
+                           if (ok == true)
+                             result = db.Get<passofusers>(PASSOFUSERS.passofusers_id);
+                           else
+                             result = PASSOFUSERS;
+                       }
                 }
             }
-            AfterSavepassofusers(PASSOFUSERS: PASSOFUSERS, ALLOFUSERS, SYNC: SYNC, TRAN: TRAN);
+            AfterSavepassofusers(PASSOFUSERS: PASSOFUSERS, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC: SYNC, TRAN: TRAN);
             return result;
         }
-        public bool Deletepassofusers(long ID, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public bool Deletepassofusers(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
             bool result = false;
-            BeforeDeletepassofusers(ID, ALLOFUSERS, SYNC, TRAN);
+            BeforeDeletepassofusers(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
                 passofusers etmp = Getpassofusers(ID, ALLOFUSERS);
@@ -59,19 +82,20 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 if (TRAN == true)
                     etmp.passofusers_active = false;
                 etmp.deletedpassofusers_id = true;
-                passofusers eresulttmp = Savepassofusers(etmp, ALLOFUSERS);
+                passofusers eresulttmp = Savepassofusers(PASSOFUSERS:etmp, ALLOFUSERS:ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC,TRAN:TRAN);
                 if (eresulttmp.deletedpassofusers_id == true)
                     result = true;
             }
-            AfterDeletepassofusers(ID, ALLOFUSERS, SYNC, TRAN);
+            AfterDeletepassofusers(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             return result;
         }
         public passofusers Getpassofusers(long ID, allofusers ALLOFUSERS, bool ALL=false)
         {
             passofusers result = new passofusers();
+            string connstr = GetConnStr(ALLOFUSERS);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
                 {                    result = db.Get<passofusers>(id: ID);
                     //senkron dişinda ve silinenlerin dişindakileri getirmesi
                     if (ALL==false)
@@ -84,6 +108,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
         public List<passofusers> GetAllpassofusers(string whereclause , allofusers ALLOFUSERS, bool ALL=false)
         {
             List<passofusers> result = new List<passofusers>();
+            string connstr = GetConnStr(ALLOFUSERS);
             BeforeGetAllpassofusers(whereclause, ALLOFUSERS, ALL);
             //senkron dişinda ve silinenlerin dişindakileri getirmesi
             if (ALL == false)
@@ -93,21 +118,21 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             }
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr, usetransaction: false))
                 {
                     result = db.GetAll<passofusers>(whereclause: whereclause).ToList();
                 }            }            AfterGetAllpassofusers(whereclause, ALLOFUSERS, ALL);
             return result;
         }
-        public void BeforeSavepassofusers(passofusers PASSOFUSERS, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterSavepassofusers(passofusers PASSOFUSERS, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterDeletepassofusers (long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void BeforeDeletepassofusers(long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void BeforeSavepassofusers(passofusers PASSOFUSERS, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterSavepassofusers(passofusers PASSOFUSERS, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterDeletepassofusers (long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void BeforeDeletepassofusers(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
         public void BeforeGetpassofusers(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void AfterGetpassofusers(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void BeforeGetAllpassofusers(string whereclause , allofusers ALLOFUSERS, bool ALL ) { }
         public void AfterGetAllpassofusers(string whereclause, allofusers ALLOFUSERS, bool ALL) { }
-        public string Single_crud (cRequest request, allofusers e_aou)
+        public string Single_crud (cRequest request, allofusers e_aou, Mysql_dapper DB_MYSQL=null)
         {
              string result = AppStaticStr.msg0040Hata;
              #region gelen paket içinden yapilacak işlemin bilgilerinin alinmasi
@@ -118,7 +143,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudSave)
                  {
                      passofusers ent = JsonConvert.DeserializeObject<passofusers>(request.data);
-                     passofusers save_ent = Savepassofusers(ent, e_aou, false, false);
+                     passofusers save_ent = Savepassofusers(ent, e_aou, DB_MYSQL, false, false);
                      cResponse res = new cResponse()
                      {
                          message_code = AppStaticInt.msg001Succes,
@@ -131,7 +156,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudDelete)
              {
                  passofusers ent = JsonConvert.DeserializeObject<passofusers>(request.data);
-                 bool resu = Deletepassofusers (ID: ent.passofusers_id, ALLOFUSERS: e_aou, SYNC: false, TRAN: false);
+                 bool resu = Deletepassofusers (ID: ent.passofusers_id, ALLOFUSERS: e_aou, DB_MYSQL:DB_MYSQL ,SYNC: false, TRAN: false);
                  if (resu == true)
                  {
                      cResponse res = new cResponse()
@@ -182,6 +207,20 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                  }
              }
              return result;
+        }
+        public string GetConnStr (allofusers ALLOFUSERS)
+
+        {
+            string result = string.Empty;
+            if (ALLOFUSERS.projects_id == AppStaticInt.ProjectCodeCore)
+                result = ALLOFUSERS.appdatabase_connstr;
+            long db_ID = 0;
+            long.TryParse(ALLOFUSERS.company_dbserver_id.ToString(), out db_ID);
+            if (db_ID == 0)
+                result = ALLOFUSERS.appdatabase_connstr;
+            else
+                result = ALLOFUSERS.dbserver_adrr;
+            return result;
         }
     }
 

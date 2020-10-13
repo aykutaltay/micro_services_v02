@@ -223,7 +223,7 @@ var Saveuser = function () {
     mdl.data = JSON.stringify(e_usr);
 
     var settings = {
-        "url": All.webpaceoptmainuserList,
+        "url": All.webpageoptsaveuser,
         "method": "POST",
         "timeout": 0,
         "headers": {
@@ -246,6 +246,7 @@ var Saveuser = function () {
 }
 $(document).ready(function () {
     Getlist();
+    NewUser();
 
     $('#example tbody').on('click', 'tr', function () {
         if ($(this).hasClass('selected')) {
@@ -267,6 +268,8 @@ $(document).ready(function () {
     $('#btnList').on('click', function () {
         Getlist()
     });
-    
+    $('#btnSave').on('click', function () {
+        Saveuser();
+    });
     GetTime01();
 });

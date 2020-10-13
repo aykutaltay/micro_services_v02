@@ -11,10 +11,11 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
 {
     public partial class Op_country
     {
-        public country Savecountry(country COUNTRY, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public country Savecountry(country COUNTRY, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
+            string connstr = GetConnStr(ALLOFUSERS);
             country result = new country();
-            BeforeSavecountry(COUNTRY: COUNTRY, ALLOFUSERS, SYNC:SYNC, TRAN: TRAN);
+            BeforeSavecountry(COUNTRY: COUNTRY, ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC, TRAN: TRAN);
             //eğer birden fazla DataBase güncelleme var ise
             if (SYNC == true)
                 COUNTRY.country_use = false;
@@ -23,32 +24,54 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 COUNTRY.country_active = false;
             if ( ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                if (DB_MYSQL == null)
                 {
-                    if (COUNTRY.country_id == 0)
-                    {
-                        long id = 0;
-                        id = db.Insert<country>(COUNTRY);
-                        if (id != 0)
-                            result = db.Get<country>(id);
-                    }
-                    else
-                    {
-                        bool ok = db.Update<country>(COUNTRY);
-                        if (ok == true)
-                            result = db.Get<country>(COUNTRY.country_id);
-                        else
-                            result = COUNTRY;
-                    }
+                   using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
+                   {
+                        if (COUNTRY.country_id == 0)
+                       {
+                            long id = 0;
+                            id = db.Insert<country>(COUNTRY);
+                           if (id != 0)
+                             result = db.Get<country>(id);
+                       }
+                       else
+                       {
+                         bool ok = db.Update<country>(COUNTRY);
+                           if (ok == true)
+                             result = db.Get<country>(COUNTRY.country_id);
+                           else
+                             result = COUNTRY;
+                       }
+                   }
+                }
+                else
+                {
+                   Mysql_dapper db = DB_MYSQL;
+                        if (COUNTRY.country_id == 0)
+                       {
+                            long id = 0;
+                            id = db.Insert<country>(COUNTRY);
+                           if (id != 0)
+                             result = db.Get<country>(id);
+                       }
+                       else
+                       {
+                         bool ok = db.Update<country>(COUNTRY);
+                           if (ok == true)
+                             result = db.Get<country>(COUNTRY.country_id);
+                           else
+                             result = COUNTRY;
+                       }
                 }
             }
-            AfterSavecountry(COUNTRY: COUNTRY, ALLOFUSERS, SYNC: SYNC, TRAN: TRAN);
+            AfterSavecountry(COUNTRY: COUNTRY, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC: SYNC, TRAN: TRAN);
             return result;
         }
-        public bool Deletecountry(long ID, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public bool Deletecountry(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
             bool result = false;
-            BeforeDeletecountry(ID, ALLOFUSERS, SYNC, TRAN);
+            BeforeDeletecountry(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
                 country etmp = Getcountry(ID, ALLOFUSERS);
@@ -59,19 +82,20 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 if (TRAN == true)
                     etmp.country_active = false;
                 etmp.deletedcountry_id = true;
-                country eresulttmp = Savecountry(etmp, ALLOFUSERS);
+                country eresulttmp = Savecountry(COUNTRY:etmp, ALLOFUSERS:ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC,TRAN:TRAN);
                 if (eresulttmp.deletedcountry_id == true)
                     result = true;
             }
-            AfterDeletecountry(ID, ALLOFUSERS, SYNC, TRAN);
+            AfterDeletecountry(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             return result;
         }
         public country Getcountry(long ID, allofusers ALLOFUSERS, bool ALL=false)
         {
             country result = new country();
+            string connstr = GetConnStr(ALLOFUSERS);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
                 {                    result = db.Get<country>(id: ID);
                     //senkron dişinda ve silinenlerin dişindakileri getirmesi
                     if (ALL==false)
@@ -84,6 +108,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
         public List<country> GetAllcountry(string whereclause , allofusers ALLOFUSERS, bool ALL=false)
         {
             List<country> result = new List<country>();
+            string connstr = GetConnStr(ALLOFUSERS);
             BeforeGetAllcountry(whereclause, ALLOFUSERS, ALL);
             //senkron dişinda ve silinenlerin dişindakileri getirmesi
             if (ALL == false)
@@ -93,21 +118,21 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             }
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr, usetransaction: false))
                 {
                     result = db.GetAll<country>(whereclause: whereclause).ToList();
                 }            }            AfterGetAllcountry(whereclause, ALLOFUSERS, ALL);
             return result;
         }
-        public void BeforeSavecountry(country COUNTRY, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterSavecountry(country COUNTRY, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterDeletecountry (long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void BeforeDeletecountry(long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void BeforeSavecountry(country COUNTRY, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterSavecountry(country COUNTRY, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterDeletecountry (long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void BeforeDeletecountry(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
         public void BeforeGetcountry(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void AfterGetcountry(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void BeforeGetAllcountry(string whereclause , allofusers ALLOFUSERS, bool ALL ) { }
         public void AfterGetAllcountry(string whereclause, allofusers ALLOFUSERS, bool ALL) { }
-        public string Single_crud (cRequest request, allofusers e_aou)
+        public string Single_crud (cRequest request, allofusers e_aou, Mysql_dapper DB_MYSQL=null)
         {
              string result = AppStaticStr.msg0040Hata;
              #region gelen paket içinden yapilacak işlemin bilgilerinin alinmasi
@@ -118,7 +143,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudSave)
                  {
                      country ent = JsonConvert.DeserializeObject<country>(request.data);
-                     country save_ent = Savecountry(ent, e_aou, false, false);
+                     country save_ent = Savecountry(ent, e_aou, DB_MYSQL, false, false);
                      cResponse res = new cResponse()
                      {
                          message_code = AppStaticInt.msg001Succes,
@@ -131,7 +156,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudDelete)
              {
                  country ent = JsonConvert.DeserializeObject<country>(request.data);
-                 bool resu = Deletecountry (ID: ent.country_id, ALLOFUSERS: e_aou, SYNC: false, TRAN: false);
+                 bool resu = Deletecountry (ID: ent.country_id, ALLOFUSERS: e_aou, DB_MYSQL:DB_MYSQL ,SYNC: false, TRAN: false);
                  if (resu == true)
                  {
                      cResponse res = new cResponse()
@@ -182,6 +207,20 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                  }
              }
              return result;
+        }
+        public string GetConnStr (allofusers ALLOFUSERS)
+
+        {
+            string result = string.Empty;
+            if (ALLOFUSERS.projects_id == AppStaticInt.ProjectCodeCore)
+                result = ALLOFUSERS.appdatabase_connstr;
+            long db_ID = 0;
+            long.TryParse(ALLOFUSERS.company_dbserver_id.ToString(), out db_ID);
+            if (db_ID == 0)
+                result = ALLOFUSERS.appdatabase_connstr;
+            else
+                result = ALLOFUSERS.dbserver_adrr;
+            return result;
         }
     }
 

@@ -212,14 +212,8 @@ namespace micro_services.Controllers
                 data = string.Empty
             };
 
-            cRequest req = new cRequest()
-            {
-                token = model.token,
-                data = model.data,
 
-            };
-
-            response = new SOperation().UserGetALL(req);
+            response = new SOperation().UserGetALL(model);
 
             return Ok(response);
         }
@@ -237,6 +231,12 @@ namespace micro_services.Controllers
             return Ok(response);
         }
 
+        [HttpPost("refcrudtrans")]
+        public IActionResult RefCrudTrans([FromBody] cRequest model)
+        {
+            cResponse response = new SOperation().ref_crud_tran(model);
+            return Ok(response);
+        }
 
     }
 }

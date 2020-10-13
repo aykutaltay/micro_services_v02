@@ -11,10 +11,11 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
 {
     public partial class Op_dbserver
     {
-        public dbserver Savedbserver(dbserver DBSERVER, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public dbserver Savedbserver(dbserver DBSERVER, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
+            string connstr = GetConnStr(ALLOFUSERS);
             dbserver result = new dbserver();
-            BeforeSavedbserver(DBSERVER: DBSERVER, ALLOFUSERS, SYNC:SYNC, TRAN: TRAN);
+            BeforeSavedbserver(DBSERVER: DBSERVER, ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC, TRAN: TRAN);
             //eğer birden fazla DataBase güncelleme var ise
             if (SYNC == true)
                 DBSERVER.dbserver_use = false;
@@ -23,32 +24,54 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 DBSERVER.dbserver_active = false;
             if ( ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                if (DB_MYSQL == null)
                 {
-                    if (DBSERVER.dbserver_id == 0)
-                    {
-                        long id = 0;
-                        id = db.Insert<dbserver>(DBSERVER);
-                        if (id != 0)
-                            result = db.Get<dbserver>(id);
-                    }
-                    else
-                    {
-                        bool ok = db.Update<dbserver>(DBSERVER);
-                        if (ok == true)
-                            result = db.Get<dbserver>(DBSERVER.dbserver_id);
-                        else
-                            result = DBSERVER;
-                    }
+                   using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
+                   {
+                        if (DBSERVER.dbserver_id == 0)
+                       {
+                            long id = 0;
+                            id = db.Insert<dbserver>(DBSERVER);
+                           if (id != 0)
+                             result = db.Get<dbserver>(id);
+                       }
+                       else
+                       {
+                         bool ok = db.Update<dbserver>(DBSERVER);
+                           if (ok == true)
+                             result = db.Get<dbserver>(DBSERVER.dbserver_id);
+                           else
+                             result = DBSERVER;
+                       }
+                   }
+                }
+                else
+                {
+                   Mysql_dapper db = DB_MYSQL;
+                        if (DBSERVER.dbserver_id == 0)
+                       {
+                            long id = 0;
+                            id = db.Insert<dbserver>(DBSERVER);
+                           if (id != 0)
+                             result = db.Get<dbserver>(id);
+                       }
+                       else
+                       {
+                         bool ok = db.Update<dbserver>(DBSERVER);
+                           if (ok == true)
+                             result = db.Get<dbserver>(DBSERVER.dbserver_id);
+                           else
+                             result = DBSERVER;
+                       }
                 }
             }
-            AfterSavedbserver(DBSERVER: DBSERVER, ALLOFUSERS, SYNC: SYNC, TRAN: TRAN);
+            AfterSavedbserver(DBSERVER: DBSERVER, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC: SYNC, TRAN: TRAN);
             return result;
         }
-        public bool Deletedbserver(long ID, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public bool Deletedbserver(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
             bool result = false;
-            BeforeDeletedbserver(ID, ALLOFUSERS, SYNC, TRAN);
+            BeforeDeletedbserver(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
                 dbserver etmp = Getdbserver(ID, ALLOFUSERS);
@@ -59,19 +82,20 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 if (TRAN == true)
                     etmp.dbserver_active = false;
                 etmp.deleteddbserver_id = true;
-                dbserver eresulttmp = Savedbserver(etmp, ALLOFUSERS);
+                dbserver eresulttmp = Savedbserver(DBSERVER:etmp, ALLOFUSERS:ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC,TRAN:TRAN);
                 if (eresulttmp.deleteddbserver_id == true)
                     result = true;
             }
-            AfterDeletedbserver(ID, ALLOFUSERS, SYNC, TRAN);
+            AfterDeletedbserver(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             return result;
         }
         public dbserver Getdbserver(long ID, allofusers ALLOFUSERS, bool ALL=false)
         {
             dbserver result = new dbserver();
+            string connstr = GetConnStr(ALLOFUSERS);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
                 {                    result = db.Get<dbserver>(id: ID);
                     //senkron dişinda ve silinenlerin dişindakileri getirmesi
                     if (ALL==false)
@@ -84,6 +108,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
         public List<dbserver> GetAlldbserver(string whereclause , allofusers ALLOFUSERS, bool ALL=false)
         {
             List<dbserver> result = new List<dbserver>();
+            string connstr = GetConnStr(ALLOFUSERS);
             BeforeGetAlldbserver(whereclause, ALLOFUSERS, ALL);
             //senkron dişinda ve silinenlerin dişindakileri getirmesi
             if (ALL == false)
@@ -93,21 +118,21 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             }
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr, usetransaction: false))
                 {
                     result = db.GetAll<dbserver>(whereclause: whereclause).ToList();
                 }            }            AfterGetAlldbserver(whereclause, ALLOFUSERS, ALL);
             return result;
         }
-        public void BeforeSavedbserver(dbserver DBSERVER, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterSavedbserver(dbserver DBSERVER, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterDeletedbserver (long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void BeforeDeletedbserver(long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void BeforeSavedbserver(dbserver DBSERVER, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterSavedbserver(dbserver DBSERVER, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterDeletedbserver (long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void BeforeDeletedbserver(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
         public void BeforeGetdbserver(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void AfterGetdbserver(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void BeforeGetAlldbserver(string whereclause , allofusers ALLOFUSERS, bool ALL ) { }
         public void AfterGetAlldbserver(string whereclause, allofusers ALLOFUSERS, bool ALL) { }
-        public string Single_crud (cRequest request, allofusers e_aou)
+        public string Single_crud (cRequest request, allofusers e_aou, Mysql_dapper DB_MYSQL=null)
         {
              string result = AppStaticStr.msg0040Hata;
              #region gelen paket içinden yapilacak işlemin bilgilerinin alinmasi
@@ -118,7 +143,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudSave)
                  {
                      dbserver ent = JsonConvert.DeserializeObject<dbserver>(request.data);
-                     dbserver save_ent = Savedbserver(ent, e_aou, false, false);
+                     dbserver save_ent = Savedbserver(ent, e_aou, DB_MYSQL, false, false);
                      cResponse res = new cResponse()
                      {
                          message_code = AppStaticInt.msg001Succes,
@@ -131,7 +156,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudDelete)
              {
                  dbserver ent = JsonConvert.DeserializeObject<dbserver>(request.data);
-                 bool resu = Deletedbserver (ID: ent.dbserver_id, ALLOFUSERS: e_aou, SYNC: false, TRAN: false);
+                 bool resu = Deletedbserver (ID: ent.dbserver_id, ALLOFUSERS: e_aou, DB_MYSQL:DB_MYSQL ,SYNC: false, TRAN: false);
                  if (resu == true)
                  {
                      cResponse res = new cResponse()
@@ -182,6 +207,20 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                  }
              }
              return result;
+        }
+        public string GetConnStr (allofusers ALLOFUSERS)
+
+        {
+            string result = string.Empty;
+            if (ALLOFUSERS.projects_id == AppStaticInt.ProjectCodeCore)
+                result = ALLOFUSERS.appdatabase_connstr;
+            long db_ID = 0;
+            long.TryParse(ALLOFUSERS.company_dbserver_id.ToString(), out db_ID);
+            if (db_ID == 0)
+                result = ALLOFUSERS.appdatabase_connstr;
+            else
+                result = ALLOFUSERS.dbserver_adrr;
+            return result;
         }
     }
 

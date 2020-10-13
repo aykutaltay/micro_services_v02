@@ -11,10 +11,11 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
 {
     public partial class Op_appdatabase
     {
-        public appdatabase Saveappdatabase(appdatabase APPDATABASE, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public appdatabase Saveappdatabase(appdatabase APPDATABASE, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
+            string connstr = GetConnStr(ALLOFUSERS);
             appdatabase result = new appdatabase();
-            BeforeSaveappdatabase(APPDATABASE: APPDATABASE, ALLOFUSERS, SYNC:SYNC, TRAN: TRAN);
+            BeforeSaveappdatabase(APPDATABASE: APPDATABASE, ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC, TRAN: TRAN);
             //eğer birden fazla DataBase güncelleme var ise
             if (SYNC == true)
                 APPDATABASE.appdatabase_use = false;
@@ -23,32 +24,54 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 APPDATABASE.appdatabase_active = false;
             if ( ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                if (DB_MYSQL == null)
                 {
-                    if (APPDATABASE.appdatabase_id == 0)
-                    {
-                        long id = 0;
-                        id = db.Insert<appdatabase>(APPDATABASE);
-                        if (id != 0)
-                            result = db.Get<appdatabase>(id);
-                    }
-                    else
-                    {
-                        bool ok = db.Update<appdatabase>(APPDATABASE);
-                        if (ok == true)
-                            result = db.Get<appdatabase>(APPDATABASE.appdatabase_id);
-                        else
-                            result = APPDATABASE;
-                    }
+                   using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
+                   {
+                        if (APPDATABASE.appdatabase_id == 0)
+                       {
+                            long id = 0;
+                            id = db.Insert<appdatabase>(APPDATABASE);
+                           if (id != 0)
+                             result = db.Get<appdatabase>(id);
+                       }
+                       else
+                       {
+                         bool ok = db.Update<appdatabase>(APPDATABASE);
+                           if (ok == true)
+                             result = db.Get<appdatabase>(APPDATABASE.appdatabase_id);
+                           else
+                             result = APPDATABASE;
+                       }
+                   }
+                }
+                else
+                {
+                   Mysql_dapper db = DB_MYSQL;
+                        if (APPDATABASE.appdatabase_id == 0)
+                       {
+                            long id = 0;
+                            id = db.Insert<appdatabase>(APPDATABASE);
+                           if (id != 0)
+                             result = db.Get<appdatabase>(id);
+                       }
+                       else
+                       {
+                         bool ok = db.Update<appdatabase>(APPDATABASE);
+                           if (ok == true)
+                             result = db.Get<appdatabase>(APPDATABASE.appdatabase_id);
+                           else
+                             result = APPDATABASE;
+                       }
                 }
             }
-            AfterSaveappdatabase(APPDATABASE: APPDATABASE, ALLOFUSERS, SYNC: SYNC, TRAN: TRAN);
+            AfterSaveappdatabase(APPDATABASE: APPDATABASE, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC: SYNC, TRAN: TRAN);
             return result;
         }
-        public bool Deleteappdatabase(long ID, allofusers ALLOFUSERS, bool SYNC = false, bool TRAN = false)
+        public bool Deleteappdatabase(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL = null, bool SYNC = false, bool TRAN = false)
         {
             bool result = false;
-            BeforeDeleteappdatabase(ID, ALLOFUSERS, SYNC, TRAN);
+            BeforeDeleteappdatabase(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
                 appdatabase etmp = Getappdatabase(ID, ALLOFUSERS);
@@ -59,19 +82,20 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                 if (TRAN == true)
                     etmp.appdatabase_active = false;
                 etmp.deletedappdatabase_id = true;
-                appdatabase eresulttmp = Saveappdatabase(etmp, ALLOFUSERS);
+                appdatabase eresulttmp = Saveappdatabase(APPDATABASE:etmp, ALLOFUSERS:ALLOFUSERS, DB_MYSQL:DB_MYSQL, SYNC:SYNC,TRAN:TRAN);
                 if (eresulttmp.deletedappdatabase_id == true)
                     result = true;
             }
-            AfterDeleteappdatabase(ID, ALLOFUSERS, SYNC, TRAN);
+            AfterDeleteappdatabase(ID, ALLOFUSERS,  DB_MYSQL:DB_MYSQL, SYNC, TRAN);
             return result;
         }
         public appdatabase Getappdatabase(long ID, allofusers ALLOFUSERS, bool ALL=false)
         {
             appdatabase result = new appdatabase();
+            string connstr = GetConnStr(ALLOFUSERS);
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(connstr: ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr: connstr, usetransaction: false))
                 {                    result = db.Get<appdatabase>(id: ID);
                     //senkron dişinda ve silinenlerin dişindakileri getirmesi
                     if (ALL==false)
@@ -84,6 +108,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
         public List<appdatabase> GetAllappdatabase(string whereclause , allofusers ALLOFUSERS, bool ALL=false)
         {
             List<appdatabase> result = new List<appdatabase>();
+            string connstr = GetConnStr(ALLOFUSERS);
             BeforeGetAllappdatabase(whereclause, ALLOFUSERS, ALL);
             //senkron dişinda ve silinenlerin dişindakileri getirmesi
             if (ALL == false)
@@ -93,21 +118,21 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
             }
             if (ALLOFUSERS.appdatabase_type == AppStaticStr.core_dbTypeMYSQL)
             {
-                using (Mysql_dapper db = new Mysql_dapper(ALLOFUSERS.appdatabase_connstr, usetransaction: false))
+                using (Mysql_dapper db = new Mysql_dapper(connstr, usetransaction: false))
                 {
                     result = db.GetAll<appdatabase>(whereclause: whereclause).ToList();
                 }            }            AfterGetAllappdatabase(whereclause, ALLOFUSERS, ALL);
             return result;
         }
-        public void BeforeSaveappdatabase(appdatabase APPDATABASE, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterSaveappdatabase(appdatabase APPDATABASE, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void AfterDeleteappdatabase (long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
-        public void BeforeDeleteappdatabase(long ID, allofusers ALLOFUSERS, bool SYNC, bool TRAN) { }
+        public void BeforeSaveappdatabase(appdatabase APPDATABASE, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterSaveappdatabase(appdatabase APPDATABASE, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void AfterDeleteappdatabase (long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
+        public void BeforeDeleteappdatabase(long ID, allofusers ALLOFUSERS, Mysql_dapper DB_MYSQL, bool SYNC, bool TRAN) { }
         public void BeforeGetappdatabase(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void AfterGetappdatabase(long ID, allofusers ALLOFUSERS, bool ALL) { }
         public void BeforeGetAllappdatabase(string whereclause , allofusers ALLOFUSERS, bool ALL ) { }
         public void AfterGetAllappdatabase(string whereclause, allofusers ALLOFUSERS, bool ALL) { }
-        public string Single_crud (cRequest request, allofusers e_aou)
+        public string Single_crud (cRequest request, allofusers e_aou, Mysql_dapper DB_MYSQL=null)
         {
              string result = AppStaticStr.msg0040Hata;
              #region gelen paket içinden yapilacak işlemin bilgilerinin alinmasi
@@ -118,7 +143,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudSave)
                  {
                      appdatabase ent = JsonConvert.DeserializeObject<appdatabase>(request.data);
-                     appdatabase save_ent = Saveappdatabase(ent, e_aou, false, false);
+                     appdatabase save_ent = Saveappdatabase(ent, e_aou, DB_MYSQL, false, false);
                      cResponse res = new cResponse()
                      {
                          message_code = AppStaticInt.msg001Succes,
@@ -131,7 +156,7 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
              if (l_ed_opt[0].value==AppStaticStr.SingleCrudDelete)
              {
                  appdatabase ent = JsonConvert.DeserializeObject<appdatabase>(request.data);
-                 bool resu = Deleteappdatabase (ID: ent.appdatabase_id, ALLOFUSERS: e_aou, SYNC: false, TRAN: false);
+                 bool resu = Deleteappdatabase (ID: ent.appdatabase_id, ALLOFUSERS: e_aou, DB_MYSQL:DB_MYSQL ,SYNC: false, TRAN: false);
                  if (resu == true)
                  {
                      cResponse res = new cResponse()
@@ -182,6 +207,20 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                  }
              }
              return result;
+        }
+        public string GetConnStr (allofusers ALLOFUSERS)
+
+        {
+            string result = string.Empty;
+            if (ALLOFUSERS.projects_id == AppStaticInt.ProjectCodeCore)
+                result = ALLOFUSERS.appdatabase_connstr;
+            long db_ID = 0;
+            long.TryParse(ALLOFUSERS.company_dbserver_id.ToString(), out db_ID);
+            if (db_ID == 0)
+                result = ALLOFUSERS.appdatabase_connstr;
+            else
+                result = ALLOFUSERS.dbserver_adrr;
+            return result;
         }
     }
 

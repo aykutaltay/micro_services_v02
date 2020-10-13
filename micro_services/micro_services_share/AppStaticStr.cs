@@ -17,6 +17,8 @@ namespace micro_services_share
         public static string msg0045OK="OK";
         public static string msg0050UuserofSaved = "Kaydeden Kullanıcı Bulunamadı";
         public static string msg0060UserAllready = "Kullanıcı sistemde kayıtlı";
+        public static string msg0070SendDataErr = "Gönderilen Bilgi Hatası";
+        public static string msg0080UserNotActivation = "Kullanıcı Aktive edilmemiş";
 
         public static string strAdmin = "admin";
 
@@ -49,7 +51,11 @@ namespace micro_services_share
         public static string MicroServicesDal="micro_services_dal";
         public static string SrvOpt ="srvoptname";
         public static string SrvTable ="tablename";
+        public static string SrvUserPass = "userpass";
         public static string SrvSingleCrud = "Single_crud";
+        public static string SrvTransCrud="Trans_crud";
+        public static string SrvTablePrimaryKey="primarykey";
+        public static string DllMicServBus ="micro_services_bus.dll";
         public static string SingleCrudSave ="Save";    //Create,Update
         public static string SingleCrudGet ="Get";      //Read
         public static string SingleCrudGetAll ="GetAll";//read
@@ -64,5 +70,6 @@ namespace micro_services_share
         public static string urlRestMainUserGet= "https://localhost:5001/GateOfNewWorld/mainuserget";
         public static string urlRestNewToken = "https://localhost:5001/GateOfNewWorld/retoken";
         public static string urlRestRefCrud = "https://localhost:5001/GateOfNewWorld/refcrud";
+        public static string urlRestRefCrudTrans = "https://localhost:5001/GateOfNewWorld/refcrudtrans";
     }
 }
