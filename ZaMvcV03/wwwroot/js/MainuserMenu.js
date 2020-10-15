@@ -99,7 +99,7 @@ var Getuser = function () {
             "Authorization": "Bearer " + mdl.token
         },
         "data": JSON.stringify(mdl),
-        "async":"false"
+        "async": "false"
     };
 
 
@@ -183,21 +183,21 @@ var Setuserpage = function () {
     else {
         e_usr.authValue = "user";
     }
-//----------
+    //----------
     if (document.getElementById("cb_Core_project").checked == true) {
         e_usr.Core_project = true;
     }
     else {
         e_usr.Core_project = false;
     }
-//----------
+    //----------
     if (document.getElementById("cb_Fason_project").checked == true) {
         e_usr.Fason_project = true;
     }
     else {
         e_usr.Fason_project = false;
     }
-//--------------
+    //--------------
     if (document.getElementById('statu_Active').checked == true) {
         e_usr.statuValue = 1;
     }
@@ -244,6 +244,38 @@ var Saveuser = function () {
         }
     });
 }
+var SendActMail = function () {
+    var mdl = new All.Models.cRequest();
+    mdl.token = localStorage.getItem("token");
+    mdl.data = localStorage.getItem(All.String.strUserIDBilgi);
+
+    var settings = {
+        "url": All.webpageoptsendactmail,
+        "method": "POST",
+        "timeout": 0,
+        "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + mdl.token
+        },
+        "data": JSON.stringify(mdl),
+        "async": "false"
+    };
+
+
+    $.ajax(settings).done(function (response) {
+        if (response.message_code == 1) {
+
+            $("div.warning").html(response.message);
+            $("div.warning").fadeIn(All.Integer.msgFadein).delay(All.Integer.msgDelay).fadeOut(All.Integer.msgFadeout);
+        }
+        else {
+            $("div.warning").html(response.message);
+            $("div.warning").fadeIn(All.Integer.msgFadein).delay(All.Integer.msgDelay).fadeOut(All.Integer.msgFadeout);
+        }
+    });
+}
+
+
 $(document).ready(function () {
     Getlist();
     NewUser();
@@ -251,7 +283,7 @@ $(document).ready(function () {
     $('#example tbody').on('click', 'tr', function () {
         if ($(this).hasClass('selected')) {
             $(this).removeClass('selected');
-            
+
         }
         else {
             dt.$('tr.selected').removeClass('selected');
@@ -271,5 +303,9 @@ $(document).ready(function () {
     $('#btnSave').on('click', function () {
         Saveuser();
     });
+    $('#btnActivationMain').on('click', function () {
+        SendActMail();
+    });
+
     GetTime01();
 });

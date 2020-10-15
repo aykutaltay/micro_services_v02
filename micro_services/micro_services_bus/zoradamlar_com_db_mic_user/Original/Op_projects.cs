@@ -206,6 +206,24 @@ namespace micro_services_bus.zoradamlar_com_db_mic_user
                      }
                  }
              }
+             if (l_ed_opt[0].value==AppStaticStr.SingleCrudGetAll_true)
+             {
+                 List<projects> ent = GetAllprojects(whereclause:request.data, ALLOFUSERS: e_aou, ALL: true);
+                 if (ent != null)
+                 {
+                     if (ent.Count>0)
+                     {
+                         cResponse res = new cResponse()
+                         {
+                             message_code = AppStaticInt.msg001Succes,
+                             message = AppStaticStr.msg0045OK,
+                             data = JsonConvert.SerializeObject(ent),
+                             token = request.token
+                         };
+                         result = JsonConvert.SerializeObject(res);
+                     }
+                 }
+             }
              return result;
         }
         public string GetConnStr (allofusers ALLOFUSERS)

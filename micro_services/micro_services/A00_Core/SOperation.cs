@@ -50,7 +50,7 @@ namespace micro_services.A00_Core
                 return result;
 
             //usersın ait olduğu companyid denbu company e ait olan herkesi al                
-            List<users> l_users = optUsers.GetAllusers(string.Format("{0}={1}", infUsers.users_users_company_id, e_aou.users_company_id), ALLOFUSERS: default_ALLOFUSER);
+            List<users> l_users = optUsers.GetAllusers(string.Format("{0}={1}", infUsers.users_users_company_id, e_aou.users_company_id), ALLOFUSERS: default_ALLOFUSER, ALL: true);
             if (l_users == null)
                 return result;
 
@@ -132,7 +132,6 @@ namespace micro_services.A00_Core
 
             return result;
         }
-
         public cResponse UserGetALL(cRequest request)
         {
             cResponse result = new cResponse()
@@ -155,7 +154,6 @@ namespace micro_services.A00_Core
 
             return result;
         }
-
         public cResponse userRetoken(cRequest request)
         {
             cResponse result = new cResponse()
@@ -190,7 +188,6 @@ namespace micro_services.A00_Core
 
             return result;
         }
-
         public cResponse ref_crud(cRequest request)
         {
             cResponse result = new cResponse()
@@ -314,7 +311,7 @@ namespace micro_services.A00_Core
                                 if (l_ed_pri[0].value.Length > 2)
                                     strPrikey = l_ed_pri[0].value;
                                 strtmpPrikey = string.Format(@"""{0}"":", strPrikey);
-                                strtmpPrikey="\\\""+l_ed_pri[0].value+"\\\":";
+                                strtmpPrikey = "\\\"" + l_ed_pri[0].value + "\\\":";
                             }
                         }
                     }
@@ -342,9 +339,9 @@ namespace micro_services.A00_Core
                     cRequest r_tmp = l_req[i];
                     if (lngPriKey != 0) //pri key değişmiş ise
                     {
-                        string strFrgkey = ""+l_ed_tbl[0].value+"_"+strPrikey+"\""+":0";
-                        string strtmpFrgkey = ""+l_ed_tbl[0].value+"_"+strPrikey+"\""+":"+lngPriKey.ToString();
-                        r_tmp.data = r_tmp.data.Replace(strFrgkey,strtmpFrgkey);
+                        string strFrgkey = "" + l_ed_tbl[0].value + "_" + strPrikey + "\"" + ":0";
+                        string strtmpFrgkey = "" + l_ed_tbl[0].value + "_" + strPrikey + "\"" + ":" + lngPriKey.ToString();
+                        r_tmp.data = r_tmp.data.Replace(strFrgkey, strtmpFrgkey);
                     }
 
                     try
@@ -421,5 +418,47 @@ namespace micro_services.A00_Core
             return result;
         }
 
+        public cResponse SendActMail(cRequest request)
+        {
+            cResponse result = new cResponse()
+            {
+                token = request.token,
+                message_code = AppStaticInt.msg001Fail,
+                message = AppStaticStr.msg0040Hata
+            };
+
+            long usr_id = 0;
+            long.TryParse(request.data, out usr_id);
+
+            List<allofusers> l_aou = AppStaticModel.l_allofusers.Where(w => w.tokensofusers_token == request.token && w.projects_id == request.project_code).ToList();
+            if (l_aou == null) return result;
+            if (l_aou.Count != 1) return result;
+
+            users e_usr = optUsers.Getusers(usr_id, ALLOFUSERS: l_aou[0],ALL:true);
+
+            List<useractivation> l_act = new Op_useractivation().GetAlluseractivation(whereclause: string.Format("{0}={1}"
+            , new info_useractivation().useractivation_useractivation_users_id, e_usr.users_id), ALLOFUSERS: default_ALLOFUSER);
+
+            if (l_act == null) return result;
+            if (l_act.Count != 1) return result;
+
+            try
+            {
+                AppStaticMethod.ActivateMailSend(usermail: e_usr.users_mail
+                , namesurname: e_usr.users_name
+                , activekey: l_act[0].useractivation_code);
+
+                result.message_code = AppStaticInt.msg001Succes;
+                result.message = AppStaticStr.msg0045OK;
+            }
+            catch (System.Exception)
+            {
+
+
+            }
+
+
+            return result;
+        }
     }
 }

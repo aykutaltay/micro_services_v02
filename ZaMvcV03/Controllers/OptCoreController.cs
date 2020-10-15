@@ -77,6 +77,50 @@ namespace ZaMvcV03.Controllers
 
         public IActionResult tokenRenew ([FromBody] cRequest Model)
         {
+             Model.project_code = AppStaticInt.ProjectCodeCore;
+
+            cResponse response = new cResponse()
+            {
+                message_code = AppStaticInt.msg001Fail,
+                message = AppStaticStr.msg0040Hata,
+                token = Model.token,
+                data = string.Empty
+            };
+            try
+            {
+                AppClassMVCMethod mvcPost = new AppClassMVCMethod(Model.token);
+                response = mvcPost.post(AppStaticStr.urlRestUserinfo, model: Model);
+
+                allofusers e_aou = JsonConvert.DeserializeObject<allofusers>(response.data);
+                response.message_code = AppStaticInt.msg001Fail;
+                response.message = AppStaticStr.msg0040Hata;
+                DateTime retokenTime = e_aou.tokensofusers_expiretime.AddMinutes(-60);
+
+                if (retokenTime < DateTime.Now)
+                {
+                    response = mvcPost.post(AppStaticStr.urlRestNewToken, model: Model);
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return Ok(response);
+        }
+
+        public IActionResult saveUser ([FromBody] cRequest Model)
+        {
+            Model.project_code = AppStaticInt.ProjectCodeCore;
+
+            cResponse response = new AppClassMVCMethod(Model.token).SaveUser(Model);
+            return Ok(response);
+        }
+
+        public IActionResult usermailActivete ([FromBody] cRequest Model)
+        {
             Model.project_code = AppStaticInt.ProjectCodeCore;
 
             cResponse response = new cResponse()
@@ -86,32 +130,71 @@ namespace ZaMvcV03.Controllers
                 token = Model.token,
                 data = string.Empty
             };
+
             AppClassMVCMethod mvcPost = new AppClassMVCMethod(Model.token);
-            response = mvcPost.post(AppStaticStr.urlRestUserinfo, model: Model);
-
-            allofusers e_aou = JsonConvert.DeserializeObject<allofusers>(response.data);
-            response.message_code = AppStaticInt.msg001Fail;
-            response.message = AppStaticStr.msg0040Hata;
-            DateTime retokenTime = e_aou.tokensofusers_expiretime.AddMinutes(-60);
-
-            if (retokenTime<DateTime.Now)
-            {
-                response = mvcPost.post(AppStaticStr.urlRestNewToken, model: Model);
-            }
-
+            response = mvcPost.post(AppStaticStr.urlRestUserActMail, model: Model);
 
             return Ok(response);
-        }
 
-        public IActionResult saveUser ([FromBody] cRequest Model)
+        }
+        public IActionResult deleteUserid([FromBody] cRequest Model)
         {
             Model.project_code = AppStaticInt.ProjectCodeCore;
+            Model.data_ex = new List<ex_data>() {
+                    new ex_data(){
+                        id = 0,
+                        info = AppStaticStr.SrvSingleCrud,
+                        value = AppStaticStr.SrvSingleCrud
+                        },
+                    new ex_data(){
+                        id = 1,
+                        info = AppStaticStr.SrvTable,
+                        value = new micro_services_dal.Models.zoradamlar_com_db_mic_user.info_users().users_tablename
+                        },
+                    new ex_data(){
+                        id = 2,
+                        info = AppStaticStr.SrvOpt,
+                        value = AppStaticStr.SingleCrudGet
+                        },
+                    };
 
-            cResponse response=new AppClassMVCMethod(Model.token).SaveUser(Model);
+            cResponse response = new cResponse()
+            {
+                message_code = AppStaticInt.msg001Fail,
+                message = AppStaticStr.msg0040Hata,
+                token = Model.token,
+                data = string.Empty
+            };
 
+            AppClassMVCMethod mvcPost = new AppClassMVCMethod(Model.token);
+            response = mvcPost.post(AppStaticStr.urlRestRefCrud, model: Model);
+            
+            Model.data = response.data;
+            Model.data_ex = new List<ex_data>() {
+                    new ex_data(){
+                        id = 0,
+                        info = AppStaticStr.SrvSingleCrud,
+                        value = AppStaticStr.SrvSingleCrud
+                        },
+                    new ex_data(){
+                        id = 1,
+                        info = AppStaticStr.SrvTable,
+                        value = new micro_services_dal.Models.zoradamlar_com_db_mic_user.info_users().users_tablename
+                        },
+                    new ex_data(){
+                        id = 2,
+                        info = AppStaticStr.SrvOpt,
+                        value = AppStaticStr.SingleCrudDelete
+                        },
+                    };
+
+            response = mvcPost.post(AppStaticStr.urlRestRefCrud, model: Model);
 
             return Ok(response);
+
         }
+
+
 
         //reflection örneği için aşağıda vardır.
         #region reflection örneği

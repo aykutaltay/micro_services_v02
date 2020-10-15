@@ -59,6 +59,7 @@ namespace micro_services_share
         public static string SingleCrudSave ="Save";    //Create,Update
         public static string SingleCrudGet ="Get";      //Read
         public static string SingleCrudGetAll ="GetAll";//read
+        public static string SingleCrudGetAll_true = "GetAll_true";//read
         public static string SingleCrudDelete ="Delete";//Delete
 
 
@@ -71,5 +72,7 @@ namespace micro_services_share
         public static string urlRestNewToken = "https://localhost:5001/GateOfNewWorld/retoken";
         public static string urlRestRefCrud = "https://localhost:5001/GateOfNewWorld/refcrud";
         public static string urlRestRefCrudTrans = "https://localhost:5001/GateOfNewWorld/refcrudtrans";
+        public static string urlRestUserActMail = "https://localhost:5001/GateOfNewWorld/sendactivemail";
+
     }
 }

@@ -167,7 +167,7 @@ namespace micro_services.Controllers
         #endregion recapfcha işlemleri
 
         [AllowAnonymous]
-        [HttpPost("activation")]
+        [HttpGet("activation")]
         public IActionResult Active(string actkey)
         {
 
@@ -235,6 +235,13 @@ namespace micro_services.Controllers
         public IActionResult RefCrudTrans([FromBody] cRequest model)
         {
             cResponse response = new SOperation().ref_crud_tran(model);
+            return Ok(response);
+        }
+
+        [HttpPost("sendactivemail")]
+        public IActionResult SendActivateMail ([FromBody] cRequest model)
+        {
+            cResponse response = new SOperation().SendActMail(request:model);
             return Ok(response);
         }
 

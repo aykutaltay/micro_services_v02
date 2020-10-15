@@ -42,19 +42,24 @@ namespace micro_services_share
             return result;
         }
 
-        public static string strEncrypt(string sifre)
+        public static string strEncrypt(string text)
         {
-            byte[] data = UTF8Encoding.UTF8.GetBytes(sifre);
-            using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
+            MD5 md5 = new MD5CryptoServiceProvider();
+
+            //metnin boyutuna göre hash hesaplar
+            md5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(text));
+
+            //hesapladıktan sonra hashi alır
+            byte[] result = md5.Hash;
+
+            StringBuilder strBuilder = new StringBuilder();
+            for (int i = 0; i < result.Length; i++)
             {
-                byte[] keys = md5.ComputeHash(UTF8Encoding.UTF8.GetBytes(sifre));
-                using (TripleDESCryptoServiceProvider tripDes = new TripleDESCryptoServiceProvider() { Key = keys, Mode = CipherMode.ECB, Padding = PaddingMode.PKCS7 })
-                {
-                    ICryptoTransform transform = tripDes.CreateEncryptor();
-                    byte[] results = transform.TransformFinalBlock(data, 0, data.Length);
-                    return Convert.ToBase64String(results, 0, results.Length);
-                }
+                //her baytı 2 hexadecimal hane olarak değiştirir
+                strBuilder.Append(result[i].ToString("x2"));
             }
+
+            return strBuilder.ToString();
         }
 
         public static string strDecrypt(string SifrelenmisDeger)

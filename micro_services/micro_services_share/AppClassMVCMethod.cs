@@ -84,13 +84,13 @@ namespace micro_services_share
 
             if (e_tmp_eusers.users_id == 0) //yeni kullancı
             {
-                passofusers e_tmp_assofusrs = new passofusers()
+                passofusers e_tmp_passofusrs = new passofusers()
                 {
                     deletedpassofusers_id = false,
                     passofusers_active = true,
                     passofusers_createtime = e_tmp_eusers.users_createtime,
                     passofusers_expiretime = e_tmp_eusers.users_expiretime.AddDays(-30),
-                    passofusers_pass = e_tmp_mui.pass,
+                    passofusers_pass = AppStaticMethod.strEncrypt(e_tmp_mui.pass),
                     passofusers_use = true,
                     passofusers_id = 0,
                     passofusers_users_id = 0
@@ -127,7 +127,7 @@ namespace micro_services_share
 
                 cRequest req_activ = new cRequest()
                 {
-                    project_code = 1,
+                    project_code = AppStaticInt.ProjectCodeCore,
                     token = model.token,
                     data = JsonConvert.SerializeObject(e_tmp_activat),
                     data_ex = new List<ex_data>
@@ -140,8 +140,23 @@ namespace micro_services_share
 
                 };
 
+                cRequest req_pass = new cRequest()
+                {
+                    project_code = AppStaticInt.ProjectCodeCore,
+                    token = model.token,
+                    data = JsonConvert.SerializeObject(e_tmp_passofusrs),
+                    data_ex = new List<ex_data>
+                    {
+                        new ex_data() {id=0,info=AppStaticStr.SrvSingleCrud,value=AppStaticStr.SingleCrudSave },
+                        new ex_data() {id=1,info=AppStaticStr.SrvTable,value=new info_passofusers().passofusers_tablename},
+                        new ex_data() {id=2,info=AppStaticStr.SrvTransCrud,value=AppStaticStr.SrvSingleCrud},
+                        new ex_data() {id=3,info=AppStaticStr.SrvOpt,value=AppStaticStr.SingleCrudSave}
+                    }
+                };
+
                 l_req.Add(req_usr);
                 l_req.Add(req_activ);
+                l_req.Add(req_pass);
                 #region Gönderilecek liste eklemek için sırası önemli bu nedenle buraya eklendi
                 cRequest e_tmp_getprojectlist = new cRequest()
                 {
@@ -194,6 +209,11 @@ namespace micro_services_share
                 };
 
                 response = post(AppStaticStr.urlRestRefCrudTrans, model: req);
+
+                if (response.message_code==AppStaticInt.msg001Succes)
+                {
+                    AppStaticMethod.ActivateMailSend(usermail: e_tmp_eusers.users_mail, namesurname: e_tmp_eusers.users_name, activekey: e_tmp_activat.useractivation_code);
+                }
 
             }
             else //var olan kullanıcı
@@ -331,7 +351,7 @@ namespace micro_services_share
                     data_ex = new List<ex_data>{
                     new ex_data{ id=0,info=AppStaticStr.SrvSingleCrud,value=AppStaticStr.SrvSingleCrud},
                     new ex_data{ id=1, info=AppStaticStr.SrvTable,value=new info_users().users_tablename},
-                    new ex_data{id=2, info=AppStaticStr.SrvOpt,value=AppStaticStr.SingleCrudGetAll}
+                    new ex_data{id=2, info=AppStaticStr.SrvOpt,value=AppStaticStr.SingleCrudGetAll_true}
                 }
                     ,
                     project_code = AppStaticInt.ProjectCodeCore
@@ -342,7 +362,7 @@ namespace micro_services_share
                 {
 
                     response.project_code = AppStaticInt.msg001Fail;
-                    response.data = AppStaticStr.msg0040Hata;
+                    response.data = AppStaticStr.msg0060UserAllready;
                     return response;
                 }
 
