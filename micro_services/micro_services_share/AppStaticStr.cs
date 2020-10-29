@@ -19,6 +19,13 @@ namespace micro_services_share
         public static string msg0060UserAllready = "Kullanıcı sistemde kayıtlı";
         public static string msg0070SendDataErr = "Gönderilen Bilgi Hatası";
         public static string msg0080UserNotActivation = "Kullanıcı Aktive edilmemiş";
+        public static string msg0090Passboyutyeterlidegil = "Şifre Boyutu yeterli değil";
+        public static string msg0092Passkucukharfyok = "Küçük harf yok";
+        public static string msg0095Passbuyukharfyok = "Büyük harf yok";
+        public static string msg0097PassOzelkaraktervar = "Şifre içinde özel karakter var";
+
+
+
 
         public static string strAdmin = "admin";
 
@@ -73,6 +80,7 @@ namespace micro_services_share
         public static string urlRestRefCrud = "https://localhost:5001/GateOfNewWorld/refcrud";
         public static string urlRestRefCrudTrans = "https://localhost:5001/GateOfNewWorld/refcrudtrans";
         public static string urlRestUserActMail = "https://localhost:5001/GateOfNewWorld/sendactivemail";
+        public static string urlRestStaticListRefresh = "https://localhost:5001/GateOfNewWorld/refreshstaticlist";
 
     }
 }

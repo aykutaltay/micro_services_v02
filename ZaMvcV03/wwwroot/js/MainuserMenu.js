@@ -5,6 +5,8 @@ var e_usr = new All.Models.Vgetuser();
 var mainstat = 0;
 
 var Getlist = function () {
+
+
     if (dt == null) {
         dt = $('#example').DataTable({
         });
@@ -76,10 +78,11 @@ var Getlist = function () {
 
         }
         else {
+
             $("div.warning").html(response.message);
             $("div.warning").fadeIn(All.Integer.msgFadein).delay(All.Integer.msgDelay).fadeOut(All.Integer.msgFadeout);
             var ss = All.webpageurl + All.webpageMainIndex;
-            window.location.href = ss;
+            //window.location.href = ss;
             return;
         }
     });
@@ -114,6 +117,131 @@ var Getuser = function () {
         }
     });
 
+};
+var GetinfoCompany = function () {
+    var mdl = new All.Models.cRequest();
+    mdl.token = localStorage.getItem("token");
+    mdl.data = localStorage.getItem(All.String.strUserIDBilgi);
+
+    var settings = {
+        "url": All.webpageoptgetcompnyid,
+        "method": "POST",
+        "timeout": 0,
+        "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + mdl.token
+        },
+        "data": JSON.stringify(mdl),
+        "async": "false"
+    };
+
+    $.ajax(settings).done(function (response) {
+        if (response.message_code == 1) {
+            localStorage.setItem(All.String.strCompnyIDBilgi, response.data);
+        }
+        else {
+            $("div.warning").html(response.message);
+            $("div.warning").fadeIn(All.Integer.msgFadein).delay(All.Integer.msgDelay).fadeOut(All.Integer.msgFadeout);
+        }
+    });
+
+    if (localStorage.getItem(All.String.strCompnyIDBilgi) != "0") {
+
+        var settings = {
+            "url": All.webpageoptgetcompnyName,
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + mdl.token
+            },
+            "data": JSON.stringify(mdl),
+            "async": "false"
+        };
+
+        $.ajax(settings).done(function (response) {
+            if (response.message_code == 1) {
+                if (document.getElementById('txtcompanyname') == null)
+                    return;
+
+                document.getElementById('txtcompanyname').value = response.data;
+            }
+            else {
+                $("div.warning").html(response.message);
+                $("div.warning").fadeIn(All.Integer.msgFadein).delay(All.Integer.msgDelay).fadeOut(All.Integer.msgFadeout);
+            }
+        });
+
+    };
+
+};
+var SaveCompany = function () {
+    var mdl = new All.Models.cRequest();
+    mdl.token = localStorage.getItem("token");
+    mdl.data = localStorage.getItem(All.String.strCompnyIDBilgi) + "*+-" + document.getElementById('txtcompanyname').value;
+
+    var settings = {
+        "url": All.webpageoptsavecompany,
+        "method": "POST",
+        "timeout": 0,
+        "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + mdl.token
+        },
+        "data": JSON.stringify(mdl),
+        "async": "false"
+    };
+
+    $.ajax(settings).done(function (response) {
+        if (response.message_code == 1) {
+           
+        }
+        else {
+            $("div.warning").html(response.message);
+            $("div.warning").fadeIn(All.Integer.msgFadein).delay(All.Integer.msgDelay).fadeOut(All.Integer.msgFadeout);
+        }
+    });
+
+};
+var SavePas = function () {
+    var mdl = new All.Models.cRequest();
+    mdl.token = localStorage.getItem("token");
+
+    String ps = document.getElementById('txtpass').value;
+    String ps_rp = document.getElementById('txtpassrepeat').value;
+
+    if (ps == ps_rp) {
+        mdl.data = ps;
+
+        var settings = {
+            "url": All.webpageoptsavepass,
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + mdl.token
+            },
+            "data": JSON.stringify(mdl),
+            "async": "false"
+        };
+
+        $.ajax(settings).done(function (response) {
+            if (response.message_code == 1) {
+
+            }
+            else {
+                $("div.warning").html(response.message);
+                $("div.warning").fadeIn(All.Integer.msgFadein).delay(All.Integer.msgDelay).fadeOut(All.Integer.msgFadeout);
+            }
+        });
+
+
+    }
+    else {
+        $("div.warning").html('Girilen bilgiler eşit değil');
+        $("div.warning").fadeIn(All.Integer.msgFadein).delay(All.Integer.msgDelay).fadeOut(All.Integer.msgFadeout);
+    };
+    
 };
 var Getuserpage = function () {
     document.getElementById('txtusername').value = e_usr.userName;
@@ -150,9 +278,12 @@ var Getuserpage = function () {
 
 
 
-}
+};
 var NewUser = function () {
     localStorage.setItem(All.String.strUserIDBilgi, "0");
+
+    if (document.getElementById('txtusername') == null)
+        return;
 
     document.getElementById('txtusername').value = "";
     document.getElementById('txtuseremail').value = "";
@@ -236,6 +367,7 @@ var Saveuser = function () {
     $.ajax(settings).done(function (response) {
         if (response.message_code == 1) {
             //işlem sonucu olursa
+            Getlist();
         }
         else {
             //işlem sonucu olmaz ise
@@ -277,8 +409,10 @@ var SendActMail = function () {
 
 
 $(document).ready(function () {
+    GetinfoCompany();
     Getlist();
-    NewUser();
+
+
 
     $('#example tbody').on('click', 'tr', function () {
         if ($(this).hasClass('selected')) {
@@ -306,6 +440,13 @@ $(document).ready(function () {
     $('#btnActivationMain').on('click', function () {
         SendActMail();
     });
+    $('#CombtnSave').on('click', function () {
+        SaveCompany();
+    });
+    $('#PassbtnSave').on('click', function () {
+        SavePas();
+    });
 
     GetTime01();
+    NewUser();
 });

@@ -210,3 +210,5 @@ C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\bin
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\bin\Debug\netcoreapp3.1\micro_services_dal.dll
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\bin\Debug\netcoreapp3.1\micro_services_dal.pdb
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\Razor\Views\Mainuser\Company.cshtml.g.cs
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\Razor\Views\Mainuser\ChangePass.cshtml.g.cs

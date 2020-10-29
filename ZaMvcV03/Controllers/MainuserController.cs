@@ -27,6 +27,15 @@ namespace ZaMvcV03.Controllers
         {
             return View();
         }
+        public IActionResult Company()
+        {
+            return View();
+        }
+
+        public IActionResult ChangePass()
+        {
+            return View();
+        }
 
         public IActionResult MenuEntry(string token)
         {

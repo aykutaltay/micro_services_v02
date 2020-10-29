@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewData["Title"] = "Company";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<div class="container">
+    @*<div id="user" style="margin-top:1px;" class="mainbox col-md-12 col-md-offset-3 col-sm-8 col-sm-offset-2">*@
+    <div id="user" style="margin-top:1px;" class="mainbox col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">Firma Bilgi Girişi</div>
+                <div style="float:left; font-size: 80%; position: relative; top:-10px"></div>
+            </div>
+
+            <div style="padding-top:3px" class="panel-body">
+
+                <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+
+                @*<form id="userform" class="form-horizontal" role="form">*@
+                <form id="userform" class="form" role="form">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div style="margin-bottom: 5px" class="input-group">
+                                <span class="input-group-addon">Kod</span>
+                                <input type="text" class="form-control" name="companyname" value="" placeholder="Firma Adı" id="txtcompanyname">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:10px" class="form-group">
+                        <!-- Button -->
+                        <div class="row">
+                            <div class="col-sm-12 controls">
+                                <a id="CombtnSave" href="#" class="btn btn-success" style="margin-left:15px">Kaydet </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<h1>Company</h1>
+

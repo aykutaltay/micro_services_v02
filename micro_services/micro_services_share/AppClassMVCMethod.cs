@@ -449,6 +449,7 @@ namespace micro_services_share
                 {
                     data = string.Format("{0}={1}", new info_useractivation().useractivation_useractivation_users_id, e_mui.userID),
                     token = model.token,
+                    project_code=AppStaticInt.ProjectCodeCore,
                     data_ex = new List<ex_data>{
                     new ex_data{ id=0,info=AppStaticStr.SrvSingleCrud,value=AppStaticStr.SrvSingleCrud},
                     new ex_data{ id=1, info=AppStaticStr.SrvTable,value=new info_useractivation().useractivation_tablename },
@@ -474,10 +475,11 @@ namespace micro_services_share
                 {
                     data = string.Format("{0}={1}", new info_users().users_users_id, e_mui.userID),
                     token = model.token,
+                    project_code=AppStaticInt.ProjectCodeCore,
                     data_ex = new List<ex_data>{
                     new ex_data{ id=0,info=AppStaticStr.SrvSingleCrud,value=AppStaticStr.SrvSingleCrud},
                     new ex_data{ id=1, info=AppStaticStr.SrvTable,value=new info_users().users_tablename},
-                    new ex_data{id=2, info=AppStaticStr.SrvOpt,value=AppStaticStr.SingleCrudGetAll}
+                    new ex_data{id=2, info=AppStaticStr.SrvOpt,value=AppStaticStr.SingleCrudGetAll_true}
                 }
                 };
                 k_usr = post(AppStaticStr.urlRestRefCrud, r_tmp);

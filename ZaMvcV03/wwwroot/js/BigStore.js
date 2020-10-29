@@ -8,9 +8,15 @@ All.webpageoptretoken = All.webpageurl + "OptCore/tokenRenew";
 All.webpageoptsaveuser = All.webpageurl + "OptCore/saveUser";
 All.webpageoptsendactmail = All.webpageurl + "OptCore/usermailActivete";
 All.webpageoptdeleteduser = All.webpageurl + "OptCore/deleteUserid";
+All.webpageoptgetcompnyid = All.webpageurl + "OptCore/getCompanyID";
+All.webpageoptgetcompnyName = All.webpageurl + "OptCore/getCompanyName";
+All.webpageoptsavecompany = All.webpageurl + "OptCore/saveCompany";
+All.webpageoptsavepass = All.webpageurl + "OptCore/savePass";
 All.webpageMainIndex = "Mainuser/Index";
 All.webpageMain = "Mainuser/Menu";
 All.webpageMainIndex = "Mainuser/Index";
+All.webpageMainCompany = "Mainuser/Company";
+All.webpageMainChangePass = "Mainuser/ChangePass";
 
 All.userToken = function () {
     var usrData = localStorage.getItem('userToken');
@@ -28,6 +34,7 @@ All.Integer.msgDelay = 1800;
 
 All.String = {};
 All.String.strUserIDBilgi = "xcyUOOZUIDFKSS";
+All.String.strCompnyIDBilgi = "hhaxkhsyhafasfasgsdsfsdSDF";
 
 All.Methods = {};
 All.Methods.postJSON = function (url, data, callback) {

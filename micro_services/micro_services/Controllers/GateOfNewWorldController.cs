@@ -245,5 +245,20 @@ namespace micro_services.Controllers
             return Ok(response);
         }
 
+        public IActionResult refreshStaticList([FromBody] cRequest model)
+        {
+              cResponse response = new cResponse()
+            {
+                message_code = AppStaticInt.msg001Fail,
+                message = AppStaticStr.msg0025ActivasyonHatasi,
+                token = string.Empty,
+                data = string.Empty
+            };
+
+
+            response = new SOperation().UserGet_AfterstatickListRefresh(model);
+
+            return Ok(response);
+        }
     }
 }
