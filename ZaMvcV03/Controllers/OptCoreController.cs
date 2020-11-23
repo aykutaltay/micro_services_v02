@@ -376,7 +376,7 @@ namespace ZaMvcV03.Controllers
             if (response_get.message_code == AppStaticInt.msg001Fail)
                 return Ok(response);
 
-            allofusers e_aou = JsonConvert.DeserializeObject<allofusers>(response.data);
+            allofusers e_aou = JsonConvert.DeserializeObject<allofusers>(response_get.data);
 
             //PAss çağırma
             info_passofusers inf_passuser = new info_passofusers();
@@ -477,7 +477,25 @@ namespace ZaMvcV03.Controllers
             return Ok(resp_last);
         }
 
+        public IActionResult forgetPass ([FromBody] cRequest Model)
+        {
+            Model.project_code = AppStaticInt.ProjectCodeCore;
 
+            cResponse response = new cResponse()
+            {
+                message_code = AppStaticInt.msg001Fail,
+                message = AppStaticStr.msg0040Hata,
+                token = Model.token,
+                data = string.Empty
+            };
+
+            AppClassMVCMethod mvcPost = new AppClassMVCMethod(Model.token);
+            response = mvcPost.post(AppStaticStr.urlRestForgetPass, model: Model);
+
+            return Ok(response);
+
+
+        }
         //reflection örneği için aşağıda vardır.
         #region reflection örneği
         public IActionResult test1([FromBody] cRequest Model)

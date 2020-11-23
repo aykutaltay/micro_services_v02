@@ -11,6 +11,11 @@ namespace micro_services.A00
 {
     public class NSOperation
     {
+        //constraction
+        public NSOperation() {
+
+        }
+
         micro_services_dal.Models.zoradamlar_com_db_mic_user.info_users info_users = new micro_services_dal.Models.zoradamlar_com_db_mic_user.info_users();
         micro_services_bus.zoradamlar_com_db_mic_user.Op_users bus_users = new micro_services_bus.zoradamlar_com_db_mic_user.Op_users();
 
@@ -30,6 +35,8 @@ namespace micro_services.A00
         micro_services_bus.zoradamlar_com_db_mic_user.Op_useractivation bus_UserActiva = new micro_services_bus.zoradamlar_com_db_mic_user.Op_useractivation();
         micro_services_dal.Models.zoradamlar_com_db_mic_user.info_usersofprojects info_usersofprojects = new micro_services_dal.Models.zoradamlar_com_db_mic_user.info_usersofprojects();
         micro_services_bus.zoradamlar_com_db_mic_user.Op_usersofprojects bus_UserOproje = new micro_services_bus.zoradamlar_com_db_mic_user.Op_usersofprojects();
+
+        
         micro_services_share.vModel.allofusers default_ALLOFUSER = new micro_services_share.vModel.allofusers()
         {
             appdatabase_connstr = AppStaticStr.core_dbConnStr,
@@ -344,5 +351,112 @@ namespace micro_services.A00
 
             return result;
         }
+
+        public long ForgetPassActivation (string actkey)
+        {
+            long result=0;
+            //activasyondan kullanıcıyı bul
+            //eski passları iptal et
+            //Random pass oluştur
+            //hepsini kaydet,
+            // oluşturduğun pass mail ile at
+
+            //Activasyon kullanıcısı bulunur
+            List<micro_services_dal.Models.zoradamlar_com_db_mic_user.useractivation> l_usrAct = bus_UserActiva.GetAlluseractivation
+            (whereclause:string.Format("{0}='{1}'",info_useractivation.useractivation_useractivation_code,actkey)
+            ,ALLOFUSERS:default_ALLOFUSER);
+
+            if (l_usrAct==null)
+                return result;
+            
+            //var ise eski passwordler silinir.
+            List<micro_services_dal.Models.zoradamlar_com_db_mic_user.passofusers> l_pass = bus_passof.GetAllpassofusers
+            (whereclause:string.Format("{0}={1}",info_passof.passofusers_passofusers_users_id,l_usrAct[0].useractivation_users_id)
+            ,ALLOFUSERS:default_ALLOFUSER);
+
+            if (l_pass!=null)
+            {
+                for (int i = 0; i < l_pass.Count; i++)
+                {
+                    bus_passof.Deletepassofusers(l_pass[i].passofusers_id,ALLOFUSERS:default_ALLOFUSER);
+                }
+            }
+
+            //randompass olustur
+            string passvalid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890AaBbb";
+            string passtemp=string.Empty;
+            Random rnd = new Random();
+            for (int i = 0; i < 9; i++)
+            {
+                passtemp+=passvalid.Substring(rnd.Next(0,64),1);
+            }
+
+            //pass word kaydı yapılır.
+            micro_services_dal.Models.zoradamlar_com_db_mic_user.passofusers e_passusr = new micro_services_dal.Models.zoradamlar_com_db_mic_user.passofusers()
+            {
+                deletedpassofusers_id=false,
+                passofusers_active=true,
+                passofusers_createtime=DateTime.Now,
+                passofusers_expiretime=DateTime.Now.AddDays(360),
+                passofusers_id=0,
+                passofusers_pass=AppStaticMethod.strEncrypt(passtemp),
+                passofusers_use=true,
+                passofusers_users_id=l_pass[0].passofusers_users_id
+            };
+
+            bus_passof.Savepassofusers(e_passusr,ALLOFUSERS:default_ALLOFUSER);
+
+            // mail yazılması
+            micro_services_dal.Models.zoradamlar_com_db_mic_user.users e_usr = bus_users.Getusers(l_pass[0].passofusers_users_id,ALLOFUSERS:default_ALLOFUSER);
+            AppStaticMethod.NewPassSent(e_usr.users_mail,e_usr.users_name,passtemp);
+
+            result=1;
+            
+
+            return result;
+        }
+        public long ForgetPass(cRequest model)
+        {
+            long result = 0;
+
+            if (AppStaticMethod.Cont_Injektion(model.data) == false)
+                return result;
+
+
+            string sql = string.Format("{0}='{1}'"
+                , info_users.users_users_mail, model.data);
+
+            List<micro_services_dal.Models.zoradamlar_com_db_mic_user.users> l_usr = bus_users.GetAllusers(whereclause: sql
+                , ALLOFUSERS: default_ALLOFUSER);
+
+            if (l_usr == null)
+                return result;
+
+            if (l_usr.Count > 1)
+                return result;
+
+            sql = string.Format("{0}={1}", info_useractivation.useractivation_useractivation_users_id, l_usr[0].users_id);
+            List<micro_services_dal.Models.zoradamlar_com_db_mic_user.useractivation> l_usrACT = bus_UserActiva.GetAlluseractivation(whereclause: sql
+            , ALLOFUSERS: default_ALLOFUSER);
+
+            if (l_usrACT == null)
+                return result;
+
+            if (l_usrACT.Count > 1)
+                return result;
+
+            try
+            {
+                AppStaticMethod.ForgetPassMail(l_usr[0].users_mail, l_usr[0].users_name, l_usrACT[0].useractivation_code);
+                result = 1;
+            }
+            catch (System.Exception)
+            {
+
+            }
+
+            return result;
+        }
+
     }
 }

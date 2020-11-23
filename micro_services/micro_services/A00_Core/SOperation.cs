@@ -434,7 +434,7 @@ namespace micro_services.A00_Core
             if (l_aou == null) return result;
             if (l_aou.Count != 1) return result;
 
-            users e_usr = optUsers.Getusers(usr_id, ALLOFUSERS: l_aou[0],ALL:true);
+            users e_usr = optUsers.Getusers(usr_id, ALLOFUSERS: l_aou[0], ALL: true);
 
             List<useractivation> l_act = new Op_useractivation().GetAlluseractivation(whereclause: string.Format("{0}={1}"
             , new info_useractivation().useractivation_useractivation_users_id, e_usr.users_id), ALLOFUSERS: default_ALLOFUSER);
@@ -457,6 +457,32 @@ namespace micro_services.A00_Core
 
             }
 
+
+            return result;
+        }
+
+        public cResponse UserGet_AfterstatickListRefresh(cRequest request)
+        {
+            cResponse result = new cResponse()
+            {
+                token = request.token,
+                data = "",
+                message = AppStaticStr.msg0040Hata,
+                message_code = AppStaticInt.msg001Fail
+            };
+
+            List<allofusers> l_aou = AppStaticModel.l_allofusers.Where(w => w.tokensofusers_token == request.token && w.projects_id == request.project_code).ToList();
+
+            if (l_aou.Count != 1)
+                return result;
+            allofusers e_aou = l_aou[0];
+
+            ctoken.savestaticList(e_aou.users_id, request.project_code);
+
+
+            result.data = JsonConvert.SerializeObject(e_aou);
+            result.message = AppStaticStr.msg0045OK;
+            result.message_code = AppStaticInt.msg001Succes;
 
             return result;
         }

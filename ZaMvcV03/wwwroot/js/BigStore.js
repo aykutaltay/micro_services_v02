@@ -12,6 +12,7 @@ All.webpageoptgetcompnyid = All.webpageurl + "OptCore/getCompanyID";
 All.webpageoptgetcompnyName = All.webpageurl + "OptCore/getCompanyName";
 All.webpageoptsavecompany = All.webpageurl + "OptCore/saveCompany";
 All.webpageoptsavepass = All.webpageurl + "OptCore/savePass";
+All.weppageoptforgetpass = All.webpageurl + "OptCore/forgetPass";
 All.webpageMainIndex = "Mainuser/Index";
 All.webpageMain = "Mainuser/Menu";
 All.webpageMainIndex = "Mainuser/Index";

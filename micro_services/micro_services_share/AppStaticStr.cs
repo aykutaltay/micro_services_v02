@@ -71,6 +71,7 @@ namespace micro_services_share
 
 
         public static string urlMailActive = "https://coreesdef.zoradamlar.com/NonSecureOp/Activesiyon?actkey=";
+        public static string urlMailForgetPass="https://localhost:5001/GateOfNewWorld/forgetpassactivation?actkey=";
         public static string urlRestUserinfo = "https://localhost:5001/GateOfNewWorld/userinfo";
         public static string urlRestAuth = "https://localhost:5001/GateOfNewWorld/auth";
         public static string urlRestNuser= "https://localhost:5001/GateOfNewWorld/nuser";
@@ -81,6 +82,7 @@ namespace micro_services_share
         public static string urlRestRefCrudTrans = "https://localhost:5001/GateOfNewWorld/refcrudtrans";
         public static string urlRestUserActMail = "https://localhost:5001/GateOfNewWorld/sendactivemail";
         public static string urlRestStaticListRefresh = "https://localhost:5001/GateOfNewWorld/refreshstaticlist";
+        public static string urlRestForgetPass = "https://localhost:5001/GateOfNewWorld/forgetpass";
 
     }
 }

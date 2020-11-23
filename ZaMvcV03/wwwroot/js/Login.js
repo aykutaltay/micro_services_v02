@@ -90,11 +90,36 @@
                     $.ajax(settings).done(function (response) {
                         $("div.warning").html(response.message);
                         $("div.warning").fadeIn(All.Integer.msgFadein).delay(All.Integer.msgDelay).fadeOut(All.Integer.msgFadeout);
-                        
+
                     });
                 });
         });
 
+    });
+
+    $('#btnResetPass').click(function () {
+        var mail = $('#txtResetMail').val();
+
+        var mdl = new All.Models.cRequest();
+        mdl.data = mail;
+
+
+        var settings = {
+            "url": All.weppageoptforgetpass,
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "data": JSON.stringify(mdl),
+        };
+
+        $.ajax(settings).done(function (response) {
+            result = response;
+            //gelen response bilgisi
+            $("div.warning").html(response.message);
+            $("div.warning").fadeIn(All.Integer.msgFadein).delay(All.Integer.msgDelay).fadeOut(All.Integer.msgFadeout);
+        });
     });
 
 });

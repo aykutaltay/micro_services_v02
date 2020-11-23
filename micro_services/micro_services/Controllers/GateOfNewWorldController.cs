@@ -185,6 +185,55 @@ namespace micro_services.Controllers
             return Ok(response);
         }
 
+
+        [AllowAnonymous]
+        [HttpPost("forgetpass")]
+        public IActionResult ForgetPass([FromBody] cRequest model)
+        {
+            cResponse response = new cResponse()
+            {
+                message = AppStaticStr.msg0040Hata,
+                message_code = AppStaticInt.msg001Fail,
+                token = "00",
+                data = "00"
+            };
+
+            if (new NSOperation().ForgetPass(model: model) != 0)
+            {
+                response.message_code = AppStaticInt.msg001Succes;
+                response.message = AppStaticStr.msg0045OK;
+            }
+
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("forgetpassactivation")]
+        public IActionResult ForgetPassActivation(string actkey)
+        {
+            cResponse response = new cResponse()
+            {
+                message = AppStaticStr.msg0040Hata,
+                message_code = AppStaticInt.msg001Fail,
+                token = "00",
+                data = "00"
+            };
+
+            if (new NSOperation().ForgetPassActivation(actkey: actkey) != 0)
+            {
+                return Ok("İşlem Tamamlandı");    
+                // response.message_code = AppStaticInt.msg001Succes;
+                // response.message = AppStaticStr.msg0045OK;
+            }
+            else
+            {
+                return Ok("Sorun var, teknik kısım ile iletişime geçiniz, info@zoradamlar.com");    
+            }
+
+            //return Ok(response);
+        }
+
+
         [HttpPost("mainuserlist")]
         public IActionResult MainUserList([FromBody] cRequest model)
         {
@@ -239,15 +288,15 @@ namespace micro_services.Controllers
         }
 
         [HttpPost("sendactivemail")]
-        public IActionResult SendActivateMail ([FromBody] cRequest model)
+        public IActionResult SendActivateMail([FromBody] cRequest model)
         {
-            cResponse response = new SOperation().SendActMail(request:model);
+            cResponse response = new SOperation().SendActMail(request: model);
             return Ok(response);
         }
-
+        [HttpPost("refreshstaticlist")]
         public IActionResult refreshStaticList([FromBody] cRequest model)
         {
-              cResponse response = new cResponse()
+            cResponse response = new cResponse()
             {
                 message_code = AppStaticInt.msg001Fail,
                 message = AppStaticStr.msg0025ActivasyonHatasi,
