@@ -13,12 +13,16 @@
         var mdl = new All.Models.cRequest();
         var result = new All.Models.cResponse();
 
+
         grecaptcha.ready(function () {
             grecaptcha.execute('6LcUT8kZAAAAADHqHET4v2sJQr8Ozbta4Ti9s5dj', { action: 'submit' })
                 .then(function (token) {
 
                     mdl.token = token;
                     mdl.data = JSON.stringify(usr);
+
+
+                    var tmp = JSON.stringify(mdl);
 
                     var settings = {
                         "url": All.webpageoptauth,

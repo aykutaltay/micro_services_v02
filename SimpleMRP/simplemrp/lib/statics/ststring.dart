@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 class stString {
-  List<String> userLoginPage =['Kullanıcı Giriş Penceresi','User Login Page'];
-  List<String> projectName=['Sade Üretim Takip','Simple MRP'];
+  String url_s = "https://localhost:5001/GateOfNewWorld/";
+  String url_mvc_s="https://192.168.10.121:44342/OptCore";
+
+
+
+
 }

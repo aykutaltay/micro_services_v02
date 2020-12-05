@@ -1,0 +1,9 @@
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\simplemrp\simplemrp_dal\bin\Debug\netstandard2.0\simplemrp_dal.deps.json
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\simplemrp\simplemrp_dal\bin\Debug\netstandard2.0\simplemrp_dal.dll
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\simplemrp\simplemrp_dal\obj\Debug\netstandard2.0\simplemrp_dal.AssemblyInfoInputs.cache
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\simplemrp\simplemrp_dal\obj\Debug\netstandard2.0\simplemrp_dal.AssemblyInfo.cs
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\simplemrp\simplemrp_dal\obj\Debug\netstandard2.0\simplemrp_dal.csprojAssemblyReference.cache
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\simplemrp\simplemrp_dal\bin\Debug\netstandard2.0\simplemrp_dal.pdb
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\simplemrp\simplemrp_dal\obj\Debug\netstandard2.0\simplemrp_dal.csproj.CoreCompileInputs.cache
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\simplemrp\simplemrp_dal\obj\Debug\netstandard2.0\simplemrp_dal.dll
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\micro_services\simplemrp\simplemrp_dal\obj\Debug\netstandard2.0\simplemrp_dal.pdb

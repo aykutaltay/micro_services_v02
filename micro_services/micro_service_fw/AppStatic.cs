@@ -13,6 +13,7 @@ namespace micro_service_fw
         public static string conf_fwtype = "FWTYPE";
         public static string conf_pathbus = "BUSPATH";
         public static string conf_pathdal = "DALPATH";
+        public static string conf_appname = "APPNAME";
         public static Dictionary<string, string> conf = new Dictionary<string, string>();
     }
 }

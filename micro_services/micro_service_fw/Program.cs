@@ -72,7 +72,7 @@ namespace micro_service_fw
                     if ((tmp[0] == AppStatic.conf_dbname) || (tmp[0] == AppStatic.conf_dbuser)
                         || (tmp[0] == AppStatic.conf_dbuserpass) || (tmp[0] == AppStatic.conf_fwtype)
                         || (tmp[0] == AppStatic.conf_pathbus) || (tmp[0] == AppStatic.conf_pathdal)
-                        || (tmp[0] == AppStatic.conf_dbserver))
+                        || (tmp[0] == AppStatic.conf_dbserver) || (tmp[0]==AppStatic.conf_appname))
                     {
                         AppStatic.conf.Add(tmp[0], tmp[1]);
                     }

@@ -126,9 +126,14 @@ namespace micro_services.Controllers
             //     return RecaptchaV3Vverify(model.token);
             // });
 
-            TokenResponse a = RecaptchaV3Vverify(model.token);
 
             cResponse res = new cResponse();
+
+            if (model.token == "6LcUT8kZAAAAADHqHET4v2sJQr8Ozbta4Ti9s5dj") //flutter public kay ile token gönderiyor
+                return res;
+
+            TokenResponse a = RecaptchaV3Vverify(model.token);
+
 
             if (a.ErrorCodes != null)
             {
@@ -221,13 +226,13 @@ namespace micro_services.Controllers
 
             if (new NSOperation().ForgetPassActivation(actkey: actkey) != 0)
             {
-                return Ok("İşlem Tamamlandı");    
+                return Ok("İşlem Tamamlandı");
                 // response.message_code = AppStaticInt.msg001Succes;
                 // response.message = AppStaticStr.msg0045OK;
             }
             else
             {
-                return Ok("Sorun var, teknik kısım ile iletişime geçiniz, info@zoradamlar.com");    
+                return Ok("Sorun var, teknik kısım ile iletişime geçiniz, info@zoradamlar.com");
             }
 
             //return Ok(response);
