@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:simplemrp/models/cresponse.dart';
 import 'package:simplemrp/models/crequest.dart';
+import 'package:simplemrp/statics/stnumber.dart';
 import 'package:simplemrp/statics/stpoolstr.dart';
 
 class stRestApi {
@@ -55,6 +56,8 @@ class stRestApi {
   // }
 
   Future<cResponse> post(String url, cRequest data) async {
+    data.project_code=stNumber().project_Code;
+
     HttpClient client = new HttpClient();
     client.badCertificateCallback =
         ((X509Certificate cert, String host, int port) => true);
@@ -65,6 +68,7 @@ class stRestApi {
         'Origin, X-Requested-With, Content-Type, Accept');
     request.headers.add('Content-Type', 'application/json');
     request.add(utf8.encode(json.encode(data)));
+    //String tt =request.toString();
     HttpClientResponse response = await request.close();
 
     String responseStr = await response.transform(utf8.decoder).join();
@@ -77,6 +81,8 @@ class stRestApi {
   Future<cResponse> postSec(String url, cRequest data) async {
 
     data.token=stPoolStr().token;
+    data.project_code=stNumber().project_Code;
+
 
     HttpClient client = new HttpClient();
     client.badCertificateCallback =

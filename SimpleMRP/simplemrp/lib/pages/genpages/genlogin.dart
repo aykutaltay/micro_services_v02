@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:simplemrp/models/crequest.dart';
 import 'package:simplemrp/models/cresponse.dart';
+import 'package:simplemrp/models/vallofusers.dart';
 import 'package:simplemrp/statics/stnumber.dart';
 import 'package:simplemrp/statics/stpoolstr.dart';
 import 'package:simplemrp/statics/lang/lng_poolstr.dart';
@@ -14,8 +15,15 @@ import 'package:simplemrp/statics/strestapi.dart';
 import 'package:simplemrp/statics/stmethods.dart';
 import 'package:simplemrp/models/vusr.dart';
 import 'package:http/http.dart' as http;
+import 'package:simplemrp/pages/genpages/genmain.dart';
+import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const String CAPTCHA_SITE_KEY = "6LcUT8kZAAAAADHqHET4v2sJQr8Ozbta4Ti9s5dj";
+bool rememberMe = false;
+bool autoentry = false;
+//LocalStorage storage = LocalStorage('remember');
+//BuildContext context;
 
 void main() {
   runApp(MaterialApp(
@@ -34,30 +42,80 @@ class LoginGen extends StatefulWidget {
   _State createState() => _State();
 }
 
-void loginManule(String userName, String passW) async {
-  String genPass = stMethods().generateMd5(passW);
+void checkRemember(BuildContext contex) async {
+  // if (storage.getItem(stString().rememberMe)==null)
+  //   return;
+  //
+  // if (storage.getItem(stString().rememberMe) == true)
+  //   loginManule(storage.getItem(stString().rememberU),
+  //       storage.getItem(stString().rememberP), contex);
 
+  SharedPreferences prefs_tmp = await SharedPreferences.getInstance();
+  if (prefs_tmp.getBool(stString().rememberMe) == true) {
+    loginManule(prefs_tmp.getString(stString().rememberU),
+        prefs_tmp.getString(stString().rememberP), contex);
+  }
+}
+
+void loginManule(String userName, String passW, BuildContext contex) async {
+  String genPass = passW;
+
+  //checkRemember(contex);
+
+  SharedPreferences prefs_tmp = await SharedPreferences.getInstance();
+  if (prefs_tmp.getBool(stString().rememberMe) != true)
+    genPass = stMethods().generateMd5(passW);
+
+  if (autoentry == true) return;
+  autoentry = true;
   // model of user
   var q = vUsr();
   q.USERNAME = userName;
   q.PASSWORD = genPass;
 
-  // String sab = await GCaptcha.reCaptcha(CAPTCHA_SITE_KEY);
-  // print(sab);
   var req = cRequest();
   req.token = CAPTCHA_SITE_KEY;
   req.data = jsonEncode(q.toJson());
   req.project_code = 0;
   req.prosses_code = 0;
 
-  String ath_url = stString().url_mvc_s + '/auth';
+  String ath_url = stString().url_s + '/auth';
   //ath_url =stString().url_s+'/auth';
   String ss = jsonEncode(req.toJson());
 
   cResponse aa = await stRestApi().post(ath_url, req);
 
-  print(aa.data);
-  print(aa.token);
+  if (aa.message_code == 1) {
+    if (rememberMe == true) {
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setBool(stString().rememberMe, rememberMe);
+      prefs.setString(stString().rememberU, q.USERNAME);
+      prefs.setString(stString().rememberP, q.PASSWORD);
+    }
+
+    print(aa.message);
+    stPoolStr().token = aa.token;
+    stPoolStr().token_Time = DateTime.now().toString();
+
+    var req01 = cRequest();
+    req01.prosses_code=0;
+    req01.data="";
+
+    cResponse aa01 = await stRestApi().postSec(stString().url_s + '/userinfo', req01);
+
+    DateTime dt;
+    dt=DateTime.parse('2020-11-28 22:16:35');
+    print(dt.toString());
+
+
+    if (aa01.message_code==1) {
+      stPoolStr().AllOfUser=vAllOfUsers.fromJson(jsonDecode(aa01.data));
+
+      Navigator.pushReplacement(
+          contex, MaterialPageRoute(builder: (contex) => MainGen()));
+    }
+  }
 
   //Future<String> qq = stRestApi().post(ath_url, ss);
 
@@ -89,6 +147,7 @@ void loginManule(String userName, String passW) async {
   //}
 }
 
+
 class _State extends State<LoginGen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -108,15 +167,29 @@ class _State extends State<LoginGen> {
 
   int prosid = 0; //0-login, 1-şifremi unutum
   //String info_lang=stPoolStr().language;
-  bool rememberMe = false;
+
+
+  Icon fab = Icon(
+    Icons.refresh,
+  );
+  bool showProgress = false;
+  double progress = 0.2;
+
+  void toggleSubmitState() {
+    setState(() {
+      showProgress = !showProgress;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    //Size size = MediaQuery.of(context).size;
+    checkRemember(context);
 
     return Scaffold(
         appBar: AppBar(
           title: Text(lng_PoolStr().projectName),
+          actions: <Widget>[
+          ],
         ),
         body: Padding(
             padding: EdgeInsets.all(10),
@@ -299,8 +372,8 @@ class _State extends State<LoginGen> {
                         onPressed: () {
                           print(nameController.text);
                           print(passwordController.text);
-                          loginManule(
-                              nameController.text, passwordController.text);
+                          loginManule(nameController.text,
+                              passwordController.text, context);
                         },
                       )),
                 ),
@@ -383,7 +456,7 @@ class _State extends State<LoginGen> {
                     ),
                   ],
                   mainAxisAlignment: MainAxisAlignment.center,
-                ))
+                )),
               ],
             )));
   }

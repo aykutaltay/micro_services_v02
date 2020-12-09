@@ -16,5 +16,14 @@ class lng_String {
   List<String> comparePass =['Şifreyi Tekrarlayınız','Repeat Password'];
   List<String> cancel=['İptal','Cancel'];
   List<String> language=['Türkçe','Engilish'];
-  List<String> rememberme=['Beni Hatırla', 'Remember Me'];
+  List<String> rememberme=['Beni Hatırla / Hızlı Giriş', 'Remember Me / Quick Entry'];
+  List<String> mainmenu =['Ana Menü','Main Menu'];
+  List<String> stock =['Stok','Stock'];
+  List<String> stocklist =['Stok Listesi','Stock List'];
+  List<String> servicestocklist =['Hizmet Stok Listesi','Service Stock List'];
+  List<String> assetlist =['Demirbaş Listesi','Asset List'];
+  List<String> transferbetweenwarehouse = ['Depolar Arası Transfer','Transfer Between Warehouse'];
+  List<String> stockmovement =['Stok Hareket','Stock Movement'];
+
+
 }

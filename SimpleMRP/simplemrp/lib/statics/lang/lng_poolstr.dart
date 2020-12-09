@@ -71,4 +71,27 @@ class lng_PoolStr {
   String get rememberme {
     return lng_String().rememberme[langID];
   }
+
+ String get mainmenu {
+    return lng_String().mainmenu[langID];
+  }
+
+  String get stock {
+    return lng_String().stock[langID];
+  }
+String get stocklist {
+    return lng_PoolStr().stocklist[langID];
+}
+String get servicestocklist {
+    return lng_PoolStr().servicestocklist[langID];
+}
+String get assetlist {
+    return lng_PoolStr().assetlist[langID];
+}
+String get transferbetweenwarehouse{
+    return lng_PoolStr().transferbetweenwarehouse[langID];
+}
+String get stockmovement{
+    return lng_PoolStr().stockmovement[langID];
+}
 }

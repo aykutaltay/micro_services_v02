@@ -21,6 +21,7 @@ namespace micro_services
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://localhost:5000", "https://192.168.10.121:5001");
                 });
     }
 }
