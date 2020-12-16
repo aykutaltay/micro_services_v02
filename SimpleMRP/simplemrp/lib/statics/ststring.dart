@@ -5,7 +5,12 @@ class stString {
   String rememberMe="rememberme";
   String rememberU="rememberu";
   String rememberP="rememberp";
-
+  String mdl_mainuserlist_header_Id="Id";
+  String mdl_mainuserlist_header_Durum="Durum";
+  String mdl_mainuserlist_header_Yetki="Yetki";
+  String mdl_mainuserlist_header_Kod="Kod";
+  String mdl_mainuserlist_header_Email="Email";
+  String mdl_mainuserlist_header_SonTarih="SonTarih";
 
 
 

@@ -24,6 +24,31 @@ class lng_String {
   List<String> assetlist =['Demirbaş Listesi','Asset List'];
   List<String> transferbetweenwarehouse = ['Depolar Arası Transfer','Transfer Between Warehouse'];
   List<String> stockmovement =['Stok Hareket','Stock Movement'];
-
+  List<String> bpartner = ['Cari','Bus.Partner'];
+  List<String> bpartnerlist = ['Cari Liste','Bus.Partner List'];
+  List<String> bpartner_caselist=['Kasa Liste','Case List'];
+  List<String> bpartner_banklist=['Banka Liste','Bank List'];
+  List<String> bpartner_bpartnermovement = ['Cari Hareket','Bus.Partner Movement'];
+  List<String> bpartner_bill_billList = ['Çek Senet Liste','Bill List'];
+  List<String> bpartner_bill_movement = ['Çek Senet Hareket', 'Bill Movement'];
+  List<String> sales = ['Satış','Sales'];
+  List<String> sales_salesorder = ['Satış Siparişi','Sales Order'];
+  List<String> sales_retail = ['Perakende Satış','Sales Retail'];
+  List<String> configure =['Ayarlar','Configure'];
+  List<String> configure_parameterlist = ['Parametre Listesi','Parameter List'];
+  List<String> configure_userlist = ['Kullanıcı Listesi','User List'];
+  List<String> buying = ['Alış','Buying'];
+  List<String> buying_buyorder = ['Alış Siparişi','Buying Order'];
+  List<String> production_productionorder = ['Üretim Siparişi','Production Order'];
+  List<String> production_BOM = ['Ürün Ağacı','BillOfMetarials']; //bill of metarials, bom
+  List<String> production = ['Üretim','Production]'];
+  List<String> reports =['Raporlar','Reports'];
+  List<String> quit =['Çıkış','Quit'];
+  List<String> id =['Id','Id'];
+  List<String> status =['Durum','Status'];
+  List<String> auth=['Yetki','Authorize'];
+  List<String> code=['Kod','Code'];
+  List<String> email=['Email','Email'];
+  List<String> expiredate=['Bittiği Gün','Expire Date'];
 
 }

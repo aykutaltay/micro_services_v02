@@ -109,8 +109,12 @@ void loginManule(String userName, String passW, BuildContext contex) async {
     print(dt.toString());
 
 
+    //kullanıcı bilgilerinin atanması
     if (aa01.message_code==1) {
       stPoolStr().AllOfUser=vAllOfUsers.fromJson(jsonDecode(aa01.data));
+
+      //kullanıcı dilinin atanması
+      stNumber().langID=stPoolStr().AllOfUser.users_lang_id-1;
 
       Navigator.pushReplacement(
           contex, MaterialPageRoute(builder: (contex) => MainGen()));
