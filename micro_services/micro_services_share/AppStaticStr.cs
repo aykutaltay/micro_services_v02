@@ -70,19 +70,20 @@ namespace micro_services_share
         public static string SingleCrudDelete ="Delete";//Delete
 
 
+        public static string urlCenter = "https://192.168.10.121:5001";
         public static string urlMailActive = "https://coreesdef.zoradamlar.com/NonSecureOp/Activesiyon?actkey=";
-        public static string urlMailForgetPass="https://localhost:5001/GateOfNewWorld/forgetpassactivation?actkey=";
-        public static string urlRestUserinfo = "https://localhost:5001/GateOfNewWorld/userinfo";
-        public static string urlRestAuth = "https://localhost:5001/GateOfNewWorld/auth";
-        public static string urlRestNuser= "https://localhost:5001/GateOfNewWorld/nuser";
-        public static string urlRestMainUserList= "https://localhost:5001/GateOfNewWorld/mainuserlist";
-        public static string urlRestMainUserGet= "https://localhost:5001/GateOfNewWorld/mainuserget";
-        public static string urlRestNewToken = "https://localhost:5001/GateOfNewWorld/retoken";
-        public static string urlRestRefCrud = "https://localhost:5001/GateOfNewWorld/refcrud";
-        public static string urlRestRefCrudTrans = "https://localhost:5001/GateOfNewWorld/refcrudtrans";
-        public static string urlRestUserActMail = "https://localhost:5001/GateOfNewWorld/sendactivemail";
-        public static string urlRestStaticListRefresh = "https://localhost:5001/GateOfNewWorld/refreshstaticlist";
-        public static string urlRestForgetPass = "https://localhost:5001/GateOfNewWorld/forgetpass";
+        public static string urlMailForgetPass= urlCenter+"/GateOfNewWorld/forgetpassactivation?actkey=";
+        public static string urlRestUserinfo = urlCenter +"/GateOfNewWorld/userinfo";
+        public static string urlRestAuth = urlCenter + "/GateOfNewWorld/auth";
+        public static string urlRestNuser= urlCenter + "/GateOfNewWorld/nuser";
+        public static string urlRestMainUserList= urlCenter + "/GateOfNewWorld/mainuserlist";
+        public static string urlRestMainUserGet= urlCenter + "/GateOfNewWorld/mainuserget";
+        public static string urlRestNewToken = urlCenter + "/GateOfNewWorld/retoken";
+        public static string urlRestRefCrud = urlCenter + "/GateOfNewWorld/refcrud";
+        public static string urlRestRefCrudTrans = urlCenter + "/GateOfNewWorld/refcrudtrans";
+        public static string urlRestUserActMail = urlCenter + "/GateOfNewWorld/sendactivemail";
+        public static string urlRestStaticListRefresh = urlCenter + "/GateOfNewWorld/refreshstaticlist";
+        public static string urlRestForgetPass = urlCenter + "/GateOfNewWorld/forgetpass";
 
     }
 }

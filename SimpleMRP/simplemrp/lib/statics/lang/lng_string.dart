@@ -50,5 +50,13 @@ class lng_String {
   List<String> code=['Kod','Code'];
   List<String> email=['Email','Email'];
   List<String> expiredate=['Bittiği Gün','Expire Date'];
+  List<String> warning=["Uyarı","Warning"];
+  List<String> filter=["Filitre","Filter"];
+  List<String> refresh=["Yenile","Refresh"];
+  List<String> add=["Ekle","Add"];
+  List<String> change=["Değiştir","Change"];
+  List<String> delete=["Sil","Delete"];
+  List<String> usersave=["Kullanici Kayit","User Save"];
+
 
 }

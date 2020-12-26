@@ -18,7 +18,7 @@ class userlist {
       this.SonTarih}
       );
 
-  bool selected = false;
+  //bool selected = false;
 
   // factory cRequest.fromJson(Map<String, dynamic> parsedJson) {
   //   return cRequest(

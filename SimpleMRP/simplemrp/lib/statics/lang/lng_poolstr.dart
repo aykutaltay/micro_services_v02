@@ -172,4 +172,25 @@ String get email{
 String get expiredate{
     return lng_String().expiredate[langID];
 }
+String get warning{
+    return lng_String().warning[langID];
+}
+String get filter {
+    return lng_String().filter[langID];
+}
+String get refresh {
+    return lng_String().refresh[langID];
+}
+String get add {
+    return lng_String().add[langID];
+}
+String get change {
+    return lng_String().change[langID];
+}
+String get delete {
+    return lng_String().delete[langID];
+}
+String get usersave {
+    return lng_String().usersave[langID];
+}
 }

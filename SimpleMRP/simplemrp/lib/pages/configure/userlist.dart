@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:simplemrp/pages/configure/userlistv02.dart';
 import 'package:simplemrp/pages/genpages/genmain.dart';
 import 'package:simplemrp/statics/lang/lng_poolstr.dart';
 import 'package:simplemrp/models/vusrlist.dart';
@@ -31,6 +32,7 @@ void main() {
 }
 
 List<userlist> l_usr = List<userlist>();
+List<UserList_loc> l_usr_loc =List<UserList_loc>();
 bool kontrl = false;
 
 
@@ -464,7 +466,7 @@ class DTSv02 extends DataTableSource {
   @override
 
   DataRow getRow(int index) {
-    final row = l_usr[index];
+    final row = l_usr_loc[index];
 
     return DataRow.byIndex(
       index: index,
