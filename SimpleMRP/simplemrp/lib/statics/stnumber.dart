@@ -1,4 +1,5 @@
 class stNumber {
+
   static int langID_0 = 0;
 
   int get langID {
@@ -14,4 +15,11 @@ class stNumber {
     return project_Code_0;
   }
 
+  static int dataId_0=0;
+  int get DataId {
+    return dataId_0;
+  }
+  void set DataId (int value){
+    dataId_0=value;
+  }
 }

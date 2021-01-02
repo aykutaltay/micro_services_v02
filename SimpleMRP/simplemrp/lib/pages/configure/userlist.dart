@@ -21,14 +21,6 @@ void main() {
     home: UserList(),
   ));
 
-  // getData()
-  //     .then((success) => runApp(MaterialApp(
-  //         home: UserList(),
-  //         )));
-    //   .whenComplete(() => runApp(MaterialApp(
-    //   home: UserList(),
-    // )));
-
 }
 
 List<userlist> l_usr = List<userlist>();

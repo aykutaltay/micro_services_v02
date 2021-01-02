@@ -8,6 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:simplemrp/pages/configure/userlist.dart';
 import 'package:simplemrp/pages/configure/usersave.dart';
 import 'package:simplemrp/pages/genpages/genmain.dart';
 import 'package:simplemrp/statics/lang/lng_poolstr.dart';
@@ -18,6 +19,7 @@ import 'package:simplemrp/statics/stmethods.dart';
 import 'package:simplemrp/statics/strestapi.dart';
 import 'package:simplemrp/statics/ststring.dart';
 import 'package:synchronized/synchronized.dart';
+import 'package:simplemrp/statics/stnumber.dart';
 //Sayfa içi genel değişkenler
 List<UserList_loc> l_usr = new List<UserList_loc>();
 final lock = new Lock();
@@ -130,8 +132,18 @@ class _UserListV02 extends State<UserListV02> {
                         tooltip: lng_PoolStr().add,
                         icon: const Icon(Icons.add),
                         onPressed: () {
+                          int id=0;
+                          for (var i=0; i<l_usr.length; i++) {
+                            if (l_usr[i].selected==true) {
+                              id = l_usr[i].Id;
+                              break;
+                            };
+                          };
+                          stNumber().DataId=id;
+
                           Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (context) => UserSave()));
+                              MaterialPageRoute(builder: (context) =>UserSave()
+                              ));
                         },
                       ),
                       //change
