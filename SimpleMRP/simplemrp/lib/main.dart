@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:simplemrp/pages/genpages/genlogin.dart';
 //import 'package:simplemrp/statics/ststring.dart';
 //import 'package:simplemrp/statics/stnumber.dart';
-import 'package:simplemrp/statics/stpoolstr.dart';
+//import 'package:simplemrp/statics/stpoolstr.dart';
 import 'package:simplemrp/statics/lang/lng_poolstr.dart';
 
 void main() {

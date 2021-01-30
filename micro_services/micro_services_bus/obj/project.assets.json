@@ -4539,6 +4539,7 @@
       },
       "frameworks": {
         "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
           "projectReferences": {
             "C:\\Github_repo\\micro_services\\micro_services_v02\\micro_services_v02\\micro_services\\micro_services_dal\\micro_services_dal.csproj": {
               "projectPath": "C:\\Github_repo\\micro_services\\micro_services_v02\\micro_services_v02\\micro_services\\micro_services_dal\\micro_services_dal.csproj"
@@ -4557,6 +4558,7 @@
     },
     "frameworks": {
       "netstandard2.0": {
+        "targetAlias": "netstandard2.0",
         "dependencies": {
           "Dapper": {
             "target": "Package",
@@ -4587,7 +4589,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   },

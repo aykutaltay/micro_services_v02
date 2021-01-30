@@ -231,8 +231,8 @@ var Getuserpage = function () {
     document.getElementById("txtchangeTime").value = e_usr.changeTime;
     document.getElementById("txtexpireTime").value = e_usr.expireTime;
 
-    document.getElementById("cb_Core_project").checked = e_usr.Core_project;
-    document.getElementById("cb_Fason_project").checked = e_usr.Fason_project;
+    //document.getElementById("cb_Core_project").checked = e_usr.Core_project;
+    //document.getElementById("cb_Fason_project").checked = e_usr.Fason_project;
 
     document.getElementById("txtpass").disabled = true;
     document.getElementById("txtpassrepeat").disabled = true;
@@ -262,8 +262,8 @@ var NewUser = function () {
     document.getElementById("txtexpireTime").value = "";
     document.getElementById("txtexpireTime").disabled = true;
 
-    document.getElementById("cb_Core_project").checked = false;
-    document.getElementById("cb_Fason_project").checked = false;
+    //document.getElementById("cb_Core_project").checked = false;
+    //document.getElementById("cb_Fason_project").checked = false;
 
     document.getElementById("txtpass").disabled = false;
     document.getElementById("txtpassrepeat").disabled = false;
@@ -276,19 +276,21 @@ var Setuserpage = function () {
         e_usr.authValue = "user";
     }
     //----------
-    if (document.getElementById("cb_Core_project").checked == true) {
-        e_usr.Core_project = true;
-    }
-    else {
-        e_usr.Core_project = false;
-    }
-    //----------
-    if (document.getElementById("cb_Fason_project").checked == true) {
-        e_usr.Fason_project = true;
-    }
-    else {
-        e_usr.Fason_project = false;
-    }
+    //if (document.getElementById("cb_Core_project").checked == true) {
+    //    e_usr.Core_project = true;
+    //}
+    //else {
+    //    e_usr.Core_project = false;
+    //}
+    ////----------
+    //if (document.getElementById("cb_Fason_project").checked == true) {
+    //    e_usr.Fason_project = true;
+    //}
+    //else {
+    //    e_usr.Fason_project = false;
+    //}
+    e_usr.Fason_project = true;
+    e_usr.Core_project = true;
     //--------------
     if (document.getElementById('statu_Active').checked == true) {
         e_usr.statuValue = 1;

@@ -23,6 +23,7 @@ namespace micro_services_share
         public static string msg0092Passkucukharfyok = "Küçük harf yok";
         public static string msg0095Passbuyukharfyok = "Büyük harf yok";
         public static string msg0097PassOzelkaraktervar = "Şifre içinde özel karakter var";
+        public static string msg0100flutKullaniciKayitHatasi="Kullanıcı Kayıt sırasında hata oldu";
 
 
 

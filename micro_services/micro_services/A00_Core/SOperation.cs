@@ -486,5 +486,150 @@ namespace micro_services.A00_Core
 
             return result;
         }
+
+        public cResponse flutSaveUser(cRequest request)
+        {
+            cResponse result = new cResponse()
+            {
+                message_code = AppStaticInt.msg001Fail,
+                message = AppStaticStr.msg0040Hata,
+                token = string.Empty,
+                data = string.Empty
+            };
+
+            allofusers e_aou = AppStaticModel.l_allofusers.Where(w => w.tokensofusers_token == request.token && w.projects_id == request.project_code).FirstOrDefault();
+            if (e_aou == null)
+                return result;
+
+            List<parameters> l_parameters = new Op_parameters().GetAllparameters(whereclause: string.Format("{0}='{1}'", new info_parameters().parameters_parameters_valuestring, AppStaticStr.Prm_DefaultExpire)
+            , ALLOFUSERS: default_ALLOFUSER);
+            if (l_parameters.Count == 0)
+                return result;
+
+            users income = JsonConvert.DeserializeObject<users>(request.data);
+            users e_users = new users();
+            //companyid_createtime,expiretime
+            //gelen bilgi var olan bir kayıt ise
+            if (income.users_id != 0)
+            {
+                users tmp_users = optUsers.Getusers(income.users_id, ALLOFUSERS: default_ALLOFUSER);
+                e_users = income;
+
+                e_users.deletedusers_id = tmp_users.deletedusers_id;
+                e_users.users_use = tmp_users.users_use;
+                e_users.users_company_id = tmp_users.users_company_id;
+                e_users.users_createtime = tmp_users.users_createtime;
+                e_users.users_expiretime = tmp_users.users_expiretime;
+
+                e_users.users_mail = tmp_users.users_mail;
+            }
+            else
+            {
+                e_users = income;
+
+                e_users.deletedusers_id = false;
+                e_users.users_use = true;
+                e_users.users_company_id = e_aou.users_company_id;
+                e_users.users_createtime = e_users.users_updatetime;
+                e_users.users_expiretime = e_users.users_createtime.AddDays(l_parameters[0].parameters_valueint);
+            }
+            // user bilgisi oluşturuldu
+
+            if (e_users.users_id == 0)
+            {
+                //eğer yeni kullanıcı ise
+                using (Mysql_dapper db = new Mysql_dapper())
+                {
+                    db.BeginTransaction();
+                    try
+                    {
+                        //kullanıcı kaydı
+                        users e_saveusers = optUsers.Saveusers(e_users, default_ALLOFUSER, db);
+                        //---------------------------------------------------------------------------------------------
+                        //aktivasyon kaydı
+                        useractivation e_tmp_activat = new useractivation()
+                        {
+                            deleteduseractivation_id = false,
+                            useractivation_active = true,
+                            useractivation_createtime = e_saveusers.users_createtime,
+                            useractivation_use = true,
+                            useractivation_code = Guid.NewGuid().ToString(),
+                            useractivation_id = 0,
+                            useractivation_users_id = e_saveusers.users_id
+                        };
+                        new Op_useractivation().Saveuseractivation(e_tmp_activat, default_ALLOFUSER, db);
+                        //---------------------------------------------------------------------------------------------
+                        //projectlere dahil edilmesi
+                        List<projects> l_proj = new Op_projects().GetAllprojects(whereclause: "1=1", default_ALLOFUSER);
+                        for (int i = 0; i < l_proj.Count; i++)
+                        {
+                            usersofprojects e_uop = new usersofprojects()
+                            {
+                                deletedusersofprojects_id = false,
+                                usersofprojects_active = true,
+                                usersofprojects_id = 0,
+                                usersofprojects_projects_id = l_proj[i].projects_id,
+                                usersofprojects_use = true,
+                                usersofprojects_users_id = e_saveusers.users_id
+
+                            };
+
+                            new Op_usersofprojects().Saveusersofprojects(e_uop, default_ALLOFUSER, db);
+                        }
+                        //---------------------------------------------------------------------------------------------
+
+                        db.Commit();
+
+                        //aktivasyon maili gönderimi
+                        cRequest actmail = new cRequest() {
+                            data=e_saveusers.users_id.ToString(),
+                            token=request.token,
+                            project_code=AppStaticInt.ProjectCodeCore
+                        };
+                        SendActMail(actmail);
+                        //---------------------------------------------------------------------------------------------
+                        //Sistemin oluşturduğu şifrenin gönderilmesi
+                        cRequest newpassfromsystem = new cRequest() {
+                            data=e_saveusers.users_mail,
+                            token=request.token,
+                            project_code=AppStaticInt.ProjectCodeCore
+                        };
+
+                        new NSOperation().ForgetPass(model: newpassfromsystem);
+                        //---------------------------------------------------------------------------------------------
+                        //Kayıt işlemi sonrasında  olanlar
+                        //Kapsülü hazırla
+                        result.data = JsonConvert.SerializeObject(e_saveusers);
+                        result.message_code = AppStaticInt.msg001Succes;
+                        result.message = AppStaticStr.msg0045OK;
+                        //---------------------------------------------------------------------------------------------
+
+                    }
+                    catch (System.Exception e)
+                    {
+
+                        result.data = e.ToString();
+                        result.message_code = AppStaticInt.msg001Fail;
+                        result.message = AppStaticStr.msg0040Hata;
+
+                        db.RollBack();
+                    }
+
+
+
+                }
+            }
+            //var olan kullanıcı ise
+            else
+            {
+                result.data = JsonConvert.SerializeObject(optUsers.Saveusers(e_users, default_ALLOFUSER));
+                result.message_code = AppStaticInt.msg001Succes;
+                result.message = AppStaticStr.msg0045OK;
+            }
+
+
+
+            return result;
+        }
     }
 }

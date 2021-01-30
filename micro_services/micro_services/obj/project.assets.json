@@ -4827,6 +4827,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {
             "C:\\Github_repo\\micro_services\\micro_services_v02\\micro_services_v02\\micro_services\\micro_services_bus\\micro_services_bus.csproj": {
               "projectPath": "C:\\Github_repo\\micro_services\\micro_services_v02\\micro_services_v02\\micro_services\\micro_services_bus\\micro_services_bus.csproj"
@@ -4848,6 +4849,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",
@@ -4880,7 +4882,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   },

@@ -76,7 +76,6 @@ C:\Github_repo\micro_services\micro_services_all\ZaMvcV03\obj\Debug\netcoreapp3.
 C:\Github_repo\micro_services\micro_services_all\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.csproj.CopyComplete
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\bin\Debug\netcoreapp3.1\appsettings.json
-C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\bin\Debug\netcoreapp3.1\ZaMvcV03.exe
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\bin\Debug\netcoreapp3.1\ZaMvcV03.deps.json
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\bin\Debug\netcoreapp3.1\ZaMvcV03.runtimeconfig.json
@@ -212,3 +211,4 @@ C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.dll
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.pdb
 C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\ZaMvcV03.genruntimeconfig.cache
+C:\Github_repo\micro_services\micro_services_v02\micro_services_v02\ZaMvcV03\obj\Debug\netcoreapp3.1\scopedcss\bundle\ZaMvcV03.styles.css

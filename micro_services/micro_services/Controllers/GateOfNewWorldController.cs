@@ -314,5 +314,22 @@ namespace micro_services.Controllers
 
             return Ok(response);
         }
+        public IActionResult fltSaveUser([FromBody] cRequest model)
+        {
+            cResponse response = new cResponse()
+            {
+                message_code = AppStaticInt.msg001Fail,
+                message = AppStaticStr.msg0100flutKullaniciKayitHatasi,
+                token = string.Empty,
+                data = string.Empty
+            };
+
+
+
+            return Ok(response);
+            
+        }
+
+
     }
 }

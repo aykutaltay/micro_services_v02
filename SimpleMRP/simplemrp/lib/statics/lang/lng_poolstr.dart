@@ -235,4 +235,16 @@ class lng_PoolStr {
   String get active {
     return lng_String().active[langID];
   }
+
+  String get save {
+    return lng_String().save[langID];
+  }
+
+  String get changePass {
+    return lng_String().changePassword[langID];
+  }
+
+  String get sendActivationMail{
+    return lng_String().sendActivateMail[langID];
+  }
 }

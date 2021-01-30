@@ -58,6 +58,9 @@ class lng_String {
   List<String> delete=["Sil","Delete"];
   List<String> usersave=["Kullanici Kayit","User Save"];
   List<String> active =['Aktif','Active'];
+  List<String> save = ['Kaydet','Save'];
+  List<String> changePassword = ['Şifre Değiştir','Change Password'];
+  List<String> sendActivateMail=['Aktivasyon Mail Gönder','Send Activation Mail'];
 
 
 }

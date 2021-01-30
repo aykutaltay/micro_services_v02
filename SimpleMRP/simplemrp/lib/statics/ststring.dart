@@ -12,6 +12,20 @@ class stString {
   String mdl_mainuserlist_header_Email="Email";
   String mdl_mainuserlist_header_SonTarih="SonTarih";
 
+  String SrvSingleCrud="Single_crud";
+  String SrvTable ="tablename";
+  String SrvTransCrud="Trans_crud";
+  String SrvTablePrimaryKey="primarykey";
+  String SrvOpt ="srvoptname";
+
+
+
+  String SingleCrudSave ="Save";    //Create,Update
+  String SingleCrudGet ="Get";      //Read
+  String SingleCrudGetAll ="GetAll";//read
+  String SingleCrudGetAll_true = "GetAll_true";//read
+  String SingleCrudDelete ="Delete";//Delete
+
 
 
 }
