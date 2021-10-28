@@ -37,7 +37,7 @@ Future<List<userlist>> getData() async {
   req01.data = "";
 
   cResponse aa01 =
-  await stRestApi().postSec(stString().url_s + '/mainuserlist', req01).then((value) => null);
+  await stRestApi().postSecCore(stString().url_s + '/mainuserlist', req01).then((value) => null);
 
   if (aa01.message_code == 1) {
     //var qq = userlist.fromJson(jsonDecode(aa01.data));

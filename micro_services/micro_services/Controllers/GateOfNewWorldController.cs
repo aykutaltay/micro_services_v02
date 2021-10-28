@@ -285,6 +285,21 @@ namespace micro_services.Controllers
             return Ok(response);
         }
 
+        [HttpPost("refcrudstr")]
+        public IActionResult RefCrudStr([FromBody] string value)
+        {
+            //string ss = "{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjI5IiwibmJmIjoxNjEyMTYyNTk0LCJleHAiOjE2MTIxNjk3OTQsImlhdCI6MTYxMjE2MjU5NH0.QINQSuCwnwEdlylAkQlakTCQkRJ6YvLNGOjJYGtOY0A\",\"project_code\":2,\"prosses_code\":0,\"data\":\"29\",\"data_exe\":[{\"id\":0,\"info\":\"Single_crud\",\"value\":\"Get\"},{\"id\":1,\"info\":\"tablename\",\"value\":\"users\"},{\"id\":2,\"info\":\"Trans_crud\",\"value\":\"Single_crud\"},{\"id\":3,\"info\":\"primarykey\",\"value\":\"users_id\"},{\"id\":4,\"info\":\"srvoptname\",\"value\":\"Get\"}]}";
+            //string ss = "{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjI5IiwibmJmIjoxNjEyMTYyNTk0LCJleHAiOjE2MTIxNjk3OTQsImlhdCI6MTYxMjE2MjU5NH0.QINQSuCwnwEdlylAkQlakTCQkRJ6YvLNGOjJYGtOY0A\",\"project_code\":2,\"prosses_code\":0,\"data\":\"29\",\"data_exe\":[{\"id\":0,\"info\":\"Single_crud\",\"value\":\"Get\"}]}";
+            string ss = "{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjI5IiwibmJmIjoxNjEyMTYyNTk0LCJleHAiOjE2MTIxNjk3OTQsImlhdCI6MTYxMjE2MjU5NH0.QINQSuCwnwEdlylAkQlakTCQkRJ6YvLNGOjJYGtOY0A\",\"project_code\":2,\"prosses_code\":0,\"data\":\"29\",\"data_exe\":[{\"id\":0,\"info\":\"Single_crud\",\"value\":\"Get\"}]}";
+
+            cRequest model1 = JsonConvert.DeserializeObject<cRequest>(ss);
+            
+            cRequest model = JsonConvert.DeserializeObject<cRequest>(value);
+            cResponse response = new SOperation().ref_crud(model);
+            return Ok(response);
+        }
+
+
         [HttpPost("refcrudtrans")]
         public IActionResult RefCrudTrans([FromBody] cRequest model)
         {
@@ -314,6 +329,8 @@ namespace micro_services.Controllers
 
             return Ok(response);
         }
+
+        [HttpPost("fltSaveUser")]
         public IActionResult fltSaveUser([FromBody] cRequest model)
         {
             cResponse response = new cResponse()

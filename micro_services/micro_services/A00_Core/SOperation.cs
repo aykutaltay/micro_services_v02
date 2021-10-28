@@ -226,7 +226,9 @@ namespace micro_services.A00_Core
             );
 
             string opt = string.Format("{0}"
-            , l_ed_crd[0].value);
+            , l_ed_crd[0].value
+            );
+
             string path = AppDomain.CurrentDomain.BaseDirectory.ToString() + AppStaticStr.DllMicServBus;
             System.Reflection.Assembly ass = System.Reflection.Assembly.LoadFrom(path);
             Type myTypeOpt = ass.GetType(optpath);

@@ -17,8 +17,8 @@ class cResponse {
   Map<String, dynamic> toJson() {
     return {
       'token': token,
-      'project_code': message_code,
-      'prosses_code': message,
+      'message_code': message_code,
+      'message': message,
       'data': data,
     };
   }

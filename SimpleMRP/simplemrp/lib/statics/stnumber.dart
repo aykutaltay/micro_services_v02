@@ -15,6 +15,12 @@ class stNumber {
     return project_Code_0;
   }
 
+  static int project_Core_0 = 1; //Core ID
+  int get project_Core {
+    return project_Core_0;
+  }
+
+
   static int dataId_0=0;
   int get DataId {
     return dataId_0;

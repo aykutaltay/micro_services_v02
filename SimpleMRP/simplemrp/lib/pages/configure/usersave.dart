@@ -30,7 +30,11 @@ class UserSave extends StatefulWidget {
   _UserSave createState() => _UserSave();
 }
 
-void getUser() {
+
+
+class _UserSave extends State<UserSave> with TickerProviderStateMixin {
+
+  void getUser() async{
 /*
   cRequest request = new cRequest()
   {
@@ -48,28 +52,74 @@ void getUser() {
 };
 */
 
-  if (stNumber().DataId==0)
-    return;
+    if (stNumber().DataId==0)
+      return;
 
-  List<ex_data> optvalue = new List<ex_data>();
-  optvalue.add(new ex_data(id: 0,info: stString().SrvSingleCrud,value: stString().SingleCrudGet));
-  optvalue.add(new ex_data(id: 1,info: stString().SrvTable,value: "users"));
-  optvalue.add(new ex_data(id: 2,info: stString().SrvTransCrud,value: stString().SrvSingleCrud));
-  optvalue.add(new ex_data(id: 3,info: stString().SrvTablePrimaryKey,value: "users_id"));
-  optvalue.add(new ex_data(id: 4,info: stString().SrvOpt,value: stString().SingleCrudGet));
+    List<ex_data> optvalue = new List<ex_data>();
 
-  cRequest req = new cRequest(
-    token: stPoolStr().token,
-    project_code: stNumber().project_Code,
-    data: stNumber().DataId.toString(),
-    data_ex: optvalue
-  );
+    optvalue.add(new ex_data(id: 0,info: stString().SrvSingleCrud,value: stString().SrvSingleCrud));
+    optvalue.add(new ex_data(id: 1,info: stString().SrvTable,value: "users"));
+    optvalue.add(new ex_data(id: 4,info: stString().SrvOpt,value: stString().SingleCrudGetAll));
 
-}
+    cRequest req = new cRequest(
+        token: stPoolStr().token,
+        project_code: stNumber().project_Code,
+        prosses_code: 0,
+        data: "users_id="+stNumber().DataId.toString(),
+        data_ex: optvalue
+    );
 
+    String strValue = jsonEncode(req);
 
+    //cResponse aa01 = await stRestApi().postSecStr(stString().url_s + "/refcrudstr/", strValue).then((value) => null);
+    cResponse aa01 = await stRestApi().postSec(stString().url_s + "/refcrud/", req);//.then((value) => null);
+    //cResponse aa01 = stRestApi().postSec_sync(stString().url_s + '/refcrud', req);
 
-class _UserSave extends State<UserSave> with TickerProviderStateMixin {
+    if (aa01==null)
+        return;
+
+    if (aa01.message_code==1)
+    {
+      users e_usr = users.fromJson(jsonDecode(aa01.data));
+      stNumber().DataId=e_usr.users_id;
+      txtCont_code.text=e_usr.users_name;
+      txtCont_email.text=e_usr.users_mail;
+      txtCont_backupemail.text=e_usr.users_backupmail;
+
+      cb_status=e_usr.users_active;
+
+    }
+
+  }
+
+  void saveUser() async {
+    users e_users = new users(
+      users_id: stNumber().DataId,
+      deletedusers_id: false,
+      users_active: cb_status,
+      users_name: txtCont_code.text,
+      users_mail: txtCont_email.text,
+      users_backupmail: txtCont_backupemail.text,
+      users_use: true,
+      users_role_id: int.parse(cbValueRoleId),
+      users_lang_id: int.parse(cbValueLangId),
+      users_updatetime: DateTime.now(),
+    );
+
+    var req01 = cRequest();
+    req01.prosses_code = 0;
+    req01.data = jsonEncode(e_users);
+
+    cResponse aa01 = await stRestApi().postSecCore(stString().url_s + '/fltSaveUser', req01).then((value) => null);
+    if (aa01.message_code==1)
+    {
+      users e_usr = users.fromJson(jsonDecode(aa01.data));
+      stNumber().DataId=e_usr.users_id;
+      getUser();
+    }
+
+  }
+
   TabController _controller;
   TextEditingController txtCont_code = TextEditingController();
   TextEditingController txtCont_email = TextEditingController();
@@ -95,6 +145,7 @@ class _UserSave extends State<UserSave> with TickerProviderStateMixin {
     super.initState();
 
     _controller = TabController(vsync: this, length: 1);
+    getUser();
   }
 
   @override
@@ -105,33 +156,12 @@ class _UserSave extends State<UserSave> with TickerProviderStateMixin {
 
   void choiceAction(String choice) {
     print('Çalışıyor ' + choice + stNumber().DataId.toString());
-  }
 
-  void saveUser() async {
-    users e_users = new users(
-      users_id: stNumber().DataId,
-      deletedusers_id: false,
-      users_active: cb_status,
-      users_name: txtCont_code.text,
-      users_mail: txtCont_email.text,
-      users_backupmail: txtCont_backupemail.text,
-      users_use: true,
-      users_role_id: int.parse(cbValueRoleId),
-      users_lang_id: int.parse(cbValueLangId),
-      users_updatetime: DateTime.now(),
-    );
-
-    var req01 = cRequest();
-    req01.prosses_code = 0;
-    req01.data = jsonEncode(e_users);
-
-    cResponse aa01 = await stRestApi().postSec(stString().url_s + '/fltSaveUser', req01).then((value) => null);
-    if (aa01.message_code==1)
-      {
-        //buraya bilgileri çağırma methodu yaz
-      }
 
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {

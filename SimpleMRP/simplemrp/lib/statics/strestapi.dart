@@ -96,6 +96,60 @@ class stRestApi {
     request.headers.add('Content-Type', 'application/json');
     request.headers.add("Authorization", "Bearer ${stPoolStr().token}");
 
+    //var test = utf8.encode(json.encode(data));
+    request.add(utf8.encode(json.encode(data)));
+    HttpClientResponse response = await request.close();
+
+    String responseStr = await response.transform(utf8.decoder).join();
+    cResponse result = cResponse.fromJson(jsonDecode(responseStr));
+
+    return result;
+    //print(reply);
+  }
+
+  Future<cResponse> postSecStr(String url, String data) async {
+
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+    ((X509Certificate cert, String host, int port) => true);
+
+    HttpClientRequest request = await client.postUrl(Uri.parse(url));
+
+    request.headers.add('Access-Control-Allow-Origin', '*');
+    request.headers.add('Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept');
+    request.headers.add('Content-Type', 'application/json');
+    request.headers.add("Authorization", "Bearer ${stPoolStr().token}");
+
+    //var test = utf8.encode(json.encode(data));
+    request.add(utf8.encode(json.encode(data)));
+    HttpClientResponse response = await request.close();
+
+    String responseStr = await response.transform(utf8.decoder).join();
+    cResponse result = cResponse.fromJson(jsonDecode(responseStr));
+
+    return result;
+    //print(reply);
+  }
+
+  Future<cResponse> postSecCore(String url, cRequest data) async {
+
+    data.token=stPoolStr().token;
+    data.project_code=stNumber().project_Core;
+
+
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+    ((X509Certificate cert, String host, int port) => true);
+
+    HttpClientRequest request = await client.postUrl(Uri.parse(url));
+
+    request.headers.add('Access-Control-Allow-Origin', '*');
+    request.headers.add('Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept');
+    request.headers.add('Content-Type', 'application/json');
+    request.headers.add("Authorization", "Bearer ${stPoolStr().token}");
+
     request.add(utf8.encode(json.encode(data)));
     HttpClientResponse response = await request.close();
 

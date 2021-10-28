@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ID00NmipJif5stLYSstDoh5OgEttegiYs/5/Se+JQadMFhUZXqhYtL5F5zPbSWKnj5ezjMZ3CBnb5vhSHYcHYQ==",
+  "dgSpecHash": "fY2CBzRuf3VJ4x5t5ozHvrn9wGo3IlbVT8xk/VGtGMeGl6TR2DCvevZgth1pi1qR2WzNllqPmamt08mdBOoeFQ==",
   "success": true,
   "projectFilePath": "C:\\Github_repo\\micro_services\\micro_services_v02\\micro_services_v02\\micro_services\\micro_service_fw\\micro_service_fw.csproj",
   "expectedPackageFiles": [
@@ -104,7 +104,8 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xmldocument\\4.0.1\\system.xml.xmldocument.4.0.1.nupkg.sha512",
     "C:\\Users\\ulaso\\.nuget\\packages\\system.xml.xpath\\4.0.1\\system.xml.xpath.4.0.1.nupkg.sha512",
-    "C:\\Users\\ulaso\\.nuget\\packages\\system.xml.xpath.xmldocument\\4.0.1\\system.xml.xpath.xmldocument.4.0.1.nupkg.sha512"
+    "C:\\Users\\ulaso\\.nuget\\packages\\system.xml.xpath.xmldocument\\4.0.1\\system.xml.xpath.xmldocument.4.0.1.nupkg.sha512",
+    "C:\\Users\\ulaso\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.18\\microsoft.netcore.app.host.win-x64.3.1.18.nupkg.sha512"
   ],
   "logs": []
 }
